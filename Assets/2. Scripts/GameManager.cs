@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviour
     private RectTransform _nexusPointerUI;
     
     private void Awake() {
-        CreateNexus(); // 싱글턴으로 수정
         CreateWeapon(); // 싱글턴으로 수정
+        CreateNexus(); // 싱글턴으로 수정
         CreateMonster(); 
         _mainCamera = Camera.main;
         _mainCamera.GetComponent<CameraMovement>().SetPlayer(_InstantiatedWeapon);

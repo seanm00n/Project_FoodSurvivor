@@ -59,9 +59,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     // 보스용 충돌 판정
     private void OnTriggerStay2D(Collider2D collision) {
-        if(_monsterState == State.Death) return;
-
-        if(!_isBoss) return;
+        if(!_isBoss || _monsterState == State.Death) return;
 
         if(collision.gameObject.CompareTag("PlayerProjectile") ||
             collision.gameObject.CompareTag("NexusProjectile")) {
@@ -116,10 +114,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void MonsterRotation() { // add rules
-        if(_monsterState != State.Moving) {
-            return;
-        }
-
+        if(_monsterState != State.Moving) return;
         this.transform.rotation = GetRotationToTarget();
     }
 
@@ -127,7 +122,6 @@ public abstract class MonsterBase : MonoBehaviour
         Vector3 direction = _targetNexus.transform.position - this.transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         return Quaternion.Euler(0, 0, angle);
-        
     }
 
     private void HandleMonsterAttack() {
