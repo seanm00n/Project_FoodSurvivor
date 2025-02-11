@@ -6,6 +6,7 @@ public class Nexus : NexusBase
 {
     public override float _nexusHealthPoint { get; protected set; }
     public override float _nexusAttackPoint { get; protected set; }
+    public override float _nexusMoveSpeed { get; protected set; }
 
     protected override void Start() {
         base.Start();
@@ -21,14 +22,15 @@ public class Nexus : NexusBase
     protected override void Initialize() {
         _nexusHealthPoint = 1000f;
         _nexusAttackPoint = 2f;
+        _nexusMoveSpeed = 0.5f;
     }
 
     protected override void SelectSkill() {
-        _SkillQueue += SkillA;
+        //_SkillQueue += SkillA;
         
     }
 
     private void AddSkillBTempFunc() {
-        _SkillQueue += SkillB;
+        _SkillQueue += ProtectShield;
     }
 }
