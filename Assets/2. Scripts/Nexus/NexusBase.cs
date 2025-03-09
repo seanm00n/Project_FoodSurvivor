@@ -5,10 +5,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-
-enum Skills {
-    ProtectShield, SkillB
-}
+using GameEnums;
 
 public abstract class NexusBase : MonoBehaviour
 {
@@ -21,8 +18,9 @@ public abstract class NexusBase : MonoBehaviour
     protected event Action<float> _SkillQueue;
     
 
-    private Dictionary<Skills, float> _skillLastUsed;
+    private Dictionary<NexusSkills, float> _skillLastUsed;
     private GameObject _playerWeapon;
+    
     private float _lastMovedTime;
     private float _moveOffset;
     private bool _isMoving;
@@ -30,7 +28,7 @@ public abstract class NexusBase : MonoBehaviour
 
     protected virtual void Start() {
         // do some common
-        _skillLastUsed = new Dictionary<Skills, float>();
+        _skillLastUsed = new Dictionary<NexusSkills, float>();
         _playerWeapon = GameObject.FindWithTag("Player"); // 직접할당 보다는 빠름
         _lastMovedTime = 0f;
         _moveOffset = 1f;
@@ -120,20 +118,21 @@ public abstract class NexusBase : MonoBehaviour
 
     protected void ProtectShield(float nexusAttackPoint) { // protect shield
         //GameObject instantiatedObject = Instantiate();
-        _skillLastUsed.TryAdd(Skills.ProtectShield, Time.time);
+        _skillLastUsed.TryAdd(NexusSkills.ProtectShield, Time.time);
         float skillCooldown = 10f; // 추후 수정
-        if(Time.time - _skillLastUsed[Skills.ProtectShield] >= skillCooldown) {
-            _skillLastUsed[Skills.ProtectShield] = Time.time;
+        if(Time.time - _skillLastUsed[NexusSkills.ProtectShield] >= skillCooldown) {
+            _skillLastUsed[NexusSkills.ProtectShield] = Time.time;
             Debug.Log("Nexus uses ProtectShield");
         }
     }
 
-    protected void SkillB(float nexusAttackPoint) {
-        _skillLastUsed.TryAdd(Skills.SkillB, Time.time);
-        float skillCooldown = 1f;
-        if(Time.time - _skillLastUsed[Skills.SkillB] >= skillCooldown) {
-            _skillLastUsed[Skills.SkillB] = Time.time;
-            Debug.Log("Nexus uses skillB");
+    protected void SlowCircle(float nexusAttackPoint) {        
+        //GameObject slowCircleInstance = Instantiate(_projectile, spawnPosition, GetRotationToTarget());
+        _skillLastUsed.TryAdd(NexusSkills.ProtectShield, Time.time);
+        float skillCooldown = 10f; // 추후 수정
+        if(Time.time - _skillLastUsed[NexusSkills.ProtectShield] >= skillCooldown) {
+            _skillLastUsed[NexusSkills.ProtectShield] = Time.time;
+            Debug.Log("Nexus uses SlowCircle");
         }
     }
 }

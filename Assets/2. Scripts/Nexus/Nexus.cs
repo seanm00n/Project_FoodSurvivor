@@ -16,7 +16,7 @@ public class Nexus : NexusBase
     protected override void Update() {
         base.Update();
         UseSkill();
-        if(Input.GetKeyDown(KeyCode.A)) AddSkillBTempFunc();
+        if(Input.GetKeyDown(KeyCode.A)) AddSkillTempFunc();
     }
 
     protected override void Initialize() {
@@ -30,7 +30,7 @@ public class Nexus : NexusBase
         
     }
 
-    private void AddSkillBTempFunc() {
-        _SkillQueue += ProtectShield;
+    private void AddSkillTempFunc() {
+        _SkillQueue += SlowCircle;
     }
 }

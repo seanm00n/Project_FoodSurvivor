@@ -22,12 +22,8 @@ public class ProtectShield : NexusSkillBase
         this.transform.position = _targetNexus.transform.position;
     }
 
-    public override void Initialize(float movespeed, float duration, float damage, float power, float size) {
-        _moveSpeed = movespeed;
-        _duration = duration;
-        _damage = damage;
-        _power = power;
-        _size = size;
+    public override void Initialize() {
+
     }
 
     protected override void SkillAction() {

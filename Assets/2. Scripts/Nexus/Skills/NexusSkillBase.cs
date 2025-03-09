@@ -11,11 +11,11 @@ public abstract class NexusSkillBase : MonoBehaviour
     public abstract float _duration { get; protected set; }
     public abstract float _power { get; protected set; }
 
-    public abstract void Initialize(float movespeed, float duration, float damage, float power, float size);
+    public abstract void Initialize();
     protected abstract void SkillAction();
 
     protected virtual void Start() {
-        //
+        Initialize();
     }
 
     protected virtual void Update() { 

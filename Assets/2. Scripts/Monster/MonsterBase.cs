@@ -1,13 +1,10 @@
+using GameEnums;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
-
-enum State {
-    Idle, Attack, Moving, Death
-}
 
 public abstract class MonsterBase : MonoBehaviour
 {
@@ -22,7 +19,7 @@ public abstract class MonsterBase : MonoBehaviour
     private float _lastHitTime = 0f; 
     private float _lastAttackTime = 0f;
     private float _rangeOffset = 0.2f;
-    private State _monsterState = State.Idle;
+    private MonsterState _monsterState = MonsterState.Idle;
     private GameObject _targetNexus;
     private BoxCollider2D _targetCollider;
 
@@ -48,7 +45,7 @@ public abstract class MonsterBase : MonoBehaviour
     protected abstract void Initialize();
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if(_monsterState == State.Death) return;
+        if(_monsterState == MonsterState.Death) return;
         if(collision.gameObject.CompareTag("PlayerProjectile") ||
             collision.gameObject.CompareTag("NexusProjectile")) {
             _lastHitTime = Time.time;
@@ -59,7 +56,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     // 보스용 충돌 판정
     private void OnTriggerStay2D(Collider2D collision) {
-        if(!_isBoss || _monsterState == State.Death) return;
+        if(!_isBoss || _monsterState == MonsterState.Death) return;
 
         if(collision.gameObject.CompareTag("PlayerProjectile") ||
             collision.gameObject.CompareTag("NexusProjectile")) {
@@ -87,22 +84,22 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void MonsterDeath() {
-        _monsterState = State.Death;
+        _monsterState = MonsterState.Death;
         Destroy(this.gameObject);
     }
 
     private void MonsterMovement() {
-        if(_monsterState == State.Death || _monsterState == State.Attack) return;
+        if(_monsterState == MonsterState.Death || _monsterState == MonsterState.Attack) return;
 
         if(_targetNexus == null) {
-            _monsterState = State.Idle;
+            _monsterState = MonsterState.Idle;
             Debug.Log("TargetNexus is null");
             return;
         }
         float distance = Vector3.Distance(_targetNexus.transform.position,this.transform.position);
 
         if(distance > _monsterAttackRange + _targetCollider.size.x + _rangeOffset) {
-            _monsterState = State.Moving;
+            _monsterState = MonsterState.Moving;
             Vector3 direction = (_targetNexus.transform.position - this.transform.position).normalized;
             this.transform.position += direction * _monsterMoveSpeed * Time.deltaTime;
         } else {
@@ -114,7 +111,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void MonsterRotation() { // add rules
-        if(_monsterState != State.Moving) return;
+        if(_monsterState != MonsterState.Moving) return;
         this.transform.rotation = GetRotationToTarget();
     }
 
@@ -125,7 +122,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void HandleMonsterAttack() {
-        _monsterState = State.Attack;
+        _monsterState = MonsterState.Attack;
         float radius = GetComponent<BoxCollider2D>().size.x / 2f + 0.1f;
         Vector3 spawnPosition = this.transform.position + (this.transform.right * radius);
         if(_projectile != null) {
@@ -137,10 +134,17 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void ResetState() {
-        _monsterState = State.Moving;
+        _monsterState = MonsterState.Moving;
     }
 //-----------------------------------------------------------------------------------------------------------
 
+    public void AddDebuff(Debuff debuff) {
+
+    }
+
+    public void RemoveDebuff(Debuff debuff) {
+        
+    }
     public void SetTargetNexus(GameObject instance) {
         _targetNexus = instance;
     }
