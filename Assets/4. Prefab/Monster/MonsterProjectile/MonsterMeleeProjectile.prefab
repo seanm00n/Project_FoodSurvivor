@@ -10,11 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2152303847994885638}
   - component: {fileID: 6544057107510090826}
+  - component: {fileID: 1878774878914468798}
   - component: {fileID: -1561808935107621195}
   - component: {fileID: -8895521694904444500}
-  - component: {fileID: 5278037777826408541}
+  - component: {fileID: 887931813352853439}
   m_Layer: 11
-  m_Name: MonsterRangedProjectile
+  m_Name: MonsterMeleeProjectile
   m_TagString: MonsterProjectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,6 +88,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1878774878914468798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4554319367707034832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504463053ac00db4399c39fcaa7ce0a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &-1561808935107621195
 Rigidbody2D:
   serializedVersion: 4
@@ -159,7 +172,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5278037777826408541
+--- !u!114 &887931813352853439
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,6 +181,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4554319367707034832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bd1a18f9bd14734989b674eee7adcd0, type: 3}
+  m_Script: {fileID: 11500000, guid: 5753bbb491831c549a6353272f667919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

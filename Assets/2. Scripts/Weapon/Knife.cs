@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Knife : WeaponBase
 {
-    public override float _weaponAttackPoint { get; protected set; }
-    public override int _weaponLevel { get; protected set; }
-    public override int _weaponRank { get; protected set; }
-
     protected override void Start() {
         base.Start();
         // do some diff
@@ -19,8 +15,6 @@ public class Knife : WeaponBase
     }
 
     protected override void Initialize() {
-        _weaponAttackPoint = 1f;
-        _weaponLevel = 1;
-        _weaponRank = 1;
+        _battleData._attackPoint = 1f;
     }
 }

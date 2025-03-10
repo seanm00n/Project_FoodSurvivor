@@ -8,6 +8,7 @@ TagManager:
   - Nexus
   - MonsterProjectile
   - PlayerProjectile
+  - NexusProjectile
   layers:
   - Default
   - TransparentFX

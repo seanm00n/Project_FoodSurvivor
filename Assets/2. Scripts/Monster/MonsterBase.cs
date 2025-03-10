@@ -8,13 +8,8 @@ using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour
 {
-    public abstract float _monsterAttackSpeed { get; protected set; }
-    public abstract float _monsterAttackPoint { get; protected set; }
-    public abstract float _monsterHealthPoint { get; protected set; }
-    public abstract float _monsterHitDelay { get; protected set; } // minion = 0, boss > 0
-    public abstract float _monsterAttackRange { get; protected set; } // melee = 0, ranged > 0
-    public abstract float _monsterMoveSpeed { get; protected set; }
     public abstract bool _isBoss { get; protected set; }
+    public abstract bool _isMelee { get; protected set; } // melee = 0, ranged = 1
 
     private float _lastHitTime = 0f; 
     private float _lastAttackTime = 0f;
@@ -27,14 +22,16 @@ public abstract class MonsterBase : MonoBehaviour
     public event Action<MonsterBase> _OnMonsterDeath; 
 
     protected event Action _OnMonsterArrived;
+    protected BattleData _battleData;
 
     [SerializeField]
     private GameObject _projectile;// { get; protected set; } // 수정, 몬스터 별로 프로젝타일 다름
 
     protected virtual void Start() {
-        Initialize();
+        _battleData = this.gameObject.GetComponent<BattleData>();
         _OnMonsterArrived += HandleMonsterAttack;
         _targetCollider = _targetNexus.GetComponent<BoxCollider2D>();
+        Initialize();
     }
 
     protected virtual void Update() {
@@ -60,24 +57,25 @@ public abstract class MonsterBase : MonoBehaviour
 
         if(collision.gameObject.CompareTag("PlayerProjectile") ||
             collision.gameObject.CompareTag("NexusProjectile")) {
-            if(Time.time - _lastHitTime >= _monsterHitDelay) {
+            if(Time.time - _lastHitTime >= _battleData._hitDelay) {
                 _lastHitTime = Time.time;
                 MonsterHit(collision.gameObject);
             }
         }        
     }
 
-    private void MonsterHit(GameObject target) {
+    private void MonsterHit(GameObject target) { // 넥서스도 공격하므로 수정해야함
+        //float s =  target.GetComponent<Battle>().attackp;
         WeaponBase weaponBase = target.GetComponentInParent<WeaponBase>();
         if(weaponBase) {
-            _monsterHealthPoint -= weaponBase.GetWeaponAttackPoint();
+            _battleData._healthPoint -= weaponBase.GetWeaponAttackPoint();
             _OnMonsterHit?.Invoke(this);
             CheckMonsterDeath();
         }
     }
 
     private void CheckMonsterDeath() {
-        if(_monsterHealthPoint <= 0f) {
+        if(_battleData._healthPoint <= 0f) {
             _OnMonsterDeath?.Invoke(this);
             MonsterDeath();
         }
@@ -98,12 +96,12 @@ public abstract class MonsterBase : MonoBehaviour
         }
         float distance = Vector3.Distance(_targetNexus.transform.position,this.transform.position);
 
-        if(distance > _monsterAttackRange + _targetCollider.size.x + _rangeOffset) {
+        if(distance > _battleData._attackRange + _targetCollider.size.x + _rangeOffset) {
             _monsterState = MonsterState.Moving;
             Vector3 direction = (_targetNexus.transform.position - this.transform.position).normalized;
-            this.transform.position += direction * _monsterMoveSpeed * Time.deltaTime;
+            this.transform.position += direction * _battleData._moveSpeed * Time.deltaTime;
         } else {
-            if((Time.time - _lastAttackTime) >= (1f / _monsterAttackSpeed)) {
+            if((Time.time - _lastAttackTime) >= (1f / _battleData._attackSpeed)) {
                 _lastAttackTime = Time.time;
                 _OnMonsterArrived?.Invoke();
             }
@@ -127,10 +125,10 @@ public abstract class MonsterBase : MonoBehaviour
         Vector3 spawnPosition = this.transform.position + (this.transform.right * radius);
         if(_projectile != null) {
             GameObject projectileInstance = Instantiate(_projectile, spawnPosition, GetRotationToTarget());
-            ProjectileBase projectileBase = projectileInstance.GetComponent<ProjectileBase>();
-            projectileBase?.SetValue(_monsterAttackPoint, _monsterMoveSpeed * 2);
+            MonsterProjectileBase projectileBase = projectileInstance.GetComponent<MonsterProjectileBase>();
+            projectileBase?.SetValue(_battleData._attackPoint, _battleData._moveSpeed * 2);
         }
-        Invoke(nameof(ResetState), (1f / _monsterAttackSpeed));
+        Invoke(nameof(ResetState), (1f / _battleData._attackSpeed));
     }
 
     private void ResetState() {
@@ -150,7 +148,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     public float GetMonsterAttackPoint() {
-        return _monsterAttackPoint;
+        return _battleData._attackPoint;
     }
 
 }

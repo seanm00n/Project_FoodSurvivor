@@ -5,31 +5,24 @@ using UnityEngine;
 
 public class MonsterRangedMinion : MonsterBase
 {
-    public override float _monsterAttackPoint { get; protected set; }
-    public override float _monsterAttackSpeed { get; protected set; }
-    public override float _monsterHealthPoint { get; protected set; }
-    public override float _monsterHitDelay { get; protected set; }
-    public override float _monsterMoveSpeed { get; protected set; }
-    public override float _monsterAttackRange { get; protected set; }
-    public override bool _isBoss { get; protected set; }
+    public override bool _isBoss { get; protected set; } = false;
+    public override bool _isMelee { get; protected set; } = false;
 
     protected override void Start() {
         base.Start();
-
     }
 
     protected override void Update() {
         base.Update();
-        // do some diff
     }
 
     protected override void Initialize() {
-        _monsterAttackPoint = 1f;
-        _monsterAttackSpeed = 1f;
-        _monsterHealthPoint = 10f;
-        _monsterHitDelay = 0f;
-        _monsterMoveSpeed = 1f;
-        _monsterAttackRange = 5f;
+        _battleData._attackPoint = 1f;
+        _battleData._attackSpeed = 1f;
+        _battleData._attackRange = 5f;
+        _battleData._moveSpeed = 1f;
+        _battleData._healthPoint = 10f;
+        _battleData._hitDelay = 0f;
     }
 }
 

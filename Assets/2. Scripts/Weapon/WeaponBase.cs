@@ -5,15 +5,13 @@ using UnityEngine;
 
 public abstract class WeaponBase : MonoBehaviour
 {
-    public abstract float _weaponAttackPoint { get; protected set; }
-    public abstract int _weaponLevel { get; protected set; }
-    public abstract int _weaponRank { get; protected set; }
-
+    protected BattleData _battleData;
     private bool _isSelected = false;
     private Camera _mainCamera;
     private Vector3 _offset; // 클릭 시 오브젝트 튐 방지
 
     protected virtual void Start() {
+        _battleData = this.gameObject.GetComponent<BattleData>();
         Initialize();
         SetCamera();
     }
@@ -55,7 +53,7 @@ public abstract class WeaponBase : MonoBehaviour
     }
 //------------------------------------------------------------------------------------------
     public float GetWeaponAttackPoint() {
-        return _weaponAttackPoint;
+        return _battleData._attackPoint;
     }
 
 }

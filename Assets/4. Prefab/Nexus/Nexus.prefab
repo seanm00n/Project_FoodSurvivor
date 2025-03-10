@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8401310562582179709}
   - component: {fileID: 7068324727731292955}
   - component: {fileID: -7324888898937126278}
+  - component: {fileID: 6654051263350315140}
   m_Layer: 7
   m_Name: Nexus
   m_TagString: Nexus
@@ -170,6 +171,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1305a8e48a5222741bfe687fb7507720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slowCirclePref: {fileID: 9062471241810429192, guid: c9b98c04fcd635c45b92b09dd7fa5d12, type: 3}
+  _protectShieldPref: {fileID: 8021280032801720668, guid: eb9abcf69696a7a4989981a10f40c18b, type: 3}
+--- !u!114 &6654051263350315140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555446884715239407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5753bbb491831c549a6353272f667919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4455337966079936021

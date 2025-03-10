@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 6434826630937886834}
   - component: {fileID: 1921940822443427338}
   - component: {fileID: 8082094747169211773}
+  - component: {fileID: 1771470147872883615}
   m_Layer: 6
   m_Name: Knife
   m_TagString: Player
@@ -249,3 +250,15 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1771470147872883615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761268160000418982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5753bbb491831c549a6353272f667919, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

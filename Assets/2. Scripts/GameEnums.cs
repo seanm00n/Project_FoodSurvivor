@@ -1,3 +1,5 @@
+
+
 namespace GameEnums {
     public enum MonsterState {
         Idle, Attack, Moving, Death
@@ -11,4 +13,7 @@ namespace GameEnums {
         ProtectShield, SlowCircle
     }
 
+    enum PlayerSkills {
+        Switching, RainFire
+    }
 }
