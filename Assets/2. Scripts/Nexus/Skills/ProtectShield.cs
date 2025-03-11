@@ -4,22 +4,24 @@ using UnityEngine;
 
 public class ProtectShield : NexusSkillBase
 {
+    CircleCollider2D[] _colliders;
+
     protected override void Start() {
         base.Start();
+        _colliders = GetComponentsInChildren<CircleCollider2D>();
     }
 
     protected override void Update() {
         base.Update();
-        //this.transform.position = _targetNexus.transform.position;
     }
 
     public override void Initialize() {
-        _battleData._moveSpeed = 1f;
+        _battleData._moveSpeed = 100f;
         _battleData._duration = 1f;
         _battleData._size = 1f;
     }
 
     protected override void SkillAction() {
-        // �о
-    }   
+        transform.Rotate(Vector3.forward * _battleData._moveSpeed * Time.deltaTime);
+    }
 }

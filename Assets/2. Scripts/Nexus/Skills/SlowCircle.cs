@@ -21,7 +21,7 @@ public class SlowCircle : NexusSkillBase
     }
 
     protected override void SkillAction() {
-        
+        //
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

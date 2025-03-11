@@ -38,7 +38,8 @@ public abstract class MonsterProjectileBase : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if(collision.gameObject.CompareTag("Nexus")) {
+        if(collision.gameObject.CompareTag("Nexus") ||
+            collision.gameObject.CompareTag("Shield")) {
             Destroy(this.gameObject);
         }
     }
@@ -52,4 +53,4 @@ public abstract class MonsterProjectileBase : MonoBehaviour
         return _damage;
     }
 }
-// 최적화를 위해 rigidbody simulated false + raycast 사용 가능
+// 소모성 오브젝트는 invoke를 하지 않는것이 좋음 -> 상대쪽에서 invoke

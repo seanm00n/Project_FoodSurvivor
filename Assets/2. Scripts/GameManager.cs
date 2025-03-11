@@ -30,18 +30,18 @@ public class GameManager : MonoBehaviour
         _mainCamera.GetComponent<CameraMovement>().SetPlayer(_InstantiatedWeapon);
     }
 
-    public void HandleMonsterHit(MonsterBase instance) {
+/*    public void HandleMonsterHit(MonsterBase instance) {
         Debug.Log("Monster Hit!");
-    }
+    }*/
 
     public void HandleMonsterDeath(MonsterBase instance) {
-        Debug.Log("Monster death!");
+        Debug.Log("Monster death!"); // show ui
     }
 
-    public void HandleNexusHit(NexusBase instance) {
+/*    public void HandleNexusHit(NexusBase instance) {
         Debug.Log("Nexus Hit!"); // show nexus direction
         //ShowNexusPointingUI();
-    }
+    }*/
     
     public void HandleNexusDeath(NexusBase instance) {
         Debug.Log("Nexus death!");
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         _instantiatedNexus = Instantiate(_nexusPref, new Vector2(0, -4), Quaternion.identity);
         NexusBase nexusInstance = _instantiatedNexus.GetComponent<NexusBase>();
         nexusInstance._OnNexusDeath += HandleNexusDeath;
-        nexusInstance._OnNexusHit += HandleNexusHit;
+        //nexusInstance._OnNexusHit += HandleNexusHit;
     }
 
     private void CreateMonster() { // ¼öÁ¤
@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         if(monsterInstance != null) {
             monsterInstance.SetTargetNexus(_instantiatedNexus);
             monsterInstance._OnMonsterDeath += HandleMonsterDeath;
-            monsterInstance._OnMonsterHit += HandleMonsterHit;
+            //monsterInstance._OnMonsterHit += HandleMonsterHit;
         } else {
             Debug.Log("monster Instance null");
         }

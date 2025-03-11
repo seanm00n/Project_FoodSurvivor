@@ -61,15 +61,14 @@ public abstract class MonsterBase : MonoBehaviour
                 _lastHitTime = Time.time;
                 MonsterHit(collision.gameObject);
             }
-        }        
+        }
     }
 
     private void MonsterHit(GameObject target) { // 넥서스도 공격하므로 수정해야함
-        //float s =  target.GetComponent<Battle>().attackp;
-        WeaponBase weaponBase = target.GetComponentInParent<WeaponBase>();
-        if(weaponBase) {
-            _battleData._healthPoint -= weaponBase.GetWeaponAttackPoint();
-            _OnMonsterHit?.Invoke(this);
+        BattleData targetData = target?.GetComponent<BattleData>();
+        if(targetData) {
+            _battleData._healthPoint -= targetData._attackPoint;
+            //_OnMonsterHit?.Invoke(this);
             CheckMonsterDeath();
         }
     }
