@@ -11,13 +11,14 @@ public class SlowCircle : NexusSkillBase
 
     protected override void Update() {
         base.Update();
+        this.transform.localPosition = Vector3.zero; // 밀리는 현상 해결
     }
 
     public override void Initialize() {
-        _battleData._moveSpeed = 0;
-        _battleData._attackPoint = 0;
-        _battleData._size = 0;
-        _battleData._duration = 0;
+        _battleData._moveSpeed = 0f;
+        _battleData._attackPoint = 1f;
+        _battleData._size = 0f;
+        _battleData._duration = 0f;
     }
 
     protected override void SkillAction() {

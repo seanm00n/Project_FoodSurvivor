@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slowCirclePref: {fileID: 9062471241810429192, guid: c9b98c04fcd635c45b92b09dd7fa5d12, type: 3}
-  _protectShieldPref: {fileID: 8021280032801720668, guid: eb9abcf69696a7a4989981a10f40c18b, type: 3}
+  _protectShieldPref: {fileID: 3770749953129922182, guid: eb9abcf69696a7a4989981a10f40c18b, type: 3}
 --- !u!114 &6654051263350315140
 MonoBehaviour:
   m_ObjectHideFlags: 0

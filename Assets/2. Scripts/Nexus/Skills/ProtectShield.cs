@@ -13,9 +13,11 @@ public class ProtectShield : NexusSkillBase
 
     protected override void Update() {
         base.Update();
+        this.transform.localPosition = Vector3.zero; // 밀리는 현상 해결
     }
 
     public override void Initialize() {
+        _battleData._attackPoint = 1f;
         _battleData._moveSpeed = 100f;
         _battleData._duration = 1f;
         _battleData._size = 1f;

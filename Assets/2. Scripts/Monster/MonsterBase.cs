@@ -48,7 +48,6 @@ public abstract class MonsterBase : MonoBehaviour
             _lastHitTime = Time.time;
             MonsterHit(collision.gameObject);
         }
-        
     }
 
     // 보스용 충돌 판정
@@ -66,7 +65,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     private void MonsterHit(GameObject target) { // 넥서스도 공격하므로 수정해야함
         BattleData targetData = target?.GetComponent<BattleData>();
-        if(targetData) {
+        if(targetData != null) {
             _battleData._healthPoint -= targetData._attackPoint;
             //_OnMonsterHit?.Invoke(this);
             CheckMonsterDeath();

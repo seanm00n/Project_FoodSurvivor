@@ -11,7 +11,7 @@ public abstract class NexusBase : MonoBehaviour
 {
     public event Action<NexusBase> _OnNexusHit;
     public event Action<NexusBase> _OnNexusDeath;
-    protected event Action<float> _SkillQueue;
+    protected event Action _SkillQueue;
     protected BattleData _battleData;
 
     [SerializeField] private GameObject _slowCirclePref;
@@ -96,14 +96,14 @@ public abstract class NexusBase : MonoBehaviour
     }
 
     protected void UseSkill() {
-        _SkillQueue?.Invoke(_battleData._attackPoint);
+        _SkillQueue?.Invoke();
     }
 
     private void NexusHit(GameObject target) {
-        MonsterProjectileBase projectile = target.GetComponent<MonsterProjectileBase>();
-        if(projectile) {
-            _battleData._healthPoint -= projectile.GetProjectileAttackPoint();
-            _OnNexusHit?.Invoke(this);
+        BattleData targetData = target?.GetComponent<BattleData>();
+        if(targetData != null) {
+            _battleData._healthPoint -= targetData._attackPoint;
+            //_OnNexusHit?.Invoke(this);
             CheckNexusDeath();
         }
     }
@@ -119,21 +119,27 @@ public abstract class NexusBase : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    protected void ProtectShield(float nexusAttackPoint) { // protect shield
-        //GameObject instantiatedObject = Instantiate();
-        _skillLastUsed.TryAdd(NexusSkills.ProtectShield, Time.time);
-        float skillCooldown = 10f; // 추후 수정
-        if(Time.time - _skillLastUsed[NexusSkills.ProtectShield] >= skillCooldown) {
+    protected void ProtectShield() { // protect shield
+        if(_instantiatedProtectShield == null) {
+            Debug.Log("protectshield");
+            _instantiatedProtectShield = Instantiate(_protectShieldPref, this.transform);
             _skillLastUsed[NexusSkills.ProtectShield] = Time.time;
-            Debug.Log("Nexus uses ProtectShield");
+            float skillCooldown = 9999f;
+            if(Time.time - _skillLastUsed[NexusSkills.ProtectShield] >= skillCooldown) {
+                _skillLastUsed[NexusSkills.ProtectShield] = Time.time;
+            }
         }
     }
 
-    protected void SlowCircle(float nexusAttackPoint) {
-        if(!_instantiatedSlowCircle) {
+    protected void SlowCircle() {
+        if(_instantiatedSlowCircle == null) {
+            Debug.Log("slowcircle");
             _instantiatedSlowCircle = Instantiate(_slowCirclePref, this.transform);
             _skillLastUsed.TryAdd(NexusSkills.ProtectShield, Time.time);
-            Debug.Log("Nexus uses SlowCircle");
+            float skillCooldown = 9999f;
+            if(Time.time - _skillLastUsed[NexusSkills.SlowCircle] >= skillCooldown) {
+                _skillLastUsed[NexusSkills.SlowCircle] = Time.time;
+            }
         }
     }
 }

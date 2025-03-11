@@ -51,9 +51,4 @@ public abstract class WeaponBase : MonoBehaviour
     private void OnMouseUp() {
         _isSelected = false;
     }
-//------------------------------------------------------------------------------------------
-    public float GetWeaponAttackPoint() {
-        return _battleData._attackPoint;
-    }
-
 }
