@@ -9,11 +9,13 @@ public abstract class WeaponBase : MonoBehaviour
     private bool _isSelected = false;
     private Camera _mainCamera;
     private Vector3 _offset; // 클릭 시 오브젝트 튐 방지
+    private LayerMask _layerMask;
 
     protected virtual void Start() {
         _battleData = this.gameObject.GetComponent<BattleData>();
         Initialize();
         SetCamera();
+        _layerMask = LayerMask.GetMask("Player");
     }
 
     protected virtual void Update() {
@@ -44,8 +46,20 @@ public abstract class WeaponBase : MonoBehaviour
     } 
 
     private void OnMouseDown() {
-        _isSelected = true;
-        _offset = transform.position - GetMouseWordPosition();
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        // 겹쳐진 모든 오브젝트를 감지
+        RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos, Vector2.zero, Mathf.Infinity, _layerMask);
+
+        foreach(RaycastHit2D hit in hits) {
+            if(hit.collider.gameObject == gameObject) // 현재 오브젝트인지 확인
+            {
+                _isSelected = true;
+                _offset = transform.position - GetMouseWordPosition();
+                Debug.Log("Clicked on: " + gameObject.name);
+                return; // 하나만 처리하고 종료
+            }
+        }
     }
 
     private void OnMouseUp() {
