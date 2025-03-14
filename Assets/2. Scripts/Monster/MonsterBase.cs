@@ -1,10 +1,11 @@
-using GameEnums;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using GameEnums;
 
 public abstract class MonsterBase : MonoBehaviour
 {
@@ -17,10 +18,11 @@ public abstract class MonsterBase : MonoBehaviour
     private MonsterState _monsterState = MonsterState.Idle;
     private GameObject _targetNexus;
     private BoxCollider2D _targetCollider;
-
+   
     public event Action<MonsterBase> _OnMonsterHit; 
-    public event Action<MonsterBase> _OnMonsterDeath; 
+    public event Action<MonsterBase> _OnMonsterDeath;
 
+    protected HashSet<Debuff> _debuffList;
     protected event Action _OnMonsterArrived;
     protected BattleData _battleData;
 
@@ -28,6 +30,7 @@ public abstract class MonsterBase : MonoBehaviour
     private GameObject _projectile;// { get; protected set; } // 수정, 몬스터 별로 프로젝타일 다름
 
     protected virtual void Start() {
+        _debuffList = new HashSet<Debuff>();
         _battleData = this.gameObject.GetComponent<BattleData>();
         _OnMonsterArrived += HandleMonsterAttack;
         _targetCollider = _targetNexus.GetComponent<BoxCollider2D>();
@@ -43,32 +46,37 @@ public abstract class MonsterBase : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if(_monsterState == MonsterState.Death) return;
+
         if(collision.gameObject.CompareTag("PlayerProjectile") ||
             collision.gameObject.CompareTag("NexusProjectile")) {
             _lastHitTime = Time.time;
-            MonsterHit(collision.gameObject);
+            MonsterHit(collision);
         }
     }
 
     // 보스용 충돌 판정
     private void OnTriggerStay2D(Collider2D collision) {
-        if(!_isBoss || _monsterState == MonsterState.Death) return;
+        //if(!_isBoss || _monsterState == MonsterState.Death) return;
+        if(_monsterState == MonsterState.Death) return;
 
         if(collision.gameObject.CompareTag("PlayerProjectile") ||
             collision.gameObject.CompareTag("NexusProjectile")) {
             if(Time.time - _lastHitTime >= _battleData._hitDelay) {
                 _lastHitTime = Time.time;
-                MonsterHit(collision.gameObject);
+                MonsterHit(collision);
             }
         }
     }
 
-    private void MonsterHit(GameObject target) { // 넥서스도 공격하므로 수정해야함
-        BattleData targetData = target?.GetComponent<BattleData>();
+    private void MonsterHit(Collider2D target) { // 넥서스도 공격하므로 수정해야함
+        BattleData targetData = target.GetComponent<BattleData>();
         if(targetData != null) {
             _battleData._healthPoint -= targetData._attackPoint;
+            UnityEngine.Debug.Log("monster hit: " + _battleData._healthPoint);
             //_OnMonsterHit?.Invoke(this);
             CheckMonsterDeath();
+        } else {
+            UnityEngine.Debug.Log("targetData null");
         }
     }
 
@@ -84,12 +92,12 @@ public abstract class MonsterBase : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    private void MonsterMovement() {
+    private void MonsterMovement() { // 디버프 적용
         if(_monsterState == MonsterState.Death || _monsterState == MonsterState.Attack) return;
 
         if(_targetNexus == null) {
             _monsterState = MonsterState.Idle;
-            Debug.Log("TargetNexus is null");
+            UnityEngine.Debug.Log("TargetNexus is null");
             return;
         }
         float distance = Vector3.Distance(_targetNexus.transform.position,this.transform.position);
@@ -97,7 +105,11 @@ public abstract class MonsterBase : MonoBehaviour
         if(distance > _battleData._attackRange + _targetCollider.size.x + _rangeOffset) {
             _monsterState = MonsterState.Moving;
             Vector3 direction = (_targetNexus.transform.position - this.transform.position).normalized;
-            this.transform.position += direction * _battleData._moveSpeed * Time.deltaTime;
+            float resultSpeed = _battleData._moveSpeed;
+            if(_debuffList.Contains(Debuff.Slow)) {
+                resultSpeed /= 2;
+            }
+            this.transform.position += direction * resultSpeed * Time.deltaTime;
         } else {
             if((Time.time - _lastAttackTime) >= (1f / _battleData._attackSpeed)) {
                 _lastAttackTime = Time.time;
@@ -135,11 +147,11 @@ public abstract class MonsterBase : MonoBehaviour
 //-----------------------------------------------------------------------------------------------------------
 
     public void AddDebuff(Debuff debuff) {
-
+        _debuffList.Add(debuff); // return bool
     }
 
     public void RemoveDebuff(Debuff debuff) {
-        
+        _debuffList.Remove(debuff); // return bool
     }
     public void SetTargetNexus(GameObject instance) {
         _targetNexus = instance;

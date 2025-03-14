@@ -22,7 +22,7 @@ public class MonsterMeleeMinion : MonsterBase
         _battleData._attackRange = 0f;
         _battleData._moveSpeed = 1f;
         _battleData._healthPoint = 10f;
-        _battleData._hitDelay = 0f;
+        _battleData._hitDelay = 1f;
     }
 }
 

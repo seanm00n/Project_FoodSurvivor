@@ -8,10 +8,10 @@ public abstract class NexusSkillBase : MonoBehaviour
     public abstract void Initialize();
     protected abstract void SkillAction();
 
-    protected BattleData _battleData;
+    protected BattleData[] _battleData;
 
     protected virtual void Start() {
-        _battleData = this.GetComponent<BattleData>();
+        _battleData = this.GetComponentsInChildren<BattleData>();
         Initialize();
     }
 

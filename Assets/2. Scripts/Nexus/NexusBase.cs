@@ -19,7 +19,6 @@ public abstract class NexusBase : MonoBehaviour
 
     [SerializeField] private GameObject _protectShieldPref;
     private GameObject _instantiatedProtectShield;
-
     private Dictionary<NexusSkills, float> _skillLastUsed;
     private GameObject _playerWeapon;
     
@@ -135,7 +134,7 @@ public abstract class NexusBase : MonoBehaviour
         if(_instantiatedSlowCircle == null) {
             Debug.Log("slowcircle");
             _instantiatedSlowCircle = Instantiate(_slowCirclePref, this.transform);
-            _skillLastUsed.TryAdd(NexusSkills.ProtectShield, Time.time);
+            _skillLastUsed.TryAdd(NexusSkills.SlowCircle, Time.time);
             float skillCooldown = 9999f;
             if(Time.time - _skillLastUsed[NexusSkills.SlowCircle] >= skillCooldown) {
                 _skillLastUsed[NexusSkills.SlowCircle] = Time.time;

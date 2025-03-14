@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 512894900811368006}
   - component: {fileID: 710539924399495106}
+  - component: {fileID: 3693699781040033683}
   m_Layer: 9
   m_Name: Body
   m_TagString: PlayerProjectile
@@ -77,6 +78,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &3693699781040033683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2401755742922430965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5753bbb491831c549a6353272f667919, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7761268160000418982
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,7 +103,6 @@ GameObject:
   - component: {fileID: 6434826630937886834}
   - component: {fileID: 1921940822443427338}
   - component: {fileID: 8082094747169211773}
-  - component: {fileID: 1771470147872883615}
   m_Layer: 6
   m_Name: Knife
   m_TagString: Player
@@ -154,7 +166,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2947025
   m_SortingLayer: 2
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -207,7 +219,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.21133333}
@@ -250,15 +262,3 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1771470147872883615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7761268160000418982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5753bbb491831c549a6353272f667919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

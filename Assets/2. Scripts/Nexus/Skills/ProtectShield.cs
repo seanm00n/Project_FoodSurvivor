@@ -17,13 +17,15 @@ public class ProtectShield : NexusSkillBase
     }
 
     public override void Initialize() {
-        _battleData._attackPoint = 1f;
-        _battleData._moveSpeed = 100f;
-        _battleData._duration = 1f;
-        _battleData._size = 1f;
+        foreach(var child in _battleData) {
+            child._attackPoint = 1f;
+            child._moveSpeed = 100f;
+            child._duration = 1f;
+            child._size = 1f;
+        }
     }
 
     protected override void SkillAction() {
-        transform.Rotate(Vector3.forward * _battleData._moveSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.forward * _battleData[0]._moveSpeed * Time.deltaTime);
     }
 }

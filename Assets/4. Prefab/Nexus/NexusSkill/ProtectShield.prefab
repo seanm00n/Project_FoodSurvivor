@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2116373565156548476}
   - component: {fileID: 2644130943590080576}
   - component: {fileID: 7714415767219862374}
-  - component: {fileID: 5064814851543010790}
   - component: {fileID: 9178945926348926857}
   m_Layer: 0
   m_Name: Shield02
@@ -30,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2436432491019275344}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -147,21 +146,9 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &5064814851543010790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2436432491019275344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61641b9efe6aba947beb34e4ea2a5837, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &9178945926348926857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,7 +173,6 @@ GameObject:
   - component: {fileID: 3361539812835804490}
   - component: {fileID: 5584626190572040723}
   - component: {fileID: 2191590142989914637}
-  - component: {fileID: 7767611415210499791}
   - component: {fileID: 156215632534875425}
   m_Layer: 0
   m_Name: Shield04
@@ -204,7 +190,7 @@ Transform:
   m_GameObject: {fileID: 3541728238554404165}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -321,21 +307,9 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &7767611415210499791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3541728238554404165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61641b9efe6aba947beb34e4ea2a5837, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &156215632534875425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,7 +332,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6036988810030147175}
   - component: {fileID: 5274036304349816509}
-  - component: {fileID: 822934165800063127}
   - component: {fileID: 2264181141512073073}
   m_Layer: 10
   m_Name: ProtectShield
@@ -396,18 +369,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 947da13ad3549a3438254a14d23b4e9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &822934165800063127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3770749953129922182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5753bbb491831c549a6353272f667919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!50 &2264181141512073073
@@ -449,7 +410,6 @@ GameObject:
   - component: {fileID: 8897377377752098101}
   - component: {fileID: 5944768159214674538}
   - component: {fileID: 6299294272153991702}
-  - component: {fileID: 3657894982737809318}
   - component: {fileID: 8297576218939379535}
   m_Layer: 0
   m_Name: Shield01
@@ -467,7 +427,7 @@ Transform:
   m_GameObject: {fileID: 4781183955879937665}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0, z: 0}
+  m_LocalPosition: {x: 2, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -584,21 +544,9 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &3657894982737809318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4781183955879937665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61641b9efe6aba947beb34e4ea2a5837, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8297576218939379535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,7 +571,6 @@ GameObject:
   - component: {fileID: 535979528802724584}
   - component: {fileID: 7081257604828865652}
   - component: {fileID: 349555482544703746}
-  - component: {fileID: 8544130837627474097}
   - component: {fileID: 6639914654979292622}
   m_Layer: 0
   m_Name: Shield03
@@ -641,7 +588,7 @@ Transform:
   m_GameObject: {fileID: 6119409847802913832}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -758,21 +705,9 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &8544130837627474097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6119409847802913832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61641b9efe6aba947beb34e4ea2a5837, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6639914654979292622
 MonoBehaviour:
   m_ObjectHideFlags: 0
