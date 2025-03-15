@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
     private float _smoothTime = 0.3f;
     private Vector3 _velocity = Vector3.zero;
     [SerializeField]
-    private float cameraOffset = 1.5f;
+    private float cameraOffset = 2f; // 화면 이동 거리
 
     private void Start() {
 

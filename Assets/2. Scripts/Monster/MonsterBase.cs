@@ -19,7 +19,7 @@ public abstract class MonsterBase : MonoBehaviour
     private GameObject _targetNexus;
     private BoxCollider2D _targetCollider;
    
-    public event Action<MonsterBase> _OnMonsterHit; 
+    public event Action<GameObject> _OnMonsterHit;
     public event Action<MonsterBase> _OnMonsterDeath;
 
     protected HashSet<Debuff> _debuffList;
@@ -30,6 +30,7 @@ public abstract class MonsterBase : MonoBehaviour
     private GameObject _projectile;// { get; protected set; } // 수정, 몬스터 별로 프로젝타일 다름
 
     protected virtual void Start() {
+        _OnMonsterHit += MonsterHit;
         _debuffList = new HashSet<Debuff>();
         _battleData = this.gameObject.GetComponent<BattleData>();
         _OnMonsterArrived += HandleMonsterAttack;
@@ -50,7 +51,7 @@ public abstract class MonsterBase : MonoBehaviour
         if(collision.gameObject.CompareTag("PlayerProjectile") ||
             collision.gameObject.CompareTag("NexusProjectile")) {
             _lastHitTime = Time.time;
-            MonsterHit(collision);
+            MonsterHit(collision.gameObject);
         }
     }
 
@@ -63,20 +64,17 @@ public abstract class MonsterBase : MonoBehaviour
             collision.gameObject.CompareTag("NexusProjectile")) {
             if(Time.time - _lastHitTime >= _battleData._hitDelay) {
                 _lastHitTime = Time.time;
-                MonsterHit(collision);
+                _OnMonsterHit?.Invoke(collision.gameObject);
             }
         }
     }
 
-    private void MonsterHit(Collider2D target) { // 넥서스도 공격하므로 수정해야함
+    public void MonsterHit(GameObject target) { // 넥서스도 공격하므로 수정해야함
         BattleData targetData = target.GetComponent<BattleData>();
         if(targetData != null) {
             _battleData._healthPoint -= targetData._attackPoint;
-            UnityEngine.Debug.Log("monster hit: " + _battleData._healthPoint);
-            //_OnMonsterHit?.Invoke(this);
             CheckMonsterDeath();
         } else {
-            UnityEngine.Debug.Log("targetData null");
         }
     }
 
@@ -97,7 +95,6 @@ public abstract class MonsterBase : MonoBehaviour
 
         if(_targetNexus == null) {
             _monsterState = MonsterState.Idle;
-            UnityEngine.Debug.Log("TargetNexus is null");
             return;
         }
         float distance = Vector3.Distance(_targetNexus.transform.position,this.transform.position);

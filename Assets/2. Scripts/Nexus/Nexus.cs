@@ -11,11 +11,10 @@ public class Nexus : NexusBase
     protected override void Update() {
         base.Update();
         UseSkill();
-        if(Input.GetKeyDown(KeyCode.A)) {
+/*        if(Input.GetKeyDown(KeyCode.A)) {
             Debug.Log("A Key Pressed");
             AddSkillTempFunc(); //
-        }
-        
+        }*/
     }
 
     protected override void Initialize() {
@@ -24,10 +23,10 @@ public class Nexus : NexusBase
         _battleData._moveSpeed = 0.5f;
     }
 
-    private void AddSkillTempFunc() {
+/*    private void AddSkillTempFunc() {
         Debug.Log("skill added");
         _SkillQueue += SlowCircle;
         _SkillQueue += ProtectShield;
-    }
+    }*/
 }
 //moveSpeed attackPoint healthPoint

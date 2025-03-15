@@ -9,7 +9,7 @@ using GameEnums;
 
 public abstract class NexusBase : MonoBehaviour
 {
-    public event Action<NexusBase> _OnNexusHit;
+    //public event Action<NexusBase> _OnNexusHit;
     public event Action<NexusBase> _OnNexusDeath;
     protected event Action _SkillQueue;
     protected BattleData _battleData;
@@ -41,6 +41,12 @@ public abstract class NexusBase : MonoBehaviour
 
     protected virtual void Update() {
         // do some common
+        if(Input.GetKeyDown(KeyCode.Q)) {
+            AddSlowCircle(); // tmp
+        }
+        if(Input.GetKeyDown(KeyCode.W)) {
+            AddProtectShield(); // tmp
+        }
         NexusMovement();
     }
 
@@ -116,6 +122,14 @@ public abstract class NexusBase : MonoBehaviour
 
     private void NexusDeath() {
         Destroy(this.gameObject);
+    }
+
+    protected void AddSlowCircle() {
+        _SkillQueue += SlowCircle;
+    }
+
+    protected void AddProtectShield() {
+        _SkillQueue += ProtectShield;
     }
 
     protected void ProtectShield() { // protect shield

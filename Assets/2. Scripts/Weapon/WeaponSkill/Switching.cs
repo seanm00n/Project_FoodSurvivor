@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Knife : WeaponBase
-{
+public class Switching : WeaponSkillBase {
     protected override void Start() {
         base.Start();
-        // do some diff
-    }
 
+    }
     protected override void Update() {
         base.Update();
-        // do some diff
+
     }
 
-    protected override void Initialize() {
-        _battleData._attackPoint = 1f;
+    protected override void SkillAction() {
+        // 넥서스와 위치 변경
     }
 
-    
+    public override void Initialize() {
+        //
+    }
 }
