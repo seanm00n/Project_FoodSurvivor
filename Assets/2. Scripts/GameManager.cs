@@ -59,6 +59,9 @@ public class GameManager : MonoBehaviour
         _mainCamera = Camera.main;
         _mainCamera.GetComponent<CameraMovement>().SetPlayer(_InstantiatedWeapon);
         MonsterSpawnInit();
+        _blueMonsters = new HashSet<GameObject>();
+        _greenMonsters = new HashSet<GameObject>();
+        _yellowMonsters = new HashSet<GameObject>();
     }
 
     private void Update() {
