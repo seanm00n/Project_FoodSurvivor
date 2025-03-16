@@ -21,6 +21,7 @@ public abstract class MonsterBase : MonoBehaviour
    
     public event Action<GameObject> _OnMonsterHit;
     public event Action<MonsterBase> _OnMonsterDeath;
+    public MonsterZone _monsterZone;
 
     protected HashSet<Debuff> _debuffList;
     protected event Action _OnMonsterArrived;

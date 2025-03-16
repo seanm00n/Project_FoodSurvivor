@@ -9,11 +9,15 @@ namespace GameEnums {
         Slow,
     }
 
-    enum NexusSkills {
+    public enum NexusSkills {
         ProtectShield, SlowCircle
     }
 
-    enum PlayerSkills {
+    public enum PlayerSkills {
         Switching, RainFire
+    }
+
+    public enum MonsterZone {
+        Blue, Green, Yellow
     }
 }

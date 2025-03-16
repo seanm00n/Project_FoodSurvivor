@@ -10,11 +10,13 @@ TagManager:
   - PlayerProjectile
   - NexusProjectile
   - Shield
+  - Zone
+  - GameManager
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Zone
   - Water
   - UI
   - Player
