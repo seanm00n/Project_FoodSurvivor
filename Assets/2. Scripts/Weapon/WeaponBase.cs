@@ -7,36 +7,76 @@ using UnityEngine;
 public abstract class WeaponBase : MonoBehaviour
 {
     protected BattleData _battleData;
-    protected event Action _SkillQueue;
 
     [SerializeField] private GameObject _rainFirePref;
 
-    private bool _isSelected = false;
+    [HideInInspector]
+    public event Action _OnExpGet;
+    [HideInInspector]
+    public int _combo;
+    [HideInInspector]
+    public bool _rainFireActive;
+    [HideInInspector]
+    public bool _switchingActive;
+
+    private bool _isSelected;
+    private bool _isSwitching;
     private Camera _mainCamera;
     private Vector3 _offset; // 클릭 시 오브젝트 튐 방지
-    private bool _isSwitching = false;
     //private LayerMask _layerMask;
+
+    protected abstract void Initialize();
 
     protected virtual void Start() {
         _battleData = this.gameObject.GetComponentInChildren<BattleData>();
+        _OnExpGet += HandleExpGet;
         Initialize();
         SetCamera();
+        _combo = 0;
+        _rainFireActive = false;
+        _switchingActive = false;
+        _isSelected = false;
+        _isSwitching = false;
         //_layerMask = LayerMask.GetMask("Player");
     }
 
     protected virtual void Update() {
         WeaponMovement();
-        if(Input.GetKeyDown(KeyCode.E)) {
-            AddRainFire(); // tmp
+        CalcCombo();
+        if(Input.GetKeyDown(KeyCode.E)) { // 버튼 입력으로 수정
+            RainFire();
         }
-        if(Input.GetKeyDown(KeyCode.R)) {
+
+        if(Input.GetKeyDown(KeyCode.R)) { // 버튼 입력으로 수정
             Switching();
-            //AddSwitching(); // tmp
         }
-        UseSkill();
     }
 
-    protected abstract void Initialize();
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if(collision.gameObject.CompareTag("EXP")) {
+            Destroy(collision.gameObject);
+            _OnExpGet?.Invoke();
+        }
+    }
+
+    private void CalcCombo() {
+        if(_combo >= 50) {
+            _rainFireActive = true;
+        } else {
+            _rainFireActive = false;
+        }
+
+        if(_combo >= 100) {
+            _switchingActive = true;
+        } else {
+            _switchingActive = false;
+        }
+    }
+
+    private void HandleExpGet() {
+        this._battleData._attackPoint += 0.01f; // 넥서스도 올라야함
+        Debug.Log("EXP get: " + _battleData._attackPoint);
+    }
 
     private void SetCamera() {
         _mainCamera = Camera.main;
@@ -73,20 +113,24 @@ public abstract class WeaponBase : MonoBehaviour
         }
     }
 
-    private void AddRainFire() {
+/*    private void AddRainFire() {
         _SkillQueue += RainFire;
     }
 
-/*    private void AddSwitching() {
+    private void AddSwitching() {
         _SkillQueue += Switching;
     }*/
 
     protected void RainFire() {
+        if(!_rainFireActive) return;
+
         Instantiate(_rainFirePref, this.transform);
-        _SkillQueue -= RainFire;
+        _combo -= 50;
     }
 
     protected void Switching() {
+        if(!_switchingActive) return;
+
         _isSwitching = true;
         GameObject nexus = GameObject.FindGameObjectWithTag("Nexus");
         Vector3 pos = transform.position;
@@ -101,6 +145,7 @@ public abstract class WeaponBase : MonoBehaviour
         StartCoroutine(SmoothCameraTransition(targetPos, 0.2f));
         //_mainCamera.transform.position -= new Vector3(result.x, result.y, _mainCamera.transform.position.z);
         StartCoroutine(ResumeWeaponMovement());
+        _combo -= 100;
     }
 
     private IEnumerator ResumeWeaponMovement() {
@@ -127,11 +172,9 @@ public abstract class WeaponBase : MonoBehaviour
         }
     }
 
-    protected void UseSkill() {
-        _SkillQueue?.Invoke();
-    }
-
     private void OnMouseUp() {
         _isSelected = false;
     }
+
+   
 }

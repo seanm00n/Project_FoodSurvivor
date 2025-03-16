@@ -257,6 +257,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 310e87f8c48bdc443ac8eaa168fb9399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _expPref: {fileID: 5164333797010973058, guid: 3b0bc01cc6c90b04bb55ea518769de2f, type: 3}
+  _monsterZone: 0
   _projectile: {fileID: 4554319367707034832, guid: fd8b96a8a5f24f1449ea85b0a650ce3b, type: 3}
 --- !u!114 &-1485273707259561391
 MonoBehaviour:

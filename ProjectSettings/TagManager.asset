@@ -12,6 +12,7 @@ TagManager:
   - Shield
   - Zone
   - GameManager
+  - EXP
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - PlayerProjectile
   - NexusProjectile
   - MonsterProjectile
-  - 
+  - Item
   - 
   - 
   - 

@@ -185,6 +185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978793c9e0264b14ea02f68a1e1a10b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _expPref: {fileID: 5164333797010973058, guid: 3b0bc01cc6c90b04bb55ea518769de2f, type: 3}
+  _monsterZone: 0
   _projectile: {fileID: 4554319367707034832, guid: 3385735be8a9cad4195f4e8914ca9c00, type: 3}
 --- !u!1 &7910401349145161243
 GameObject:

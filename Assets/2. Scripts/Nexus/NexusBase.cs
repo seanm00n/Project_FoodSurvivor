@@ -31,6 +31,7 @@ public abstract class NexusBase : MonoBehaviour
         // do some common
         _skillLastUsed = new Dictionary<NexusSkills, float>();
         _playerWeapon = GameObject.FindWithTag("Player"); // 직접할당 보다는 빠름
+        _playerWeapon.GetComponent<WeaponBase>()._OnExpGet += HandleExpGet;
         _battleData = this.gameObject.GetComponent<BattleData>();
         _lastMovedTime = 0f;
         _moveOffset = 1f;
@@ -52,6 +53,11 @@ public abstract class NexusBase : MonoBehaviour
 
     protected abstract void Initialize();
     //protected abstract void SelectSkill();
+
+    private void HandleExpGet() {
+        this._battleData._attackPoint += 0.01f;
+        this._battleData._healthPoint += 0.5f;
+    }
 
     private void NexusMovement() {
         if(!_isMoving && !_isRotating && Time.time - _lastMovedTime > 1.5f ) {

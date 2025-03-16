@@ -5,6 +5,7 @@ using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using GameEnums;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,6 +50,8 @@ public class GameManager : MonoBehaviour
     private int _yellowMaxNum;
     private int _yellowLastIndex;
     private bool _isYellowZoneOut = false;
+
+    private int _hitCount = 0;
 
     private void Awake() {
         CreateWeapon(); // 싱글턴으로 수정
@@ -120,10 +123,6 @@ public class GameManager : MonoBehaviour
         _yellowMaxNum = 15 + index + (index / 3);
     }
 
-/*    public void HandleMonsterHit(MonsterBase instance) {
-        Debug.Log("Monster Hit!");
-    }*/
-
     public void HandleMonsterDeath(MonsterBase instance) {
         // _blue인지 어디인지 확인 후 배열 삭제
         switch(instance._monsterZone) {
@@ -156,7 +155,8 @@ public class GameManager : MonoBehaviour
     public void HandleNexusDeath(NexusBase instance) {
         Debug.Log("Nexus death!");
     }
-    
+
+
     private void CreateNexus() {
         _instantiatedNexus = Instantiate(_nexusPref, new Vector2(0, -4), Quaternion.identity);
         NexusBase nexusInstance = _instantiatedNexus.GetComponent<NexusBase>();

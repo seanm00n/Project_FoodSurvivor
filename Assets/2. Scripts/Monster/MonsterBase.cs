@@ -12,6 +12,8 @@ public abstract class MonsterBase : MonoBehaviour
     public abstract bool _isBoss { get; protected set; }
     public abstract bool _isMelee { get; protected set; } // melee = 0, ranged = 1
 
+    [SerializeField]
+    private GameObject _expPref;
     private float _lastHitTime = 0f; 
     private float _lastAttackTime = 0f;
     private float _rangeOffset = 0.2f;
@@ -19,7 +21,7 @@ public abstract class MonsterBase : MonoBehaviour
     private GameObject _targetNexus;
     private BoxCollider2D _targetCollider;
    
-    public event Action<GameObject> _OnMonsterHit;
+    //public event Action<GameObject> _OnMonsterHit;
     public event Action<MonsterBase> _OnMonsterDeath;
     public MonsterZone _monsterZone;
 
@@ -31,7 +33,7 @@ public abstract class MonsterBase : MonoBehaviour
     private GameObject _projectile;// { get; protected set; } // 수정, 몬스터 별로 프로젝타일 다름
 
     protected virtual void Start() {
-        _OnMonsterHit += MonsterHit;
+        //_OnMonsterHit += MonsterHit;
         _debuffList = new HashSet<Debuff>();
         _battleData = this.gameObject.GetComponent<BattleData>();
         _OnMonsterArrived += HandleMonsterAttack;
@@ -65,12 +67,16 @@ public abstract class MonsterBase : MonoBehaviour
             collision.gameObject.CompareTag("NexusProjectile")) {
             if(Time.time - _lastHitTime >= _battleData._hitDelay) {
                 _lastHitTime = Time.time;
-                _OnMonsterHit?.Invoke(collision.gameObject);
+                MonsterHit(collision.gameObject);
+                //_OnMonsterHit?.Invoke(collision.gameObject);
             }
         }
     }
 
-    public void MonsterHit(GameObject target) { // 넥서스도 공격하므로 수정해야함
+    public void MonsterHit(GameObject target) {
+        if(target.CompareTag("Player")) {
+            target.GetComponent<WeaponBase>()._combo++;
+        }
         BattleData targetData = target.GetComponent<BattleData>();
         if(targetData != null) {
             _battleData._healthPoint -= targetData._attackPoint;
@@ -88,7 +94,13 @@ public abstract class MonsterBase : MonoBehaviour
 
     private void MonsterDeath() {
         _monsterState = MonsterState.Death;
+        DropEXP();
         Destroy(this.gameObject);
+    }
+
+    private void DropEXP() {
+        if(_expPref != null)
+            Instantiate(_expPref, this.transform.position, Quaternion.identity);
     }
 
     private void MonsterMovement() { // 디버프 적용
