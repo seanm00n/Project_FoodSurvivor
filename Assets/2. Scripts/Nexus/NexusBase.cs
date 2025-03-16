@@ -14,6 +14,15 @@ public abstract class NexusBase : MonoBehaviour
     protected event Action _SkillQueue;
     protected BattleData _battleData;
 
+    [SerializeField]
+    protected float attackPoint;
+    [SerializeField]
+    protected float healthPoint;
+    [SerializeField]
+    protected float moveSpeed;
+
+
+
     [SerializeField] private GameObject _slowCirclePref;
     private GameObject _instantiatedSlowCircle;
 
@@ -37,6 +46,9 @@ public abstract class NexusBase : MonoBehaviour
         _moveOffset = 1f;
         _isMoving = false;
         _isRotating = false;
+        _battleData._healthPoint = this.healthPoint;
+        _battleData._attackPoint = this.attackPoint;
+        _battleData._moveSpeed = this.moveSpeed;
         Initialize();
     }
 
@@ -142,6 +154,7 @@ public abstract class NexusBase : MonoBehaviour
         if(_instantiatedProtectShield == null) {
             Debug.Log("protectshield");
             _instantiatedProtectShield = Instantiate(_protectShieldPref, this.transform);
+            _instantiatedProtectShield.GetComponent<NexusSkillBase>().SetValue(_battleData._attackPoint, _battleData._moveSpeed);
             _skillLastUsed[NexusSkills.ProtectShield] = Time.time;
             float skillCooldown = 9999f;
             if(Time.time - _skillLastUsed[NexusSkills.ProtectShield] >= skillCooldown) {
@@ -154,6 +167,7 @@ public abstract class NexusBase : MonoBehaviour
         if(_instantiatedSlowCircle == null) {
             Debug.Log("slowcircle");
             _instantiatedSlowCircle = Instantiate(_slowCirclePref, this.transform);
+            _instantiatedSlowCircle.GetComponent<NexusSkillBase>().SetValue(_battleData._attackPoint, _battleData._moveSpeed);
             _skillLastUsed.TryAdd(NexusSkills.SlowCircle, Time.time);
             float skillCooldown = 9999f;
             if(Time.time - _skillLastUsed[NexusSkills.SlowCircle] >= skillCooldown) {

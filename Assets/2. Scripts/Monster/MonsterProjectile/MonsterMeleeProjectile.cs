@@ -15,6 +15,6 @@ public class MonsterMeleeProjectile : MonsterProjectileBase
     }
 
     protected override void Initialize() {
-        _battleData._lifeTime = 2f;
+        //
     }
 }

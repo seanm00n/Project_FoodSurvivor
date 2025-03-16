@@ -15,6 +15,6 @@ public class MonsterRangedProjectile : MonsterProjectileBase {
     }
 
     protected override void Initialize() {
-        _battleData._lifeTime = 5f;
+        //
     }
 }

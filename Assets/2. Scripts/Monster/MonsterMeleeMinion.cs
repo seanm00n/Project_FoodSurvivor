@@ -17,12 +17,7 @@ public class MonsterMeleeMinion : MonsterBase
     }
 
     protected override void Initialize() {
-        _battleData._attackPoint = 1f;
-        _battleData._attackSpeed = 1f;
-        _battleData._attackRange = 0f;
-        _battleData._moveSpeed = 1f;
-        _battleData._healthPoint = 10f;
-        _battleData._hitDelay = 1f;
+        //
     }
 }
 

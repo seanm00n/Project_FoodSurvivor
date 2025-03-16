@@ -13,7 +13,13 @@ public abstract class MonsterBase : MonoBehaviour
     public abstract bool _isMelee { get; protected set; } // melee = 0, ranged = 1
 
     [SerializeField]
+    protected float attackPoint;
+    [SerializeField]
+    protected float healthPoint;
+
+    [SerializeField]
     private GameObject _expPref;
+
     private float _lastHitTime = 0f; 
     private float _lastAttackTime = 0f;
     private float _rangeOffset = 0.2f;
@@ -39,6 +45,8 @@ public abstract class MonsterBase : MonoBehaviour
         _OnMonsterArrived += HandleMonsterAttack;
         _targetCollider = _targetNexus.GetComponent<BoxCollider2D>();
         Initialize();
+        _battleData._attackPoint = this.attackPoint;
+        _battleData._healthPoint = this.healthPoint;
     }
 
     protected virtual void Update() {

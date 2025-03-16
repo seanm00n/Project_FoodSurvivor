@@ -8,6 +8,11 @@ public abstract class WeaponBase : MonoBehaviour
 {
     protected BattleData _battleData;
 
+    [SerializeField]
+    protected float attackPoint;
+    [SerializeField]
+    protected float attackSpeed;
+
     [SerializeField] private GameObject _rainFirePref;
 
     [HideInInspector]
@@ -18,6 +23,7 @@ public abstract class WeaponBase : MonoBehaviour
     public bool _rainFireActive;
     [HideInInspector]
     public bool _switchingActive;
+
 
     private bool _isSelected;
     private bool _isSwitching;
@@ -37,6 +43,8 @@ public abstract class WeaponBase : MonoBehaviour
         _switchingActive = false;
         _isSelected = false;
         _isSwitching = false;
+        _battleData._attackPoint = this.attackPoint;
+        _battleData._attackSpeed = this.attackSpeed;
         //_layerMask = LayerMask.GetMask("Player");
     }
 
@@ -75,6 +83,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     private void HandleExpGet() {
         this._battleData._attackPoint += 0.01f; // 넥서스도 올라야함
+
         Debug.Log("EXP get: " + _battleData._attackPoint);
     }
 
@@ -124,7 +133,8 @@ public abstract class WeaponBase : MonoBehaviour
     protected void RainFire() {
         if(!_rainFireActive) return;
 
-        Instantiate(_rainFirePref, this.transform);
+        GameObject instantiatedRainFire = Instantiate(_rainFirePref, this.transform);
+        instantiatedRainFire.GetComponent<WeaponSkillBase>().SetValue(_battleData._attackPoint, _battleData._attackSpeed);
         _combo -= 50;
     }
 

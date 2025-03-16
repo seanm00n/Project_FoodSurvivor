@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ProtectShield : NexusSkillBase
 {
-    CircleCollider2D[] _colliders;
+    private Transform[] _childs;
 
     protected override void Start() {
         base.Start();
-        _colliders = GetComponentsInChildren<CircleCollider2D>();
+        _childs = GetComponentsInChildren<Transform>();
     }
 
     protected override void Update() {
@@ -17,15 +17,13 @@ public class ProtectShield : NexusSkillBase
     }
 
     public override void Initialize() {
-        foreach(var child in _battleData) {
-            child._attackPoint = 1f;
-            child._moveSpeed = 100f;
-            child._duration = 1f;
-            child._size = 1f;
+        foreach(var child in _childs) {
+            child.GetComponent<BattleData>()._attackPoint = this._battleData._attackPoint;
+            child.GetComponent<BattleData>()._moveSpeed = this._battleData._moveSpeed;
         }
     }
 
     protected override void SkillAction() {
-        transform.Rotate(Vector3.forward * _battleData[0]._moveSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.forward * this._battleData._moveSpeed * Time.deltaTime);
     }
 }

@@ -852,11 +852,11 @@ MonoBehaviour:
   _nexusPref: {fileID: 1555446884715239407, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
   _weaponPref: {fileID: 7761268160000418982, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
   _blueZone: {fileID: 1651696325}
-  _blueMonsterPref: {fileID: 0}
+  _blueMonsterPref: {fileID: 7614071129163002635, guid: a1cc8872a26f5f34989b3a2a4e6a6bd2, type: 3}
   _greenZone: {fileID: 66241829}
-  _greenMonsterPref: {fileID: 0}
+  _greenMonsterPref: {fileID: 7614071129163002635, guid: 0a7ab1e6bc6f1ff4eaa48fa9eab707e6, type: 3}
   _yellowZone: {fileID: 1540382033}
-  _yellowMonsterPref: {fileID: 0}
+  _yellowMonsterPref: {fileID: 7614071129163002635, guid: 878e822e894e68649af45a22df410a59, type: 3}
 --- !u!1 &1351216966
 GameObject:
   m_ObjectHideFlags: 0

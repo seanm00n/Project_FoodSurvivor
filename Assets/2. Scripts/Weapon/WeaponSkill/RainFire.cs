@@ -23,9 +23,7 @@ public class RainFire : WeaponSkillBase {
     }
 
     public override void Initialize() {
-        _battleData._attackPoint = 1f;
-        _battleData._moveSpeed = 1f;
-        _battleData._attackSpeed = 8f; // ¹ß»ç ¼ö
+        //
     }
 
     IEnumerator Fire() {

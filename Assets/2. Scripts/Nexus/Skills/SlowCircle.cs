@@ -15,12 +15,7 @@ public class SlowCircle : NexusSkillBase
     }
 
     public override void Initialize() {
-        foreach(var child in _battleData) {
-            child._moveSpeed = 0f;
-            child._attackPoint = 1f;
-            child._size = 0f;
-            child._duration = 0f;
-        }
+        //
     }
 
     protected override void SkillAction() {

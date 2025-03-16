@@ -15,7 +15,7 @@ public class Knife : WeaponBase
     }
 
     protected override void Initialize() {
-        _battleData._attackPoint = 1f;
+        //
     }
 
     

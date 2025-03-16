@@ -18,9 +18,7 @@ public class Nexus : NexusBase
     }
 
     protected override void Initialize() {
-        _battleData._healthPoint = 1000f;
-        _battleData._attackPoint = 2f;
-        _battleData._moveSpeed = 0.5f;
+        //
     }
 
 /*    private void AddSkillTempFunc() {

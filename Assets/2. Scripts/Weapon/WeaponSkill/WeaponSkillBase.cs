@@ -17,4 +17,9 @@ public abstract class WeaponSkillBase : MonoBehaviour
     protected virtual void Update() {
         SkillAction();
     }
+
+    public void SetValue(float attackPoint, float attackSpeed) {
+        _battleData._attackPoint = attackPoint;
+        _battleData._attackSpeed = attackSpeed;
+    }
 }
