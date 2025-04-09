@@ -127,7 +127,6 @@ public class GameManager : MonoBehaviour
     }
 
     public void HandleMonsterDeath(MonsterBase instance) {
-        // _blue인지 어디인지 확인 후 배열 삭제
         switch(instance._monsterZone) {
             case MonsterZone.Blue:
                 if(_blueMonsters.Remove(instance.gameObject)) {

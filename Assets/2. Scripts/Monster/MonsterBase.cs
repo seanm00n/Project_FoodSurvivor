@@ -56,19 +56,8 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected abstract void Initialize();
 
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if(_monsterState == MonsterState.Death) return;
 
-        if(collision.gameObject.CompareTag("PlayerProjectile") ||
-            collision.gameObject.CompareTag("NexusProjectile")) {
-            _lastHitTime = Time.time;
-            MonsterHit(collision.gameObject);
-        }
-    }
-
-    // 보스용 충돌 판정
     private void OnTriggerStay2D(Collider2D collision) {
-        //if(!_isBoss || _monsterState == MonsterState.Death) return;
         if(_monsterState == MonsterState.Death) return;
 
         if(collision.gameObject.CompareTag("PlayerProjectile") ||
@@ -78,6 +67,16 @@ public abstract class MonsterBase : MonoBehaviour
                 MonsterHit(collision.gameObject);
                 //_OnMonsterHit?.Invoke(collision.gameObject);
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if(_monsterState == MonsterState.Death) return;
+
+        if(collision.gameObject.CompareTag("PlayerProjectile") ||
+            collision.gameObject.CompareTag("NexusProjectile")) {
+            _lastHitTime = Time.time;
+            MonsterHit(collision.gameObject);
         }
     }
 

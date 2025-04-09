@@ -21,8 +21,6 @@ public abstract class NexusBase : MonoBehaviour
     [SerializeField]
     protected float moveSpeed;
 
-
-
     [SerializeField] private GameObject _slowCirclePref;
     private GameObject _instantiatedSlowCircle;
 
