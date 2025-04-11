@@ -1,5 +1,5 @@
-﻿name(upper camel),ap
-Switching,0
-RainFire,20
-ProtectShield,10
-SlowCircle,5
+name(upper camel)	Lv1_Ap	Lv2_Ap	Lv3_Ap	Lv4_Ap	Lv5_Ap
+Switching	0	0	0	0	0
+RainFire	20	40	80	160	320
+ProtectShield	10	25	40	55	70
+SlowCircle	5	10	15	20	25
