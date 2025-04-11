@@ -8,7 +8,7 @@ public class Missile : MonoBehaviour
 {
     private GameObject _target;
     private GameObject[] _monsters;
-    private BattleData _battleData;
+    private Ability _battleData;
     private Vector3 _lastDirection = Vector3.zero;
     private float _lastRotationZ = 0f; // 마지막 회전 값
 
@@ -16,7 +16,7 @@ public class Missile : MonoBehaviour
     private void Start() {
         _monsters = GameObject.FindGameObjectsWithTag("Monster");
         _target = FindNearsetMonster();
-        _battleData = GetComponent<BattleData>();
+        _battleData = GetComponent<Ability>();
         Destroy(gameObject, 3f);
     }
 
@@ -55,7 +55,7 @@ public class Missile : MonoBehaviour
 
             if(_target == null) // 🔥 새로운 목표도 없으면 기존 방향 유지
             {
-                transform.position += _lastDirection * _battleData._moveSpeed * Time.deltaTime;
+                transform.position += _lastDirection * _battleData._MS * Time.deltaTime;
                 transform.rotation = Quaternion.Euler(0, 0, _lastRotationZ); // 🔥 마지막 회전값 유지
                 return;
             }
@@ -66,7 +66,7 @@ public class Missile : MonoBehaviour
         _lastDirection = direction; // 🌟 마지막 이동 방향 저장
         _lastRotationZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 🌟 2D에서 회전값(Z축) 저장
 
-        float resultSpeed = _battleData._moveSpeed;
+        float resultSpeed = _battleData._MS;
         transform.position += direction * resultSpeed * Time.deltaTime;
 
         // 🔥 2D에서 Z축만 회전하도록 설정

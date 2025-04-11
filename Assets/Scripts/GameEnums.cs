@@ -1,5 +1,4 @@
 
-
 namespace GameEnums {
     public enum MonsterState {
         Idle, Attack, Moving, Death
@@ -17,7 +16,17 @@ namespace GameEnums {
         Switching, RainFire
     }
 
-    public enum MonsterZone {
+    public enum Zone {
         Blue, Green, Yellow
+    }
+}
+
+public struct LvCol {
+    public float reqEXP;
+    public float AP;
+
+    public LvCol(float value1, float value2) {
+        reqEXP = value1;
+        AP = value2;
     }
 }

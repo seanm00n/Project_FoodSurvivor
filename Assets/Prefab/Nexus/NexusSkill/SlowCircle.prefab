@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5446372417633411704}
   - component: {fileID: 8919693701098775107}
   - component: {fileID: 8626311557098314899}
-  - component: {fileID: 641102818916197744}
   - component: {fileID: -7512218083064356256}
   m_Layer: 10
   m_Name: SlowCircle
@@ -122,18 +121,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &641102818916197744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2437209667103863883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5753bbb491831c549a6353272f667919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-7512218083064356256
 MonoBehaviour:
   m_ObjectHideFlags: 0

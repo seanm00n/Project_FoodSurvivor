@@ -8,7 +8,7 @@ public class SpawnZone : MonoBehaviour
     GameObject _gameManager;
 
     [SerializeField]
-    MonsterZone _monsterZone;
+    Zone _monsterZone;
 
     private void Awake() {
         _gameManager = GameObject.FindGameObjectWithTag("GameManager");
@@ -17,7 +17,7 @@ public class SpawnZone : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision) {
         if(collision.gameObject.CompareTag("Player")) {
             Debug.Log("Player out of line");
-            _gameManager.GetComponent<GameManager>().SetZoneOut(_monsterZone, true);
+            _gameManager.GetComponent<GM>().SetZoneOut(_monsterZone, true);
         }
     }
 }

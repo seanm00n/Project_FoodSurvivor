@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 512894900811368006}
   - component: {fileID: 710539924399495106}
-  - component: {fileID: 3693699781040033683}
+  - component: {fileID: 5583683573030161246}
   m_Layer: 9
   m_Name: Body
   m_TagString: PlayerProjectile
@@ -78,7 +78,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &3693699781040033683
+--- !u!114 &5583683573030161246
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2401755742922430965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5753bbb491831c549a6353272f667919, type: 3}
+  m_Script: {fileID: 11500000, guid: f050c9e614d2c244d879c8433e1fe250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7761268160000418982
@@ -190,10 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c50b13f3e153904cb3eab33173fc481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPoint: 25
-  attackSpeed: 1
   _rainFirePref: {fileID: 1308840794168678689, guid: 61dfd4e0d12c42245a57e0967f798792, type: 3}
-  _combo: 0
   _rainFireActive: 0
   _switchingActive: 0
 --- !u!61 &1921940822443427338

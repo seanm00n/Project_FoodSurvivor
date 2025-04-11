@@ -7,10 +7,10 @@ public abstract class WeaponSkillBase : MonoBehaviour
     public abstract void Initialize();
     protected abstract void SkillAction();
 
-    protected BattleData _battleData;
+    protected Ability _battleData;
 
     protected virtual void Start() {
-        _battleData = GetComponent<BattleData>();
+        _battleData = GetComponent<Ability>();
         Initialize();
     }
 
@@ -19,7 +19,7 @@ public abstract class WeaponSkillBase : MonoBehaviour
     }
 
     public void SetValue(float attackPoint, float attackSpeed) {
-        _battleData._attackPoint = attackPoint;
-        _battleData._attackSpeed = attackSpeed;
+        _battleData._AP = attackPoint;
+        _battleData._AS = attackSpeed;
     }
 }

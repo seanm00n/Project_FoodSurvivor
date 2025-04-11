@@ -6,9 +6,12 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using GameEnums;
 using System;
+using System.IO;
 
-public class GameManager : MonoBehaviour
+public class GM : MonoBehaviour
 {
+    public static GM I { get; private set; }
+
     [SerializeField]
     private GameObject _nexusPref; // 수정
     private GameObject _instantiatedNexus;
@@ -53,9 +56,18 @@ public class GameManager : MonoBehaviour
 
     private int _hitCount = 0;
 
+    public Dictionary<int, LvCol> _LvData { get; private set; }
+
     private void Awake() {
-        CreateWeapon(); // 싱글턴으로 수정
-        CreateNexus(); // 싱글턴으로 수정
+        if(I != null && I != this) {
+            Destroy(gameObject);
+            return;
+        }
+        I = this;
+
+        _LvData = LoadLevelDataCSV();
+        CreateWeapon(); 
+        CreateNexus(); 
         _mainCamera = Camera.main;
         _mainCamera.GetComponent<CameraMovement>().SetPlayer(_InstantiatedWeapon);
         MonsterSpawnInit();
@@ -67,6 +79,40 @@ public class GameManager : MonoBehaviour
     private void Update() {
         MonsterSpawn(); // 1초 주기로 변경
         UpdateMonsterMax(); // Max 증가
+    }
+
+    private Dictionary<int, LvCol> LoadLevelDataCSV() { // 다른 데이터도 가능하게 수정
+        TextAsset csvFile = Resources.Load<TextAsset>("LevelData");
+        if(csvFile == null) {
+            Debug.Log("Cannot find csv data");
+        }
+
+        StringReader reader = new StringReader(csvFile.text);
+        if(reader == null) {
+            Debug.Log("Cannot read csv data");
+        }
+
+        var result = new Dictionary<int, LvCol>();
+        bool isFirstLine = true;
+
+        while(reader.Peek() > -1) {
+            string line = reader.ReadLine();
+
+            if(isFirstLine) {
+                isFirstLine = false;
+                continue;
+            }
+
+            string[] values = line.Split(",");
+            if(values.Length != 3) {
+                Debug.Log("Data not fure");
+                continue;
+            }
+            LvCol levelColumn = new LvCol(float.Parse(values[1]), float.Parse(values[2]));//
+            result.Add(int.Parse(values[0]), levelColumn);
+        }
+
+        return result;
     }
 
     private void MonsterSpawnInit() {
@@ -85,7 +131,7 @@ public class GameManager : MonoBehaviour
             GameObject instance = Instantiate(_blueMonsterPref, _blueSpawnPoint[i].position, Quaternion.identity);
             _blueMonsters.Add(instance);
             MonsterBase instanceBase = instance.GetComponent<MonsterBase>();
-            instanceBase._monsterZone = MonsterZone.Blue;
+            instanceBase._monsterZone = Zone.Blue;
             instanceBase?.SetTargetNexus(_instantiatedNexus);
             instanceBase._OnMonsterDeath += HandleMonsterDeath;
             _blueLastIndex = i+1;
@@ -97,7 +143,7 @@ public class GameManager : MonoBehaviour
                 GameObject instance = Instantiate(_greenMonsterPref, _greenSpawnPoint[i].position, Quaternion.identity);
                 _greenMonsters.Add(instance);
                 MonsterBase instanceBase = instance.GetComponent<MonsterBase>();
-                instanceBase._monsterZone = MonsterZone.Green;
+                instanceBase._monsterZone = Zone.Green;
                 instanceBase?.SetTargetNexus(_instantiatedNexus);
                 instanceBase._OnMonsterDeath += HandleMonsterDeath;
                 _greenLastIndex = i + 1;
@@ -110,7 +156,7 @@ public class GameManager : MonoBehaviour
                 GameObject instance = Instantiate(_yellowMonsterPref, _yellowSpawnPoint[i].position, Quaternion.identity);
                 _yellowMonsters.Add(instance);
                 MonsterBase instanceBase = instance.GetComponent<MonsterBase>();
-                instanceBase._monsterZone = MonsterZone.Yellow;
+                instanceBase._monsterZone = Zone.Yellow;
                 instanceBase?.SetTargetNexus(_instantiatedNexus);
                 instanceBase._OnMonsterDeath += HandleMonsterDeath;
                 _yellowLastIndex = i + 1;
@@ -128,17 +174,17 @@ public class GameManager : MonoBehaviour
 
     public void HandleMonsterDeath(MonsterBase instance) {
         switch(instance._monsterZone) {
-            case MonsterZone.Blue:
+            case Zone.Blue:
                 if(_blueMonsters.Remove(instance.gameObject)) {
                     Destroy(instance.gameObject);
                 }
                 break;
-            case MonsterZone.Green:
+            case Zone.Green:
                 if(_greenMonsters.Remove(instance.gameObject)) {
                     Destroy(instance.gameObject);
                 }
                 break;
-            case MonsterZone.Yellow:
+            case Zone.Yellow:
                 if(_yellowMonsters.Remove(instance.gameObject)) {
                     Destroy(instance.gameObject);
                 }
@@ -170,15 +216,15 @@ public class GameManager : MonoBehaviour
         _InstantiatedWeapon = Instantiate(_weaponPref, new Vector2(0, 0), Quaternion.identity);
     }
 
-    public void SetZoneOut(MonsterZone monsterZone, bool value) {
+    public void SetZoneOut(Zone monsterZone, bool value) {
         switch(monsterZone) {
-            case MonsterZone.Blue:
+            case Zone.Blue:
                 _isBlueZoneOut = value;
                 break;
-            case MonsterZone.Green:
+            case Zone.Green:
                 _isGreenZoneOut = value;
                 break;
-            case MonsterZone.Yellow:
+            case Zone.Yellow:
                 _isYellowZoneOut = value;
                 break;
             default:
