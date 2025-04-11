@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class FuckThisShit : MonoBehaviour
+public class LobbyPopUp : MonoBehaviour
 {
     public Image imageA;
     public Image imageB;
