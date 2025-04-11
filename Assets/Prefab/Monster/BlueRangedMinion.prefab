@@ -97,7 +97,6 @@ GameObject:
   - component: {fileID: 4404670056931082299}
   - component: {fileID: 5499043400820174400}
   - component: {fileID: -5570818030593102797}
-  - component: {fileID: -1485273707259561391}
   m_Layer: 8
   m_Name: BlueRangedMinion
   m_TagString: Monster
@@ -259,18 +258,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPoint: 10
   healthPoint: 20
-  _expPref: {fileID: 5164333797010973058, guid: 3b0bc01cc6c90b04bb55ea518769de2f, type: 3}
+  _expPref: {fileID: 2485280721376784820, guid: 6d864ffa63671594896754eeff5aea80, type: 3}
   _monsterZone: 0
   _projectile: {fileID: 4554319367707034832, guid: fd8b96a8a5f24f1449ea85b0a650ce3b, type: 3}
---- !u!114 &-1485273707259561391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7614071129163002635}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5753bbb491831c549a6353272f667919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -18,12 +18,12 @@ public class ProtectShield : NexusSkillBase
 
     public override void Initialize() {
         foreach(var child in _childs) {
-            child.GetComponent<BattleData>()._attackPoint = this._battleData._attackPoint;
-            child.GetComponent<BattleData>()._moveSpeed = this._battleData._moveSpeed;
+            child.GetComponent<Ability>()._AP = this._battleData._AP;
+            child.GetComponent<Ability>()._MS = this._battleData._MS;
         }
     }
 
     protected override void SkillAction() {
-        transform.Rotate(Vector3.forward * this._battleData._moveSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.forward * this._battleData._MS * Time.deltaTime);
     }
 }

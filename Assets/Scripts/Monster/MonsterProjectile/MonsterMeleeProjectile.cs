@@ -8,6 +8,7 @@ public class MonsterMeleeProjectile : MonsterProjectileBase
 
     protected override void Start() {
         base.Start();
+        _ability._lifeTime = 2f;
     }
 
     protected override void Update() {

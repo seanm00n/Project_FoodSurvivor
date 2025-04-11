@@ -9,19 +9,14 @@ using GameEnums;
 
 public abstract class NexusBase : MonoBehaviour
 {
-    //public event Action<NexusBase> _OnNexusHit;
+    public static NexusBase I { get; private set; }
+
     public event Action<NexusBase> _OnNexusDeath;
     protected event Action _SkillQueue;
-    protected BattleData _battleData;
+    protected Ability _ability;
 
-    [SerializeField]
-    protected float attackPoint;
-    [SerializeField]
-    protected float healthPoint;
-    [SerializeField]
-    protected float moveSpeed;
-
-    [SerializeField] private GameObject _slowCirclePref;
+    [SerializeField] 
+    private GameObject _slowCirclePref;
     private GameObject _instantiatedSlowCircle;
 
     [SerializeField] private GameObject _protectShieldPref;
@@ -34,20 +29,29 @@ public abstract class NexusBase : MonoBehaviour
     private float _moveOffset;
     private bool _isMoving;
 
+    protected abstract void Initialize();
+
+    private void Awake() {
+        if(I != null && I != this) {
+            Destroy(gameObject);
+            return;
+        }
+        I = this;
+    }
+
     protected virtual void Start() {
-        // do some common
         _skillLastUsed = new Dictionary<NexusSkills, float>();
         _playerWeapon = GameObject.FindWithTag("Player"); // 직접할당 보다는 빠름
-        _playerWeapon.GetComponent<WeaponBase>()._OnExpGet += HandleExpGet;
-        _battleData = this.gameObject.GetComponent<BattleData>();
+        _ability = this.gameObject.GetComponent<Ability>();
         _spriteRenderer = GetComponent<SpriteRenderer>(); 
         _lastMovedTime = 0f;
         _moveOffset = 1f;
         _isMoving = false;
-        _battleData._healthPoint = this.healthPoint;
-        _battleData._attackPoint = this.attackPoint;
-        _battleData._moveSpeed = this.moveSpeed;
+        _ability._HP = 500f;
+        _ability._AP = 15f;
+        _ability._MS = 1f;
         Initialize();
+        // do some common
     }
 
     protected virtual void Update() {
@@ -61,13 +65,6 @@ public abstract class NexusBase : MonoBehaviour
         NexusMovement();
     }
 
-    protected abstract void Initialize();
-    //protected abstract void SelectSkill();
-
-    private void HandleExpGet() {
-        this._battleData._attackPoint += 0.01f;
-        this._battleData._healthPoint += 0.5f;
-    }
 
     private void NexusMovement() {
         if(!_isMoving && Time.time - _lastMovedTime > 1.5f ) {
@@ -85,7 +82,7 @@ public abstract class NexusBase : MonoBehaviour
         Vector2 direction = (_playerWeapon.transform.position - this.transform.position).normalized;
         float timer = Time.time;
         while(Time.time - timer < 1f) {
-            this.transform.position += (Vector3)direction * _battleData._moveSpeed * Time.deltaTime;
+            this.transform.position += (Vector3)direction * _ability._MS * Time.deltaTime;
             yield return null;
         }
         _isMoving = false;
@@ -122,23 +119,23 @@ public abstract class NexusBase : MonoBehaviour
     }
 
     private void NexusHit(GameObject target) {
-        BattleData targetData = target?.GetComponent<BattleData>();
+        Ability targetData = target?.GetComponent<Ability>();
         if(targetData != null) {
-            _battleData._healthPoint -= targetData._attackPoint;
-            //_OnNexusHit?.Invoke(this);
+            _ability._HP -= targetData._AP;
             CheckNexusDeath();
         }
     }
 
     private void CheckNexusDeath() {
-        if(_battleData._healthPoint <= 0f) {
+        if(_ability._HP <= 0f) {
             _OnNexusDeath?.Invoke(this);
-            NexusDeath();
+            HandleNexusDeath();
         }
     }
 
-    private void NexusDeath() {
+    private void HandleNexusDeath() {
         Destroy(this.gameObject);
+        //game end
     }
 
     protected void AddSlowCircle() {
@@ -153,7 +150,7 @@ public abstract class NexusBase : MonoBehaviour
         if(_instantiatedProtectShield == null) {
             Debug.Log("protectshield");
             _instantiatedProtectShield = Instantiate(_protectShieldPref, this.transform);
-            _instantiatedProtectShield.GetComponent<NexusSkillBase>().SetValue(_battleData._attackPoint, _battleData._moveSpeed);
+            _instantiatedProtectShield.GetComponent<NexusSkillBase>().SetValue(_ability._AP, _ability._MS);
             _skillLastUsed[NexusSkills.ProtectShield] = Time.time;
             float skillCooldown = 9999f;
             if(Time.time - _skillLastUsed[NexusSkills.ProtectShield] >= skillCooldown) {
@@ -166,7 +163,7 @@ public abstract class NexusBase : MonoBehaviour
         if(_instantiatedSlowCircle == null) {
             Debug.Log("slowcircle");
             _instantiatedSlowCircle = Instantiate(_slowCirclePref, this.transform);
-            _instantiatedSlowCircle.GetComponent<NexusSkillBase>().SetValue(_battleData._attackPoint, _battleData._moveSpeed);
+            _instantiatedSlowCircle.GetComponent<NexusSkillBase>().SetValue(_ability._AP, _ability._MS);
             _skillLastUsed.TryAdd(NexusSkills.SlowCircle, Time.time);
             float skillCooldown = 9999f;
             if(Time.time - _skillLastUsed[NexusSkills.SlowCircle] >= skillCooldown) {

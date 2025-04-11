@@ -1,59 +1,68 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using GameEnums;
+using System.IO;
+using Unity.VisualScripting.FullSerializer;
 
 public abstract class WeaponBase : MonoBehaviour
 {
-    protected BattleData _battleData;
+    public static WeaponBase I { get; private set; }
+    protected Ability _ability;
 
     [SerializeField] 
     private GameObject _rainFirePref;
 
-    public event Action _OnExpGet;
-    private int _combo;
-    public bool _rainFireActive;
-    public bool _switchingActive;
+    #region weapon skill
+    private int _combo = 0;
+    public bool _rainFireActive = false;
+    public bool _switchingActive = false;
+    #endregion
 
-    private bool _isSelected;
-    private bool _isSwitching;
+    private bool _isSelected = false;
+    private bool _isSwitching = false;
     private Camera _mainCamera;
     private Vector3 _offset; // 클릭 시 오브젝트 튐 방지
 
     protected abstract void Initialize();
 
+    private void Awake() {
+        if(I != null && I != this) {
+            Destroy(gameObject);
+            return;
+        }
+        I = this;
+    }
+
     protected virtual void Start() {
-        _battleData = this.gameObject.GetComponentInChildren<BattleData>();
-        _OnExpGet += HandleExpGet;
+        _ability = this.gameObject.GetComponentInChildren<Ability>();
+        _ability._AP = 25f;
+        _ability._AS = 1f;
+        _ability._reqEXP = GM.I._LvData[_ability._Lv].reqEXP;//
+
         Initialize();
         SetCamera();
-        _combo = 0;
-        _rainFireActive = false;
-        _switchingActive = false;
-        _isSelected = false;
-        _isSwitching = false;
-        _battleData._attackPoint = 25f;
-        _battleData._attackSpeed = 1f;
-        //_layerMask = LayerMask.GetMask("Player");
     }
 
     protected virtual void Update() {
         WeaponMovement();
         CalcCombo();
-        if(Input.GetKeyDown(KeyCode.E)) { // 버튼 입력으로 수정
+        if(Input.GetKeyDown(KeyCode.E)) { // 레벨업스킬로 수정
             RainFire();
         }
 
-        if(Input.GetKeyDown(KeyCode.R)) { // 버튼 입력으로 수정
+        if(Input.GetKeyDown(KeyCode.R)) { // 레벨업스킬로 수정
             Switching();
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.CompareTag("EXP")) {
+            HandleExpGet(collision.GetComponent<EXP>()._expPoint);
             Destroy(collision.gameObject);
-            _OnExpGet?.Invoke();
         }
     }
 
@@ -71,10 +80,21 @@ public abstract class WeaponBase : MonoBehaviour
         }
     }
 
-    private void HandleExpGet() {
-        this._battleData._attackPoint += 0.01f; // 넥서스도 올라야함
+    private void HandleExpGet(float value) {
+        if(value + _ability._exp >= _ability._reqEXP) {
+            _ability._exp = (value + _ability._exp) - _ability._reqEXP;
+            LevelUp();
+        } else {
+            _ability._exp += value;
+        }
+        Debug.Log("EXP get: " + _ability._exp);
+    }
 
-        Debug.Log("EXP get: " + _battleData._attackPoint);
+    private void LevelUp() {
+        _ability._Lv++;
+        _ability._AP = GM.I._LvData[_ability._Lv].AP;
+        _ability._reqEXP = GM.I._LvData[_ability._Lv].reqEXP;
+        // get skill or skillup
     }
 
     private void SetCamera() {
@@ -116,7 +136,7 @@ public abstract class WeaponBase : MonoBehaviour
         if(!_rainFireActive) return;
 
         GameObject instantiatedRainFire = Instantiate(_rainFirePref, this.transform);
-        instantiatedRainFire.GetComponent<WeaponSkillBase>().SetValue(_battleData._attackPoint, _battleData._attackSpeed);
+        instantiatedRainFire.GetComponent<WeaponSkillBase>().SetValue(_ability._AP, _ability._AS);
         _combo -= 50; // rainfire active condition
     }
 

@@ -7,17 +7,10 @@ public abstract class MonsterProjectileBase : MonoBehaviour
 {
     protected abstract bool _isMelee { get; set; }
 
-    protected BattleData _battleData;
-    private float _spawnTime;
-
-    [SerializeField]
-    protected float _lifeTime;
-    
+    protected Ability _ability;
+    private float _spawnTime;    
 
     protected virtual void Start() {
-        _battleData = this.GetComponent<BattleData>();
-        _battleData._lifeTime = this._lifeTime;
-        // do some common
         Initialize();
         _spawnTime = Time.time;
     }
@@ -29,14 +22,14 @@ public abstract class MonsterProjectileBase : MonoBehaviour
     protected abstract void Initialize();
 
     private void ProjectileDestroy() {
-        if(Time.time - _spawnTime >= _battleData._lifeTime) {
+        if(Time.time - _spawnTime >= _ability._lifeTime) {
             Destroy(this.gameObject);
         }
     }
 
     private void ProjectileMovement() {
         Vector3 direction = this.transform.right.normalized;
-        this.transform.position += direction * _battleData._moveSpeed * (_isMelee? 0f:1f) * Time.deltaTime;
+        this.transform.position += direction * _ability._MS * (_isMelee? 0f:1f) * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -47,12 +40,12 @@ public abstract class MonsterProjectileBase : MonoBehaviour
     }
 
     public void SetValue(float attackPoint, float moveSpeed) {
-        _battleData._attackPoint = attackPoint;
-        _battleData._moveSpeed = moveSpeed;
+        _ability._AP = attackPoint;
+        _ability._MS = moveSpeed;
     }
 
     public float GetProjectileAttackPoint() {
-        return _battleData._attackPoint;
+        return _ability._AP;
     }
 
 }

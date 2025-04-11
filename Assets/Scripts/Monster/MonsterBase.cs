@@ -29,25 +29,25 @@ public abstract class MonsterBase : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     //public event Action<GameObject> _OnMonsterHit;
     public event Action<MonsterBase> _OnMonsterDeath;
-    public MonsterZone _monsterZone;
+    public Zone _monsterZone;
 
     protected HashSet<Debuff> _debuffList;
     protected event Action _OnMonsterArrived;
-    protected BattleData _battleData;
+    protected Ability _battleData;
 
     [SerializeField]
     private GameObject _projectile;// { get; protected set; } // 수정, 몬스터 별로 프로젝타일 다름
 
     protected virtual void Start() {
-        //_OnMonsterHit += MonsterHit;
+        _battleData = this.gameObject.GetComponent<Ability>();
+        _battleData._AP = this.attackPoint;
+        _battleData._HP = this.healthPoint;
+
         _debuffList = new HashSet<Debuff>();
-        _battleData = this.gameObject.GetComponent<BattleData>();
         _OnMonsterArrived += HandleMonsterAttack;
         _targetCollider = _targetNexus.GetComponent<BoxCollider2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Initialize();
-        _battleData._attackPoint = this.attackPoint;
-        _battleData._healthPoint = this.healthPoint;
     }
 
     protected virtual void Update() {
@@ -85,16 +85,16 @@ public abstract class MonsterBase : MonoBehaviour
         if(target.CompareTag("Player")) {
             target.GetComponent<WeaponBase>().AddCombo();
         }
-        BattleData targetData = target.GetComponent<BattleData>();
+        Ability targetData = target.GetComponent<Ability>();
         if(targetData != null) {
-            _battleData._healthPoint -= targetData._attackPoint;
+            _battleData._HP -= targetData._AP;
             CheckMonsterDeath();
         } else {
         }
     }
 
     private void CheckMonsterDeath() {
-        if(_battleData._healthPoint <= 0f) {
+        if(_battleData._HP <= 0f) {
             _OnMonsterDeath?.Invoke(this);
             MonsterDeath();
         }
@@ -120,16 +120,16 @@ public abstract class MonsterBase : MonoBehaviour
         }
         float distance = Vector3.Distance(_targetNexus.transform.position,this.transform.position);
 
-        if(distance > _battleData._attackRange + _targetCollider.size.x + _rangeOffset) {
+        if(distance > _battleData._AR + _targetCollider.size.x + _rangeOffset) {
             _monsterState = MonsterState.Moving;
             Vector3 direction = (_targetNexus.transform.position - this.transform.position).normalized;
-            float resultSpeed = _battleData._moveSpeed;
+            float resultSpeed = _battleData._MS;
             if(_debuffList.Contains(Debuff.Slow)) {
                 resultSpeed /= 2;
             }
             this.transform.position += direction * resultSpeed * Time.deltaTime;
         } else {
-            if((Time.time - _lastAttackTime) >= (1f / _battleData._attackSpeed)) {
+            if((Time.time - _lastAttackTime) >= (1f / _battleData._AS)) {
                 _lastAttackTime = Time.time;
                 _OnMonsterArrived?.Invoke();
             }
@@ -154,9 +154,9 @@ public abstract class MonsterBase : MonoBehaviour
         if(_projectile != null) {
             GameObject projectileInstance = Instantiate(_projectile, spawnPosition, Quaternion.identity);
             MonsterProjectileBase projectileBase = projectileInstance.GetComponent<MonsterProjectileBase>();
-            projectileBase?.SetValue(_battleData._attackPoint, _battleData._moveSpeed * 2);
+            projectileBase?.SetValue(_battleData._AP, _battleData._MS * 2);
         }
-        Invoke(nameof(ResetState), (1f / _battleData._attackSpeed));
+        Invoke(nameof(ResetState), (1f / _battleData._AS));
     }
 
     private void ResetState() {
@@ -176,7 +176,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     public float GetMonsterAttackPoint() {
-        return _battleData._attackPoint;
+        return _battleData._AP;
     }
 
 }

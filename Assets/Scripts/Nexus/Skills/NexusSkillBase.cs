@@ -8,10 +8,10 @@ public abstract class NexusSkillBase : MonoBehaviour
     public abstract void Initialize();
     protected abstract void SkillAction();
 
-    protected BattleData _battleData;
+    protected Ability _battleData;
 
     protected virtual void Start() {
-        _battleData = this.GetComponent<BattleData>();
+        _battleData = this.GetComponent<Ability>();
         Initialize();
     }
 
@@ -20,7 +20,7 @@ public abstract class NexusSkillBase : MonoBehaviour
     }
 
     public void SetValue(float attackPoint, float moveSpeed) {
-        _battleData._attackPoint = attackPoint;
-        _battleData._moveSpeed = moveSpeed;
+        _battleData._AP = attackPoint;
+        _battleData._MS = moveSpeed;
     }
 }

@@ -27,7 +27,7 @@ public class RainFire : WeaponSkillBase {
     }
 
     IEnumerator Fire() {
-        for(int i = 0; i < _battleData._attackSpeed; ++i) {
+        for(int i = 0; i < _battleData._AS; ++i) {
             GameObject instantiatedMissie = Instantiate(_missilePref, this.transform.position, Quaternion.identity);
             instantiatedMissie.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.3f);
