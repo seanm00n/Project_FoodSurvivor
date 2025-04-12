@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-public class RainFire : WeaponSkillBase {
+public class RainFire : WeaponProj {
     [SerializeField] GameObject _missilePref;
     private bool _fireEnd = false;
 
@@ -13,7 +13,7 @@ public class RainFire : WeaponSkillBase {
         StartCoroutine(Fire());
     }
 
-    protected override void Update() { 
+    protected override void Update() {
         base.Update();
         Destroy(this.gameObject, 5f);
     }
@@ -27,7 +27,7 @@ public class RainFire : WeaponSkillBase {
     }
 
     IEnumerator Fire() {
-        for(int i = 0; i < _battleData._AS; ++i) {
+        for(int i = 0; i < ability.AS; ++i) {
             GameObject instantiatedMissie = Instantiate(_missilePref, this.transform.position, Quaternion.identity);
             instantiatedMissie.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.3f);

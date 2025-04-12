@@ -1,5 +1,7 @@
-﻿name(upper camel),ap
-Switching,0
-RainFire,20
-ProtectShield,10
-SlowCircle,5
+﻿name(upper camel),Lv1,Lv2,Lv3,Lv4,Lv5
+Switching,0,0,0,0,0
+RainFire,20,0,0,0,0
+ProtectShield,10,0,0,0,0
+SlowCircle,5,0,0,0,0
+Overdrive,0,0,0,0,0
+VitalSurge,0,0,0,0,0

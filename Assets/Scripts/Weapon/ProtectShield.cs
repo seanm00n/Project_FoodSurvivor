@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProtectShield : NexusSkillBase
-{
+public class ProtectShield : WeaponProj {
     private Transform[] _childs;
 
     protected override void Start() {
@@ -18,12 +17,12 @@ public class ProtectShield : NexusSkillBase
 
     public override void Initialize() {
         foreach(var child in _childs) {
-            child.GetComponent<Ability>()._AP = this._battleData._AP;
-            child.GetComponent<Ability>()._MS = this._battleData._MS;
+            child.GetComponent<Ability>().AP = this.ability.AP;
+            child.GetComponent<Ability>().MS = this.ability.MS;
         }
     }
 
     protected override void SkillAction() {
-        transform.Rotate(Vector3.forward * this._battleData._MS * Time.deltaTime);
+        transform.Rotate(Vector3.forward * this.ability.MS * Time.deltaTime);
     }
 }

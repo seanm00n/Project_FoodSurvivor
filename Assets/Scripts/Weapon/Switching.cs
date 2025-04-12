@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Switching : WeaponSkillBase {
+public class Switching : WeaponProj {
     protected override void Start() {
         base.Start();
 
