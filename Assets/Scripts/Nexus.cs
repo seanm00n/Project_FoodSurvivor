@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Nexus : MonoBehaviour
@@ -8,36 +7,27 @@ public class Nexus : MonoBehaviour
     public static Nexus I { get; private set; }
 
     public event Action<Nexus> OnNexusDeath;
+
     public event Action<Nexus> OnNexusHit;
 
     public Ability ability { get; private set; }
 
-    #region SerializeField
-    [SerializeField] 
-    private GameObject _slowCirclePref;
-
-    [SerializeField] 
-    private GameObject _protectShieldPref;
-    #endregion
-
     #region Member ref
-    private GameObject _instSlowCircle;
-
-    private GameObject _instProtectShield;
 
     private Weapon _weapon;
 
     private SpriteRenderer _spriteRenderer;
+
     #endregion
 
     #region Member variable
-    private Dictionary<NexusSkills, float> _skillLastUsed;
 
     private float _lastMovedTime;
 
     private float _moveOffset;
 
     private bool _isMoving;
+
     #endregion
 
     private void Awake() {
@@ -48,9 +38,7 @@ public class Nexus : MonoBehaviour
         I = this;
 
         _spriteRenderer = GetComponent<SpriteRenderer>(); 
-        _skillLastUsed = new Dictionary<NexusSkills, float>();
         OnNexusDeath += HandleDeath;
-        _weapon = Weapon.I; 
 
         _lastMovedTime = 0f;
         _moveOffset = 1f;
@@ -62,9 +50,12 @@ public class Nexus : MonoBehaviour
         ability.SetMS(1f);
     }
 
+    private void Start() {
+        _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>(); // 초기화 시점 문제로 사용
+    }
+
     private void Update() {
         Movement();
-        // use skill
     }
 
     private void Movement() {
@@ -129,6 +120,6 @@ public class Nexus : MonoBehaviour
     }
 
     private void HandleDeath(Nexus nexus) {
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 }

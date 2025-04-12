@@ -26,23 +26,13 @@ public struct LvCol {
 }
 
 public struct MobCol {
-    public int HP;
-    public int AP;
+    public float HP;
+    public float AP;
     public float Exp;
 
-    public MobCol(int hp, int ap, float exp) {
+    public MobCol(float hp, float ap, float exp) {
         HP = hp;
         AP = ap;
         Exp = exp;
-    }
-}
-
-public struct SkillCol {
-    public float AP;
-    public float MS;
-
-    public SkillCol(float ap, float mx) {
-        AP = ap;
-        MS = mx;
     }
 }

@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class WeaponProj : MonoBehaviour, IBattle
 {
-    public Ability ability { get; private set; }
+    public Ability ability { get; protected set; }
 
     public abstract void LevelUp();
 
@@ -15,8 +13,6 @@ public abstract class WeaponProj : MonoBehaviour, IBattle
     private void Awake() => Initialize();
 
     private void Update() => SkillAction();
-
-    public void SetAbility(Ability ability) => this.ability = ability;
 
     public float GetAP() => ability.AP;
 }

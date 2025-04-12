@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MonsterProj : MonoBehaviour, IBattle
 {
-    public Ability ability { get; private set; } // set from monsterbase
+    public Ability ability { get; private set; }
 
     private float _spawnTime;
 
@@ -38,7 +35,6 @@ public class MonsterProj : MonoBehaviour, IBattle
 
     public float GetAP() => ability.AP;
 
-    public void SetAbility(Ability ability) {
-        this.ability = ability;
-    }
+    public void SetAbility(Ability ability) => this.ability = ability;
+
 }

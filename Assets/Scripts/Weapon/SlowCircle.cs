@@ -1,24 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using GV;
 
 public class SlowCircle : WeaponProj {
-    protected override void Start() {
-        base.Start();
+
+    public override void LevelUp() {
+        if(ability.Lv == 5) return;
+        ability.SetLv(ability.Lv + 1);
+        ability.SetAP(GM.I.SkillData[("SlowCircle", ability.Lv)]);
     }
 
-    protected override void Update() {
-        base.Update();
-        this.transform.localPosition = Vector3.zero; // 밀리는 현상 해결
-    }
-
-    public override void Initialize() {
-        //
+    protected override void Initialize() {
+        ability = new Ability();
+        ability.SetAP(0f);
+        ability.SetLv(0);
     }
 
     protected override void SkillAction() {
-        //
+        transform.localPosition = Vector3.zero; // 밀리는 현상 해결 update에
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

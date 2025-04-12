@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 512894900811368006}
   - component: {fileID: 710539924399495106}
-  - component: {fileID: 5583683573030161246}
+  - component: {fileID: 6092260637896832901}
   m_Layer: 9
   m_Name: Body
   m_TagString: PlayerProjectile
@@ -78,7 +78,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5583683573030161246
+--- !u!114 &6092260637896832901
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2401755742922430965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f050c9e614d2c244d879c8433e1fe250, type: 3}
+  m_Script: {fileID: 11500000, guid: 6412126ec481c1f4fa16efcbf8b503b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7761268160000418982
@@ -100,11 +100,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8984225707363637688}
   - component: {fileID: 7649104412935303385}
-  - component: {fileID: 6434826630937886834}
   - component: {fileID: 1921940822443427338}
   - component: {fileID: 8082094747169211773}
+  - component: {fileID: 832603226944567986}
   m_Layer: 6
-  m_Name: Knife
+  m_Name: Weapon
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -178,21 +178,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6434826630937886834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7761268160000418982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c50b13f3e153904cb3eab33173fc481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rainFirePref: {fileID: 1308840794168678689, guid: 61dfd4e0d12c42245a57e0967f798792, type: 3}
-  _rainFireActive: 0
-  _switchingActive: 0
 --- !u!61 &1921940822443427338
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -265,3 +250,21 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &832603226944567986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761268160000418982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7d213822afb1d41a7ff385270a1984, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rainFirePref: {fileID: 1308840794168678689, guid: 61dfd4e0d12c42245a57e0967f798792, type: 3}
+  _slowCirclePref: {fileID: 2437209667103863883, guid: 2245b28a2ac8d55499943e2a7e78ad22, type: 3}
+  _protectShieldPref: {fileID: 3770749953129922182, guid: eb9abcf69696a7a4989981a10f40c18b, type: 3}
+  _switchingPref: {fileID: 8361460493925754942, guid: 97453e30bc9fe394fb877840a5e127d3, type: 3}
+  _vitalSurgePref: {fileID: 5100453080466153061, guid: 20c7398bee9ec02428261107e56edce3, type: 3}
+  _overdrivePref: {fileID: 6430998564156198106, guid: 757fe2c6a32b6ee4fae0ec802a2e2910, type: 3}

@@ -1,28 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ProtectShield : WeaponProj {
-    private Transform[] _childs;
 
-    protected override void Start() {
-        base.Start();
-        _childs = GetComponentsInChildren<Transform>();
+    public override void LevelUp() {
+        if(ability.Lv == 5) return;
+        ability.SetLv(ability.Lv + 1);
+        ability.SetAP(GM.I.SkillData[("ProtectShield", ability.Lv)]);
     }
 
-    protected override void Update() {
-        base.Update();
-        this.transform.localPosition = Vector3.zero; // 밀리는 현상 해결
-    }
-
-    public override void Initialize() {
-        foreach(var child in _childs) {
-            child.GetComponent<Ability>().AP = this.ability.AP;
-            child.GetComponent<Ability>().MS = this.ability.MS;
-        }
+    protected override void Initialize() {
+        ability = new Ability();
+        ability.SetAP(0f);
+        ability.SetLv(0);
     }
 
     protected override void SkillAction() {
-        transform.Rotate(Vector3.forward * this.ability.MS * Time.deltaTime);
+        transform.Rotate(Vector3.forward * Time.deltaTime);
+        transform.localPosition = Vector3.zero; // 밀리는 현상 해결
     }
 }

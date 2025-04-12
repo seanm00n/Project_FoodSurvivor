@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using System.IO;
-using Unity.VisualScripting.FullSerializer;
-using UnityEditor.Playables;
 
 public class Weapon : MonoBehaviour
 {
@@ -31,10 +26,10 @@ public class Weapon : MonoBehaviour
     private GameObject _switchingPref;
 
     [SerializeField]
-    private GameObject _HpUpPref;
+    private GameObject _vitalSurgePref;
 
     [SerializeField]
-    private GameObject _apUpPref;
+    private GameObject _overdrivePref;
 
     #endregion
 
@@ -54,6 +49,10 @@ public class Weapon : MonoBehaviour
 
     private bool _isSwitching = false;
 
+    private float _lastSwitching = 0f;
+
+    private int _weaponMaxLv = 30;
+
     private Vector3 _offset; // 클릭 시 오브젝트 튐 방지
 
     #endregion
@@ -67,19 +66,20 @@ public class Weapon : MonoBehaviour
         I = this;
 
         ability = new Ability();
-        ability.SetAP(25f);
-        ability.SetAS(1f);
         ability.SetLv(1);
+        ability.SetAP(GM.I.LevelData[ability.Lv].AP);
+        ability.SetAS(1f);
         ability.SetExp(0f);
         ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
 
         SetCamera();
         _instSkill = new Dictionary<string, GameObject>();
 
-        _nexus = Nexus.I;
     }
 
-    private void Start() { // 채우기
+    private void Start() {       
+        _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>(); // 초기화 시점 문제로 사용
+
         GameObject instRainFire = Instantiate(_rainFirePref, _nexus.transform);
         _instSkill.Add("RainFire", instRainFire);
 
@@ -92,11 +92,11 @@ public class Weapon : MonoBehaviour
         GameObject instSwitching = Instantiate(_switchingPref, transform);
         _instSkill.Add("Switching", instSwitching);
 
-        GameObject instHpUp = Instantiate(_HpUpPref, transform);
-        _instSkill.Add("HpUp", instHpUp);
+        GameObject instVitalSurge = Instantiate(_vitalSurgePref, transform);
+        _instSkill.Add("VitalSurge", instVitalSurge);
 
-        GameObject instApUp = Instantiate(_apUpPref, transform);
-        _instSkill.Add("ApUp", instApUp);
+        GameObject instOverdrive = Instantiate(_overdrivePref, transform);
+        _instSkill.Add("Overdrive", instOverdrive);
     }
 
     private void Update() {
@@ -111,7 +111,7 @@ public class Weapon : MonoBehaviour
     }
 
     private void HandleExpGet(float value) {
-        if(value + ability.Exp >= ability.reqExp) {
+        if(ability.Lv < _weaponMaxLv && value + ability.Exp >= ability.reqExp) {
             ability.SetExp((value + ability.Exp) - ability.reqExp);
             OnWeaponLevelUp.Invoke(this); // show level up UI
             LevelUp();
@@ -124,6 +124,7 @@ public class Weapon : MonoBehaviour
         ability.SetLv(ability.Lv + 1);
         ability.SetAP(GM.I.LevelData[ability.Lv].AP) ;
         ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
+        if(ability.Lv == 30) ability.SetExp(0f);
     }
 
     public void SkillLevelUp(string skill) {
@@ -164,9 +165,31 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private IEnumerator ResumeWeaponMovement() {
-        yield return new WaitForSeconds(0.4f); // 짧은 대기 후 이동 가능
-        _isSwitching = false;
+    private void OnMouseUp() {
+        _isSelected = false;
+    }
+
+    #region Switching
+
+    public void Switching() {
+        //if(!_switchingActive) return; // 쿨타임 기반으로 수정
+        if(Time.time - _lastSwitching >= _instSkill["Switching"].GetComponent<IBattle>().GetAP()) {
+            _lastSwitching = Time.time;
+            _isSwitching = true;
+
+            Nexus nexus = Nexus.I;
+            Vector3 pos = transform.position;
+            transform.position = nexus.transform.position;
+            nexus.transform.position = pos;
+
+            Vector2 newCameraPos = new Vector2(transform.position.x, transform.position.y);
+            Vector2 mousePos = GetMouseWorldPosition();
+            Vector3 result = mousePos - newCameraPos;
+
+            Vector3 targetPos = _mainCamera.transform.position - new Vector3(result.x, result.y, 0);
+            StartCoroutine(SmoothCameraTransition(targetPos, 0.2f));
+            StartCoroutine(ResumeWeaponMovement());
+        }
     }
 
     private IEnumerator SmoothCameraTransition(Vector3 targetPos, float duration) {
@@ -188,57 +211,11 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private void OnMouseUp() {
-        _isSelected = false;
+    private IEnumerator ResumeWeaponMovement() { // 스위칭 직후 조작 방지
+        yield return new WaitForSeconds(0.4f); 
+        _isSwitching = false;
     }
 
-    #region Skill
-
-    protected void Switching() {
-        if(!_switchingActive) return;
-
-        _isSwitching = true;
-        GameObject nexus = GameObject.FindGameObjectWithTag("Nexus");
-        Vector3 pos = transform.position;
-        transform.position = nexus.transform.position;
-        nexus.transform.position = pos;
-
-        Vector2 newCameraPos = new Vector2(transform.position.x, transform.position.y);
-        Vector2 mousePos = GetMouseWorldPosition();
-        Vector3 result = mousePos - newCameraPos;
-
-        Vector3 targetPos = _mainCamera.transform.position - new Vector3(result.x, result.y, 0);
-        StartCoroutine(SmoothCameraTransition(targetPos, 0.2f));
-        //_mainCamera.transform.position -= new Vector3(result.x, result.y, _mainCamera.transform.position.z);
-        StartCoroutine(ResumeWeaponMovement());
-        _combo -= 100;
-    }
-
-    protected void ProtectShield() { // protect shield
-        if(_instProtectShield == null) {
-            Debug.Log("protectshield");
-            _instProtectShield = Instantiate(_protectShieldPref, this.transform);
-            _instProtectShield.GetComponent<NexusSkillBase>().SetValue(ability.AP, ability.MS);
-            _skillLastUsed[NexusSkills.ProtectShield] = Time.time;
-            float skillCooldown = 9999f;
-            if(Time.time - _skillLastUsed[NexusSkills.ProtectShield] >= skillCooldown) {
-                _skillLastUsed[NexusSkills.ProtectShield] = Time.time;
-            }
-        }
-    }
-
-    protected void SlowCircle() {
-        if(_instSlowCircle == null) {
-            Debug.Log("slowcircle");
-            _instSlowCircle = Instantiate(_slowCirclePref, this.transform);
-            _instSlowCircle.GetComponent<NexusSkillBase>().SetValue(ability.AP, ability.MS);
-            _skillLastUsed.TryAdd(NexusSkills.SlowCircle, Time.time);
-            float skillCooldown = 9999f;
-            if(Time.time - _skillLastUsed[NexusSkills.SlowCircle] >= skillCooldown) {
-                _skillLastUsed[NexusSkills.SlowCircle] = Time.time;
-            }
-        }
-    }
     #endregion
 
 }

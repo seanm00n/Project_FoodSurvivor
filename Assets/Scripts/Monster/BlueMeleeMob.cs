@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
+public class BlueMeleeMob : MonsterBase {
 
-public class BlueMeleeMob : MonsterBase
-{
     protected override void Initialize() {
         ability.SetAP(GM.I.MobData[(0, 0)].AP);
+        ability.SetHP(GM.I.MobData[(0, 0)].HP);
         ability.SetAS(1f);
         ability.SetAR(0f);
         ability.SetMS(1f);

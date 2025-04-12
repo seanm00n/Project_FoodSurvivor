@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6687145105231493266}
   - component: {fileID: 8401310562582179709}
   - component: {fileID: 7068324727731292955}
-  - component: {fileID: -7324888898937126278}
+  - component: {fileID: 3792775055841030311}
   m_Layer: 7
   m_Name: Nexus
   m_TagString: Nexus
@@ -159,7 +159,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &-7324888898937126278
+--- !u!114 &3792775055841030311
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,8 +168,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1555446884715239407}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1305a8e48a5222741bfe687fb7507720, type: 3}
+  m_Script: {fileID: 11500000, guid: a3658b3e7b768b84d9df638adb958a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slowCirclePref: {fileID: 2437209667103863883, guid: 2245b28a2ac8d55499943e2a7e78ad22, type: 3}
-  _protectShieldPref: {fileID: 3770749953129922182, guid: eb9abcf69696a7a4989981a10f40c18b, type: 3}
+  _slowCirclePref: {fileID: 0}
+  _protectShieldPref: {fileID: 0}

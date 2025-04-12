@@ -1,23 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using GV;
 
 public class SpawnZone : MonoBehaviour
 {
-    GameObject _gameManager;
-
     [SerializeField]
-    Zone _monsterZone;
-
-    private void Awake() {
-        _gameManager = GameObject.FindGameObjectWithTag("GameManager");
-    }
+    private Zone _zone;
 
     private void OnTriggerExit2D(Collider2D collision) {
         if(collision.gameObject.CompareTag("Player")) {
             Debug.Log("Player out of line");
-            _gameManager.GetComponent<GM>().SetZoneOut(_monsterZone, true);
+            GM.I.SetZoneOut(_zone);
         }
     }
 }

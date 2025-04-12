@@ -1,19 +1,15 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Unity.VisualScripting;
 using UnityEngine;
-//using GV;
 
 public abstract class MonsterBase : MonoBehaviour
 {
     public event Action<MonsterBase> OnMonsterDeath;
 
-    public Ability ability { get; protected set; } //ar ms as ap
+    public Ability ability { get; protected set; }
 
     #region SerializeField
+
     [SerializeField]
     private GameObject _expPref;
 
@@ -22,6 +18,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     [SerializeField]
     private Zone _zone;
+
     #endregion
 
     #region Member Ref
@@ -53,7 +50,7 @@ public abstract class MonsterBase : MonoBehaviour
         _nexusColl = _nexus.GetComponent<BoxCollider2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         OnMonsterDeath += HandleDeath;
-        Initialize(); // set ability here
+        Initialize();
     }
 
     private void Update() {
@@ -64,9 +61,9 @@ public abstract class MonsterBase : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision) {
         if(_state == State.Death) return;
 
-        if(collision.gameObject.CompareTag("PlayerProjectile") ||
-            collision.gameObject.CompareTag("NexusProjectile")) {
+        if(collision.gameObject.CompareTag("PlayerProjectile")) {
             _lastHitTime = Time.time;
+            Debug.Log(collision);
             HandleHit(collision.gameObject);
         }
     }
@@ -81,14 +78,15 @@ public abstract class MonsterBase : MonoBehaviour
 
     private void CheckDeath() {
         if(ability.HP <= 0f) {
-            OnMonsterDeath?.Invoke(this); // kill count
+            OnMonsterDeath?.Invoke(this);
         }
     }
 
     private void HandleDeath(MonsterBase monsterBase) {
+        Debug.Log($"[{Time.time}] 몬스터 죽음: {gameObject.name}, 위치: {transform.position}\n{new System.Diagnostics.StackTrace()}");
         _state = State.Death;
-        GameObject exp = Instantiate(_expPref, transform.position, Quaternion.identity);
-        exp.GetComponent<EXP>().SetExp(ability.Exp);
+        GameObject instExp = Instantiate(_expPref, transform.position, Quaternion.identity);
+        instExp.GetComponent<EXP>().SetExp(ability.Exp);
         Destroy(gameObject);
     }
 
@@ -142,7 +140,6 @@ public abstract class MonsterBase : MonoBehaviour
     private void ResetState() {
         _state = State.Moving;
     }
-//-----------------------------------------------------------------------------------------------------------
 
     public void AddDebuff(Debuff debuff) {
         _debuffList.Add(debuff); // return bool
@@ -151,4 +148,6 @@ public abstract class MonsterBase : MonoBehaviour
     public void RemoveDebuff(Debuff debuff) {
         _debuffList.Remove(debuff); // return bool
     }
+
+    public Zone GetZone() => _zone;
 }

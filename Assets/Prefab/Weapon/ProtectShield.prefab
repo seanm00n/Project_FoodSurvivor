@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2116373565156548476}
   - component: {fileID: 2644130943590080576}
   - component: {fileID: 7714415767219862374}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shield02
   m_TagString: Shield
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 3361539812835804490}
   - component: {fileID: 5584626190572040723}
   - component: {fileID: 2191590142989914637}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shield04
   m_TagString: Shield
   m_Icon: {fileID: 0}
@@ -307,9 +307,9 @@ GameObject:
   - component: {fileID: 6036988810030147175}
   - component: {fileID: 5274036304349816509}
   - component: {fileID: 2264181141512073073}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: ProtectShield
-  m_TagString: NexusProjectile
+  m_TagString: Shield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -384,7 +384,7 @@ GameObject:
   - component: {fileID: 8897377377752098101}
   - component: {fileID: 5944768159214674538}
   - component: {fileID: 6299294272153991702}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shield01
   m_TagString: Shield
   m_Icon: {fileID: 0}
@@ -532,7 +532,7 @@ GameObject:
   - component: {fileID: 535979528802724584}
   - component: {fileID: 7081257604828865652}
   - component: {fileID: 349555482544703746}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shield03
   m_TagString: Shield
   m_Icon: {fileID: 0}

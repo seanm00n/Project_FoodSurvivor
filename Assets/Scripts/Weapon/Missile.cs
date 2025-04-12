@@ -1,83 +1,95 @@
-﻿using GV;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class Missile : MonoBehaviour
+public class Missile : MonoBehaviour, IBattle
 {
-    private GameObject _target;
-    private GameObject[] _monsters;
-    private Ability _battleData;
-    private Vector3 _lastDirection = Vector3.zero;
-    private float _lastRotationZ = 0f; // 마지막 회전 값
+    public Ability ability { get; private set; }
 
+    private GameObject _target = null;
+
+    private Vector3 _lastDirection = Vector3.zero; //
+
+    private float _lastRotationZ = 0f; //
+
+    private Vector3 _direction;
+
+    private float _rotationZ;
 
     private void Start() {
-        _monsters = GameObject.FindGameObjectsWithTag("Monster");
-        _target = FindNearsetMonster();
-        _battleData = GetComponent<Ability>();
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, 4f);
+        InvokeRepeating(nameof(SearchTarget), 0f, 0.2f);
     }
 
     private void Update() {
-        SearchTarget();
+        Movement();
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if(collision.gameObject.CompareTag("Monster")) {
-            collision.gameObject.GetComponent<MonsterBase>().HandleHit(collision.gameObject);
-            Debug.Log("missile hit");
             Destroy(gameObject);
         }
     }
 
-    private GameObject FindNearsetMonster() {
-        if(_monsters == null || _monsters.Length == 0)
-            return null;
-        GameObject nearset = null;
-        float minDistSq = float.MaxValue;
-
-        foreach(GameObject monster in _monsters) {
-            if(monster == null) continue;
-            float distSq = (monster.transform.position - this.transform.position).sqrMagnitude;
-            if(distSq < minDistSq) {
-                minDistSq = distSq;
-                nearset = monster;
-            }
+    private void SearchTarget() {
+        if(_target == null || !_target.activeInHierarchy) {
+            _target = FindNearestMonster();
+            if(_target == null) return; // 여전히 타겟이 없다면 방향 유지
         }
-        return nearset;
+
+        // 방향 갱신
+        _direction = (_target.transform.position - transform.position).normalized;
+        _rotationZ = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
     }
 
-    private void SearchTarget() { // 방향 추가
-        if(_target == null) {
-            _target = FindNearsetMonster();
+    private void Movement() {
+        transform.position += _direction * ability.MS * Time.deltaTime;
+        transform.rotation = Quaternion.Euler(0, 0, _rotationZ);
+    }
 
-            if(_target == null) // 🔥 새로운 목표도 없으면 기존 방향 유지
-            {
-                transform.position += _lastDirection * _battleData.MS * Time.deltaTime;
-                transform.rotation = Quaternion.Euler(0, 0, _lastRotationZ); // 🔥 마지막 회전값 유지
+    private void SearchTargetOld() {
+        if(_target == null) {
+            _target = FindNearestMonster();
+
+            if(_target == null) { // 새로운 목표도 없으면 기존 방향 유지
+                transform.position += _lastDirection * ability.MS * Time.deltaTime;
+                transform.rotation = Quaternion.Euler(0, 0, _lastRotationZ); // 마지막 회전값 유지
                 return;
             }
         }
 
-        // 🔥 목표가 있을 경우 방향 계산 및 저장
+        // 목표가 있을 경우 방향 계산 및 저장
         Vector3 direction = (_target.transform.position - transform.position).normalized;
-        _lastDirection = direction; // 🌟 마지막 이동 방향 저장
-        _lastRotationZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 🌟 2D에서 회전값(Z축) 저장
+        _lastDirection = direction; // 마지막 이동 방향 저장
+        _lastRotationZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 2D에서 회전값(Z축) 저장
 
-        float resultSpeed = _battleData.MS;
+        float resultSpeed = ability.MS;
         transform.position += direction * resultSpeed * Time.deltaTime;
 
-        // 🔥 2D에서 Z축만 회전하도록 설정
+        // Z축만 회전하도록 설정
         transform.rotation = Quaternion.Euler(0, 0, _lastRotationZ);
-        /*        if(_target == null) {
-                    FindNearsetMonster();
-                    return;
-                }
-
-                Vector3 direction = (_target.transform.position - this.transform.position).normalized;
-                float resultSpeed = _battleData._moveSpeed;
-                this.transform.position += direction * resultSpeed * Time.deltaTime;*/
     }
+
+    private GameObject FindNearestMonster() {
+        IEnumerable<GameObject> allMonsters = GM.I.GetBlueMobs().Concat(GM.I.GetGreenMobs()).Concat(GM.I.GetYellowMobs());
+
+        GameObject nearest = null;
+        float minDistSq = float.MaxValue;
+
+        foreach(GameObject monster in allMonsters) {
+            if(monster == null) continue;
+
+            float distSq = (monster.transform.position - transform.position).sqrMagnitude;
+            if(distSq < minDistSq) {
+                minDistSq = distSq;
+                nearest = monster;
+            }
+        }
+
+        return nearest;
+    }
+
+    public void SetAbility(Ability ability) => this.ability = ability;
+
+    public float GetAP() => ability.AP;
 }

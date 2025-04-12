@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b74e91681b7f2c4eab2d04b226c19fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _monsterZone: 1
+  _zone: 1
 --- !u!58 &66241831
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -432,7 +432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d760407540169534b84e21c87dc5138a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraOffset: 1.5
 --- !u!1 &523933832
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,14 +848,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ac202d574c41d64b8cfa9bf0e9e3745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nexusPref: {fileID: 1555446884715239407, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
   _weaponPref: {fileID: 7761268160000418982, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
+  _nexusPref: {fileID: 1555446884715239407, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
   _blueZone: {fileID: 1651696325}
-  _blueMonsterPref: {fileID: 7614071129163002635, guid: a1cc8872a26f5f34989b3a2a4e6a6bd2, type: 3}
   _greenZone: {fileID: 66241829}
-  _greenMonsterPref: {fileID: 7614071129163002635, guid: 0a7ab1e6bc6f1ff4eaa48fa9eab707e6, type: 3}
   _yellowZone: {fileID: 1540382033}
-  _yellowMonsterPref: {fileID: 7614071129163002635, guid: 878e822e894e68649af45a22df410a59, type: 3}
+  _blueMeleeMobPref: {fileID: 7614071129163002635, guid: a1cc8872a26f5f34989b3a2a4e6a6bd2, type: 3}
+  _blueRangedMobPref: {fileID: 7614071129163002635, guid: 47cf5447b1d157e43b4e9c7abd3e9155, type: 3}
+  _greenMeleeMobPref: {fileID: 7614071129163002635, guid: 0a7ab1e6bc6f1ff4eaa48fa9eab707e6, type: 3}
+  _greenRangedMobPref: {fileID: 7614071129163002635, guid: 2d614c0206034804e9ec5d2befcb2bd0, type: 3}
+  _yellowMeleeMobPref: {fileID: 7614071129163002635, guid: 878e822e894e68649af45a22df410a59, type: 3}
+  _yellowRangedMobPref: {fileID: 7614071129163002635, guid: 1b640da2595dfd8408022e1a51f80981, type: 3}
 --- !u!1 &1351216966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,7 +1084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b74e91681b7f2c4eab2d04b226c19fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _monsterZone: 2
+  _zone: 2
 --- !u!58 &1540382035
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1547,7 +1549,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b74e91681b7f2c4eab2d04b226c19fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _monsterZone: 0
+  _zone: 0
 --- !u!1 &1738915325
 GameObject:
   m_ObjectHideFlags: 0
@@ -1789,11 +1791,11 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1738915328}
   - {fileID: 519420032}
   - {fileID: 1257053421}
   - {fileID: 1803975094}
   - {fileID: 1481235818}
-  - {fileID: 1738915328}
   - {fileID: 1651696328}
   - {fileID: 66241833}
   - {fileID: 1540382037}
