@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using GameEnums;
+using GV;
 using System;
 using System.IO;
 
@@ -56,7 +56,12 @@ public class GM : MonoBehaviour
 
     private int _hitCount = 0;
 
-    public Dictionary<int, LvCol> _LvData { get; private set; }
+    #region CSV Data
+    public Dictionary<int, LvCol> LevelData { get; private set; } // LevelData
+    public Dictionary<(int, int), MobCol> MobData { get; private set; } // MobData
+    public Dictionary<string, SkillCol> SkillData { get; private set; }
+    //public Dictionary<>
+    #endregion
 
     private void Awake() {
         if(I != null && I != this) {
@@ -65,7 +70,8 @@ public class GM : MonoBehaviour
         }
         I = this;
 
-        _LvData = LoadLevelDataCSV();
+        LevelData = LoadLevelDataCSV();
+        MobData = LoadLevelDataCSV();
         CreateWeapon(); 
         CreateNexus(); 
         _mainCamera = Camera.main;
@@ -80,7 +86,12 @@ public class GM : MonoBehaviour
         MonsterSpawn(); // 1초 주기로 변경
         UpdateMonsterMax(); // Max 증가
     }
+    private Dictionary<string, SkillCol> LoadSkilDataCSV() {
 
+    }
+    private Dictionary<string, MobCol> LoadMobDataCSV() {
+
+    }
     private Dictionary<int, LvCol> LoadLevelDataCSV() { // 다른 데이터도 가능하게 수정
         TextAsset csvFile = Resources.Load<TextAsset>("LevelData");
         if(csvFile == null) {
@@ -131,9 +142,9 @@ public class GM : MonoBehaviour
             GameObject instance = Instantiate(_blueMonsterPref, _blueSpawnPoint[i].position, Quaternion.identity);
             _blueMonsters.Add(instance);
             MonsterBase instanceBase = instance.GetComponent<MonsterBase>();
-            instanceBase._monsterZone = Zone.Blue;
+            instanceBase._zone = Zone.Blue;
             instanceBase?.SetTargetNexus(_instantiatedNexus);
-            instanceBase._OnMonsterDeath += HandleMonsterDeath;
+            instanceBase.OnMonsterDeath += HandleMonsterDeath;
             _blueLastIndex = i+1;
         }
 
@@ -143,9 +154,9 @@ public class GM : MonoBehaviour
                 GameObject instance = Instantiate(_greenMonsterPref, _greenSpawnPoint[i].position, Quaternion.identity);
                 _greenMonsters.Add(instance);
                 MonsterBase instanceBase = instance.GetComponent<MonsterBase>();
-                instanceBase._monsterZone = Zone.Green;
+                instanceBase._zone = Zone.Green;
                 instanceBase?.SetTargetNexus(_instantiatedNexus);
-                instanceBase._OnMonsterDeath += HandleMonsterDeath;
+                instanceBase.OnMonsterDeath += HandleMonsterDeath;
                 _greenLastIndex = i + 1;
             }
         }
@@ -156,9 +167,9 @@ public class GM : MonoBehaviour
                 GameObject instance = Instantiate(_yellowMonsterPref, _yellowSpawnPoint[i].position, Quaternion.identity);
                 _yellowMonsters.Add(instance);
                 MonsterBase instanceBase = instance.GetComponent<MonsterBase>();
-                instanceBase._monsterZone = Zone.Yellow;
+                instanceBase._zone = Zone.Yellow;
                 instanceBase?.SetTargetNexus(_instantiatedNexus);
-                instanceBase._OnMonsterDeath += HandleMonsterDeath;
+                instanceBase.OnMonsterDeath += HandleMonsterDeath;
                 _yellowLastIndex = i + 1;
             }
         }
@@ -173,7 +184,7 @@ public class GM : MonoBehaviour
     }
 
     public void HandleMonsterDeath(MonsterBase instance) {
-        switch(instance._monsterZone) {
+        switch(instance._zone) {
             case Zone.Blue:
                 if(_blueMonsters.Remove(instance.gameObject)) {
                     Destroy(instance.gameObject);
@@ -200,15 +211,15 @@ public class GM : MonoBehaviour
             //ShowNexusPointingUI();
         }*/
 
-    public void HandleNexusDeath(NexusBase instance) {
+    public void HandleNexusDeath(Nexus instance) {
         Debug.Log("Nexus death!");
     }
 
 
     private void CreateNexus() {
         _instantiatedNexus = Instantiate(_nexusPref, new Vector2(0, -4), Quaternion.identity);
-        NexusBase nexusInstance = _instantiatedNexus.GetComponent<NexusBase>();
-        nexusInstance._OnNexusDeath += HandleNexusDeath;
+        Nexus nexusInstance = _instantiatedNexus.GetComponent<Nexus>();
+        nexusInstance.OnNexusDeath += HandleNexusDeath;
         //nexusInstance._OnNexusHit += HandleNexusHit;
     }
 

@@ -1,4 +1,4 @@
-﻿using GameEnums;
+﻿using GV;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -26,7 +26,7 @@ public class Missile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if(collision.gameObject.CompareTag("Monster")) {
-            collision.gameObject.GetComponent<MonsterBase>().MonsterHit(collision.gameObject);
+            collision.gameObject.GetComponent<MonsterBase>().HandleHit(collision.gameObject);
             Debug.Log("missile hit");
             Destroy(gameObject);
         }
@@ -55,7 +55,7 @@ public class Missile : MonoBehaviour
 
             if(_target == null) // 🔥 새로운 목표도 없으면 기존 방향 유지
             {
-                transform.position += _lastDirection * _battleData._MS * Time.deltaTime;
+                transform.position += _lastDirection * _battleData.MS * Time.deltaTime;
                 transform.rotation = Quaternion.Euler(0, 0, _lastRotationZ); // 🔥 마지막 회전값 유지
                 return;
             }
@@ -66,7 +66,7 @@ public class Missile : MonoBehaviour
         _lastDirection = direction; // 🌟 마지막 이동 방향 저장
         _lastRotationZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 🌟 2D에서 회전값(Z축) 저장
 
-        float resultSpeed = _battleData._MS;
+        float resultSpeed = _battleData.MS;
         transform.position += direction * resultSpeed * Time.deltaTime;
 
         // 🔥 2D에서 Z축만 회전하도록 설정
