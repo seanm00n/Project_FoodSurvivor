@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class RainFire : WeaponProj {
+public class RainFire : WeaponProjBase {
 
     [SerializeField] 
     private GameObject _missilePref;
@@ -10,17 +10,13 @@ public class RainFire : WeaponProj {
 
     private float _lastLaunch = 0f;
 
-    public override void LevelUp() {
-        if(ability.Lv == 5) return;
+    protected override void LevelUp() {
+        base.LevelUp();
         ability.SetLv(ability.Lv + 1);
         ability.SetAP(GM.I.SkillData[("RainFire", ability.Lv)]);
     }
 
-    protected override void Initialize() {
-        ability = new Ability();
-        ability.SetAP(0f);
-        ability.SetLv(0);
-    }
+    protected override void Initialize() => base.Initialize();
 
     protected override void SkillAction() {
         if(ability.Lv == 0) return;

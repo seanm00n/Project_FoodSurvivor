@@ -7,8 +7,8 @@ public enum Debuff {
     Slow,
 }
 
-public enum PlayerSkills {
-    Switching, RainFire, ProtectShield, SlowCircle, 
+public enum Skills {
+    Switching, RainFire, ProtectShield, SlowCircle, Overdrive, VitalSurge
 }
 
 public enum Zone {
@@ -34,5 +34,17 @@ public struct MobCol {
         HP = hp;
         AP = ap;
         Exp = exp;
+    }
+}
+
+public struct MobSpawnCol {
+    public int blueMax;
+    public int greenMax;
+    public int yellowMax;
+
+    public MobSpawnCol(int bluemax, int greenmax, int yellowmax) {
+        blueMax = bluemax;
+        greenMax = greenmax;
+        yellowMax = yellowmax;
     }
 }

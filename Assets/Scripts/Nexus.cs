@@ -38,15 +38,14 @@ public class Nexus : MonoBehaviour
         I = this;
 
         _spriteRenderer = GetComponent<SpriteRenderer>(); 
-        OnNexusDeath += HandleDeath;
 
         _lastMovedTime = 0f;
         _moveOffset = 1f;
         _isMoving = false;
 
         ability = new Ability();
+        ability.SetMaxHP(500f);
         ability.SetHP(500f);
-        ability.SetAP(15f);
         ability.SetMS(1f);
     }
 
@@ -107,7 +106,7 @@ public class Nexus : MonoBehaviour
     }
 
     private void HandleHit(GameObject target) {
-        ability.SetHP(ability.HP - target.GetComponent<MonsterProj>().GetAP());
+        ability.SetHP(ability.HP - target.GetComponent<MonsterProjBase>().GetAP());
         OnNexusHit.Invoke(this);
         CheckDeath();
     }
@@ -115,11 +114,15 @@ public class Nexus : MonoBehaviour
     private void CheckDeath() {
         if(ability.HP <= 0f) {
             OnNexusDeath?.Invoke(this);
-            HandleDeath(this);
+            HandleDeath();
         }
     }
 
-    private void HandleDeath(Nexus nexus) {
+    private void HandleDeath() {
         Destroy(gameObject);
+    }
+
+    private void OnDestroy() {
+        I = null;
     }
 }

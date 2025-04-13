@@ -3,6 +3,7 @@ public class GreenRangedMob : MonsterBase
     protected override void Initialize() {
         ability.SetAP(GM.I.MobData[(1, 1)].AP);
         ability.SetHP(GM.I.MobData[(1, 1)].HP);
+        ability.SetMaxHP(GM.I.MobData[(1, 1)].HP);
         ability.SetAS(1f);
         ability.SetAR(5f);
         ability.SetMS(1f);

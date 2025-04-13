@@ -22,14 +22,17 @@ public abstract class MonsterBase : MonoBehaviour
     #endregion
 
     #region Member Ref
+
     private Nexus _nexus;
 
     private BoxCollider2D _nexusColl;
 
     private SpriteRenderer _spriteRenderer;
+
     #endregion
 
     #region Memver variable
+
     private HashSet<Debuff> _debuffList;
 
     private float _lastHitTime = 0f; 
@@ -39,6 +42,7 @@ public abstract class MonsterBase : MonoBehaviour
     private float _rangeOffset = 0.2f;
 
     private State _state = State.Idle;
+
     #endregion
 
     protected abstract void Initialize();
@@ -47,7 +51,7 @@ public abstract class MonsterBase : MonoBehaviour
         ability = new Ability();
         _debuffList = new HashSet<Debuff>();
         _nexus = Nexus.I;
-        _nexusColl = _nexus.GetComponent<BoxCollider2D>();
+        _nexusColl = _nexus?.GetComponent<BoxCollider2D>(); // 싱글턴 클래스라서 destroy되어도 Nexus.I는 남아있음
         _spriteRenderer = GetComponent<SpriteRenderer>();
         OnMonsterDeath += HandleDeath;
         Initialize();
@@ -63,7 +67,6 @@ public abstract class MonsterBase : MonoBehaviour
 
         if(collision.gameObject.CompareTag("PlayerProjectile")) {
             _lastHitTime = Time.time;
-            Debug.Log(collision);
             HandleHit(collision.gameObject);
         }
     }
@@ -83,7 +86,6 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void HandleDeath(MonsterBase monsterBase) {
-        Debug.Log($"[{Time.time}] 몬스터 죽음: {gameObject.name}, 위치: {transform.position}\n{new System.Diagnostics.StackTrace()}");
         _state = State.Death;
         GameObject instExp = Instantiate(_expPref, transform.position, Quaternion.identity);
         instExp.GetComponent<EXP>().SetExp(ability.Exp);
@@ -115,8 +117,8 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void Rotation() { 
-        if(_state != State.Moving) return;
-        Vector3 direction = _nexus.transform.position - this.transform.position;
+        if(_state != State.Moving || _nexus == null) return;
+        Vector3 direction = _nexus.transform.position - transform.position;
         if(direction.x >= 0) {
             _spriteRenderer.flipX = false; // right
             return;
@@ -127,11 +129,14 @@ public abstract class MonsterBase : MonoBehaviour
 
     private void HandleAttack() {
         _state = State.Attack;
-        float radius = GetComponent<BoxCollider2D>().size.x / 2f + 0.1f;
-        Vector3 spawnPos = this.transform.position + (this.transform.right * radius);
 
-        GameObject instProj = Instantiate(projPref, spawnPos, Quaternion.identity);
-        MonsterProj projBase = instProj.GetComponent<MonsterProj>();
+        float radius = GetComponent<BoxCollider2D>().size.x / 2f + 0.1f;
+        Vector3 spawnDir = (_nexus.transform.position - transform.position).normalized;
+        Vector3 spawnPos = transform.position + spawnDir * radius; // 반지름 만큼의 거리
+        float angle = Mathf.Atan2(spawnDir.y, spawnDir.x) * Mathf.Rad2Deg;
+
+        GameObject instProj = Instantiate(projPref, spawnPos, Quaternion.Euler(0, 0, angle)); // 적 방향으로
+        MonsterProjBase projBase = instProj.GetComponent<MonsterProjBase>();
 
         projBase.SetAbility(ability);
         Invoke(nameof(ResetState), (1f / ability.AS)); // state init

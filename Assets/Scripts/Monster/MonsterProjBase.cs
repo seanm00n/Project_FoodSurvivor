@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MonsterProj : MonoBehaviour, IBattle
+public class MonsterProjBase : MonoBehaviour, IBattle
 {
     public Ability ability { get; private set; }
 
@@ -23,7 +23,7 @@ public class MonsterProj : MonoBehaviour, IBattle
 
     private void Movement() {
         Vector3 direction = transform.right.normalized;
-        transform.position += direction * ability.MS * 2 * (ability.AR > 0 ? 0f:1f) * Time.deltaTime;
+        transform.position += direction * (ability.MS * 2) * (ability.AR > 0 ? 1f : 0f) * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
