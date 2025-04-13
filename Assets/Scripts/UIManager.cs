@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Linq;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -18,8 +19,25 @@ public class UIManager : MonoBehaviour
         I = this;
     }
 
-    public void DrawSelectUI(List<string> selects) {
-        // 선택지를 UI에 표시
-        // 선택되면 OnSkillSelect(string chose); 실행
+    public void DrawSelectUI() {
+        List<string> options = Enum.GetNames(typeof(Skills)).ToList();
+        List<string> selects = new List<string>();
+
+        for(int i = 0; i < 6 && selects.Count < 3; ++i) {
+            string select = options.OrderBy(x => Random.value).First();
+            if(Weapon.I.instSkills[select].ability.Lv < 5 && !selects.Contains(select)) {
+                selects.Add(select);
+            }
+        }
+
+        //...
+    }
+
+    public void DrawNexusHitUI() {
+
+    }
+
+    public void DrawGameOverUI() {
+
     }
 }

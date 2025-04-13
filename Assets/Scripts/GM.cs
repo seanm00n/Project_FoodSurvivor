@@ -17,6 +17,9 @@ public class GM : MonoBehaviour
     #region SerializeField
 
     [SerializeField]
+    private UIManager _uiManager;
+
+    [SerializeField]
     private GameObject _weaponPref; // 수정?
 
     [SerializeField]
@@ -137,9 +140,12 @@ public class GM : MonoBehaviour
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
         _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
 
-        InvokeRepeating(nameof(LogMessage), 0f, 1f);
     }
-    private void LogMessage() => Debug.Log("BM: "+_blueMaxNum+"GM: "+_greenMaxNum+"YM: "+_yellowMaxNum);
+
+    private void Start() {
+
+    }
+
     private void Update() {
         UpdateMonsterMax();
         MonsterSpawn(); 
@@ -373,11 +379,19 @@ public class GM : MonoBehaviour
         }
     }
 
-    private void PauseGame() {
+    private void PauseGame() { // 문제시 interface 패턴 사용
         MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>(true);
+
+        List<MonoBehaviour> exceptChilds = new List<MonoBehaviour>();
+        foreach(var child in exceptions) {
+            if(child == null) continue;
+            MonoBehaviour[] comps = child.GetComponentsInChildren<MonoBehaviour>(true);
+            exceptChilds.AddRange(comps);
+        }
+
         foreach(var mb in allBehaviours) {
             if(mb == null) continue;
-            if(Array.Exists(exceptions, e => e == mb)) continue;
+            if(exceptChilds.Contains(mb)) continue;
             mb.enabled = false;
         }
 
@@ -387,9 +401,9 @@ public class GM : MonoBehaviour
 
     private void ResumeGame() {
         MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>(true);
+
         foreach(var mb in allBehaviours) {
             if(mb == null) continue;
-            if(Array.Exists(exceptions, e => e == mb)) continue;
             mb.enabled = true;
         }
 
@@ -397,8 +411,9 @@ public class GM : MonoBehaviour
         _isGamePaused = false;
     }
 
-    public void OnPauseToggle() { // need bool?
-        if(true) { // fix
+    public void OnPauseButton() {
+        Debug.Log("pausebutton");
+        if(!_isGamePaused) {
             PauseGame();
         } else {
             ResumeGame();
@@ -412,27 +427,16 @@ public class GM : MonoBehaviour
 
     public void HandleWeaponLevelUp(Weapon weapon) {
         PauseGame();
-
-        List<string> options = Enum.GetNames(typeof(Skills)).ToList();
-        List<string> selects = new List<string>();
-        
-        for(int i = 0; i < 6 && selects.Count < 3; ++i) {
-            string select = options.OrderBy(x => Random.value).First();
-            if(Weapon.I.instSkills[select].ability.Lv < 5 && !selects.Contains(select)) {
-                selects.Add(select);
-            }
-        }
-
-        UIManager.I.DrawSelectUI(selects);
+        _uiManager.DrawSelectUI();
     }
 
     public void HandleNexusHit(Nexus instance) {
-        // alert UI
+        _uiManager.DrawNexusHitUI();
     }
 
     public void HandleNexusDeath(Nexus instance) {
         PauseGame();
-        // gameover ui
+        _uiManager.DrawGameOverUI();
     }
 
     public HashSet<GameObject> GetBlueMobs() => _blueMobs;
