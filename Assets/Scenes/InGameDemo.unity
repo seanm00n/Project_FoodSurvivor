@@ -859,6 +859,7 @@ MonoBehaviour:
   _greenRangedMobPref: {fileID: 7614071129163002635, guid: 2d614c0206034804e9ec5d2befcb2bd0, type: 3}
   _yellowMeleeMobPref: {fileID: 7614071129163002635, guid: 878e822e894e68649af45a22df410a59, type: 3}
   _yellowRangedMobPref: {fileID: 7614071129163002635, guid: 1b640da2595dfd8408022e1a51f80981, type: 3}
+  exceptions: []
 --- !u!1 &1351216966
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,6 +903,7 @@ GameObject:
   - component: {fileID: 1481235817}
   - component: {fileID: 1481235816}
   - component: {fileID: 1481235815}
+  - component: {fileID: 1481235819}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -967,7 +969,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -991,6 +993,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1481235819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481235814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c5cef2bdf5174d47a2c61375f49c657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1495648723
 GameObject:
   m_ObjectHideFlags: 0

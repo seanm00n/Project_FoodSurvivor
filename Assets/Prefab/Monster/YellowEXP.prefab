@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1931935879582552162}
   - component: {fileID: 4740693451479263787}
   - component: {fileID: 5382671108718871918}
+  - component: {fileID: 4266389677427284005}
   m_Layer: 13
   m_Name: YellowEXP
   m_TagString: EXP
@@ -97,4 +98,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f095df71e75bd564ebf44dcf4bb73afb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _expPoint: 20
+--- !u!58 &4266389677427284005
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000780801139214134}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.49999997

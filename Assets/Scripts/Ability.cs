@@ -7,6 +7,8 @@ public class Ability {
 
     public float HP { get; private set; }
 
+    public float MaxHP { get; private set; }
+
     public float MS { get; private set; }
 
     public float lifeTime { get; private set; }
@@ -24,6 +26,8 @@ public class Ability {
     public void SetAR(float value) => AR = value;
 
     public void SetHP(float value) => HP = value;
+
+    public void SetMaxHP(float value) => MaxHP = value;
 
     public void SetMS(float value) => MS = value;
 

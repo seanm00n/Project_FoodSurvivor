@@ -1,6 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Random = UnityEngine.Random;
+using System.Linq;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
+using System;
+using static UnityEditor.Progress;
 
 public class GM : MonoBehaviour
 {
@@ -43,6 +49,9 @@ public class GM : MonoBehaviour
     [SerializeField]
     private GameObject _yellowRangedMobPref;
 
+    [SerializeField]
+    private MonoBehaviour[] exceptions;
+
     #endregion
 
     #region Member ref
@@ -69,11 +78,11 @@ public class GM : MonoBehaviour
 
     private HashSet<GameObject> _yellowMobs;
 
-    private int _blueMaxNum;
+    private int _blueMaxNum = 0;
 
-    private int _greenMaxNum;
+    private int _greenMaxNum = 0;
 
-    private int _yellowMaxNum;
+    private int _yellowMaxNum = 0;
 
     private int _blueLastIndex = 0;
 
@@ -87,6 +96,8 @@ public class GM : MonoBehaviour
 
     private bool _isYellowZoneOut = false;
 
+    private bool _isGamePaused = false;
+
     #endregion
 
     #region CSV Data
@@ -96,6 +107,8 @@ public class GM : MonoBehaviour
     public Dictionary<(int, int), MobCol> MobData { get; private set; }
 
     public Dictionary<(string, int), float> SkillData { get; private set; }
+
+    public Dictionary<int, MobSpawnCol> MobSpawnData {  get; private set; }
 
     #endregion
 
@@ -109,6 +122,7 @@ public class GM : MonoBehaviour
         LevelData = LoadLevelDataCSV();
         MobData = LoadMobDataCSV();
         SkillData = LoadSkilDataCSV();
+        MobSpawnData = LoadMobSpawnDataCSV();
 
         CreateWeapon();
         CreateNexus(); 
@@ -119,18 +133,16 @@ public class GM : MonoBehaviour
         _greenMobs = new HashSet<GameObject>();
         _yellowMobs = new HashSet<GameObject>();
 
-        _blueMaxNum = 10;
-        _greenMaxNum = 12;
-        _yellowMaxNum = 15;
+        _blueSpawnPoint = _blueZone.GetComponentsInChildren<Transform>().Where(t => t != _blueZone.transform).ToArray();
+        _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
+        _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
 
-        _blueSpawnPoint = _blueZone.GetComponentsInChildren<Transform>();
-        _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>();
-        _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>();
+        InvokeRepeating(nameof(LogMessage), 0f, 1f);
     }
-
+    private void LogMessage() => Debug.Log("BM: "+_blueMaxNum+"GM: "+_greenMaxNum+"YM: "+_yellowMaxNum);
     private void Update() {
-        MonsterSpawn(); 
         UpdateMonsterMax();
+        MonsterSpawn(); 
     }
 
     #region CSV Load
@@ -237,44 +249,81 @@ public class GM : MonoBehaviour
         return result;
     }
 
+    private Dictionary<int, MobSpawnCol> LoadMobSpawnDataCSV() {
+        TextAsset csvFile = Resources.Load<TextAsset>("MobSpawnData");
+        if(csvFile == null) {
+            Debug.Log("Cannot find csv data");
+        }
+
+        StringReader reader = new StringReader(csvFile.text);
+        if(reader == null) {
+            Debug.Log("Cannot read csv data");
+        }
+
+        var result = new Dictionary<int, MobSpawnCol>();
+        bool isFirstLine = true;
+
+        while(reader.Peek() > -1) {
+            string line = reader.ReadLine();
+
+            if(isFirstLine) {
+                isFirstLine = false;
+                continue;
+            }
+
+            string[] values = line.Split(",");
+            if(values.Length != 4) {
+                Debug.Log("Data not fure");
+                continue;
+            }
+            MobSpawnCol mobSpawnCol = new MobSpawnCol(int.Parse(values[1]), int.Parse(values[2]), int.Parse(values[3]));
+            result.Add(int.Parse(values[0]), mobSpawnCol);
+        }
+
+        return result;
+    }
+
     #endregion
 
     private void MonsterSpawn() {
-        for(int i = _blueLastIndex; i < _blueSpawnPoint.Length; ++i) { // _blueSpawnPoint.Length ¼öÁ¤
-            if(_blueMobs.Count >= _blueMaxNum) break;
-            GameObject instMob = Instantiate(_blueMeleeMobPref, _blueSpawnPoint[i].position, Quaternion.identity);
+        while(_blueMobs.Count < _blueMaxNum) {
+            GameObject pref = Random.value > 0.5f ? _blueMeleeMobPref : _blueRangedMobPref;
+            GameObject instMob = Instantiate(pref, _blueSpawnPoint[_blueLastIndex].position, Quaternion.identity);
             _blueMobs.Add(instMob);
             instMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
-            _blueLastIndex = i + 1;
+            _blueLastIndex = (_blueLastIndex + 1) % _blueSpawnPoint.Length;
         }
 
-        for(int i = _greenLastIndex; i < _greenSpawnPoint.Length; ++i) {
-            if(Time.time / 240 >= 1 || _isBlueZoneOut) {
-                if(_greenMobs.Count >= _greenMaxNum) break;
-                GameObject instMob = Instantiate(_greenMeleeMobPref, _greenSpawnPoint[i].position, Quaternion.identity);
+        if(Time.time / 240 >= 1 || _isBlueZoneOut) {
+            while(_greenMobs.Count < _greenMaxNum) {
+                GameObject pref = Random.value > 0.5f ? _greenMeleeMobPref : _greenRangedMobPref;
+                GameObject instMob = Instantiate(pref, _greenSpawnPoint[_greenLastIndex].position, Quaternion.identity);
                 _greenMobs.Add(instMob);
                 instMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
-                _greenLastIndex = i + 1;
+                _greenLastIndex = (_greenLastIndex + 1) % _greenSpawnPoint.Length;
             }
         }
 
-        for(int i = _yellowLastIndex; i < _yellowSpawnPoint.Length; ++i) {
-            if(Time.time / 360 >= 1 || _isGreenZoneOut) {
-                if(_yellowMobs.Count >= _yellowMaxNum) break;
-                GameObject instMob = Instantiate(_yellowMeleeMobPref, _yellowSpawnPoint[i].position, Quaternion.identity);
+        if(Time.time / 360 >= 1 || _isGreenZoneOut) {
+            while(_yellowMobs.Count < _yellowMaxNum) {
+                GameObject pref = Random.value > 0.5f ? _yellowMeleeMobPref : _yellowRangedMobPref;
+                GameObject instMob = Instantiate(pref, _yellowSpawnPoint[_yellowLastIndex].position, Quaternion.identity);
                 _yellowMobs.Add(instMob);
                 instMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
-                _yellowLastIndex = i + 1;
+                _yellowLastIndex = (_yellowLastIndex + 1) % _yellowSpawnPoint.Length;
             }
         }
     }
 
     private void UpdateMonsterMax() {
-        int index = (int)(Mathf.Min(Time.time, 450) / 30);
+        int index = 450;
+        if(!_isYellowZoneOut) {
+            index = ((int)(Mathf.Min(Time.time, 450) / 30)) * 30;
+        }
 
-        _blueMaxNum = 10 + index + (index / 3);
-        _greenMaxNum = 12 + index + (index / 3);
-        _yellowMaxNum = 15 + index + (index / 3);
+        _blueMaxNum = MobSpawnData[index].blueMax;
+        _greenMaxNum = MobSpawnData[index].greenMax;
+        _yellowMaxNum = MobSpawnData[index].yellowMax;
     }
 
     public void HandleMonsterDeath(MonsterBase mob) {
@@ -293,20 +342,6 @@ public class GM : MonoBehaviour
                 break;
         }
         killCount++;
-    }
-
-    public void HandleNexusHit(Nexus instance) {
-        Debug.Log("Nexus Hit!"); 
-        // alert effect
-    }
-
-    public void HandleNexusDeath(Nexus instance) {
-        Debug.Log("Nexus death!");
-        // gameover
-    }
-
-    public void HandleWeaponLevelUp(Weapon weapon) {
-        // skill select ui
     }
 
     private void CreateNexus() {
@@ -336,6 +371,68 @@ public class GM : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private void PauseGame() {
+        MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>(true);
+        foreach(var mb in allBehaviours) {
+            if(mb == null) continue;
+            if(Array.Exists(exceptions, e => e == mb)) continue;
+            mb.enabled = false;
+        }
+
+        Time.timeScale = 0f;
+        _isGamePaused = true;
+    }
+
+    private void ResumeGame() {
+        MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>(true);
+        foreach(var mb in allBehaviours) {
+            if(mb == null) continue;
+            if(Array.Exists(exceptions, e => e == mb)) continue;
+            mb.enabled = true;
+        }
+
+        Time.timeScale = 1f;
+        _isGamePaused = false;
+    }
+
+    public void OnPauseToggle() { // need bool?
+        if(true) { // fix
+            PauseGame();
+        } else {
+            ResumeGame();
+        }
+    }
+
+    public void OnSkillSelect(string skill) {
+        Weapon.I.SkillLevelUp(skill);
+        ResumeGame();
+    }
+
+    public void HandleWeaponLevelUp(Weapon weapon) {
+        PauseGame();
+
+        List<string> options = Enum.GetNames(typeof(Skills)).ToList();
+        List<string> selects = new List<string>();
+        
+        for(int i = 0; i < 6 && selects.Count < 3; ++i) {
+            string select = options.OrderBy(x => Random.value).First();
+            if(Weapon.I.instSkills[select].ability.Lv < 5 && !selects.Contains(select)) {
+                selects.Add(select);
+            }
+        }
+
+        UIManager.I.DrawSelectUI(selects);
+    }
+
+    public void HandleNexusHit(Nexus instance) {
+        // alert UI
+    }
+
+    public void HandleNexusDeath(Nexus instance) {
+        PauseGame();
+        // gameover ui
     }
 
     public HashSet<GameObject> GetBlueMobs() => _blueMobs;
