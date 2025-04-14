@@ -412,7 +412,7 @@ public class GM : MonoBehaviour
         }
     }
 
-    public void OnSkillSelect(string skill) {
+    public void OnSkillSelect(Skill skill) {
         Weapon.I.SkillLevelUp(skill);
         ResumeGame();
     }

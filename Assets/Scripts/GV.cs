@@ -7,7 +7,7 @@ public enum Debuff {
     Slow,
 }
 
-public enum Skills {
+public enum Skill {
     Switching, RainFire, ProtectShield, SlowCircle, Overdrive, VitalSurge
 }
 

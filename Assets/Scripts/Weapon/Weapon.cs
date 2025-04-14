@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AYellowpaper.SerializedCollections;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -12,7 +13,7 @@ public class Weapon : MonoBehaviour
 
     public Ability ability { get; private set; }
 
-    public Dictionary<string, WeaponProjBase> instSkills { get; private set; }
+    public Dictionary<Skill, WeaponProjBase> instSkills { get; private set; }
 
     #region SerializeField
 
@@ -74,7 +75,7 @@ public class Weapon : MonoBehaviour
         ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
 
         SetCamera();
-        instSkills = new Dictionary<string, WeaponProjBase>();
+        instSkills = new Dictionary<Skill, WeaponProjBase>();
 
     }
 
@@ -82,22 +83,22 @@ public class Weapon : MonoBehaviour
         _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>(); // 초기화 시점 문제로 사용
 
         WeaponProjBase instRainFire = Instantiate(_rainFirePref, _nexus.transform).GetComponent<WeaponProjBase>();
-        instSkills.Add("RainFire", instRainFire);
+        instSkills.Add(Skill.RainFire, instRainFire);
 
         WeaponProjBase instSlowCircle = Instantiate(_slowCirclePref, _nexus.transform).GetComponent<WeaponProjBase>();
-        instSkills.Add("SlowCircle", instSlowCircle);
+        instSkills.Add(Skill.SlowCircle, instSlowCircle);
 
         WeaponProjBase instProtectShield = Instantiate(_protectShieldPref, _nexus.transform).GetComponent<WeaponProjBase>();
-        instSkills.Add("ProtectShield", instProtectShield);
+        instSkills.Add(Skill.ProtectShield, instProtectShield);
 
         WeaponProjBase instSwitching = Instantiate(_switchingPref, transform).GetComponent<WeaponProjBase>();
-        instSkills.Add("Switching", instSwitching);
+        instSkills.Add(Skill.Switching, instSwitching);
 
         WeaponProjBase instVitalSurge = Instantiate(_vitalSurgePref, transform).GetComponent<WeaponProjBase>();
-        instSkills.Add("VitalSurge", instVitalSurge);
+        instSkills.Add(Skill.VitalSurge, instVitalSurge);
 
         WeaponProjBase instOverdrive = Instantiate(_overdrivePref, transform).GetComponent<WeaponProjBase>();
-        instSkills.Add("Overdrive", instOverdrive);
+        instSkills.Add(Skill.Overdrive, instOverdrive);
     }
 
     private void Update() {
@@ -128,13 +129,13 @@ public class Weapon : MonoBehaviour
     private void LevelUp() {
         ability.SetLv(ability.Lv + 1);
         float baseAP = GM.I.LevelData[ability.Lv].AP;
-        float passiveAP = instSkills["Overdrive"].GetAP();
+        float passiveAP = instSkills[Skill.Overdrive].GetAP();
         ability.SetAP(baseAP + passiveAP);
         ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
         if(ability.Lv == 30) ability.SetExp(0f);
     }
 
-    public void SkillLevelUp(string skill) { // LevelUp -> UI select -> SkillLevelUP(select)
+    public void SkillLevelUp(Skill skill) { // LevelUp -> UI select -> SkillLevelUP(select)
         instSkills[skill].OnLevelUp();
     }
 
@@ -204,7 +205,7 @@ public class Weapon : MonoBehaviour
     #region Switching
 
     public void OnSwitching() { // button click event
-        if(Time.time - _lastSwitchTime >= instSkills["Switching"].GetAP()) {
+        if(Time.time - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
             _lastSwitchTime = Time.time;
             _isSwitching = true;
 
@@ -248,9 +249,8 @@ public class Weapon : MonoBehaviour
     }
 
     public float GetSwitchLeft() { // UI 확인용
-        return instSkills["Switching"].GetAP() - (Time.time - _lastSwitchTime);
+        return instSkills[Skill.Switching].GetAP() - (Time.time - _lastSwitchTime);
     }
 
     #endregion
-
 }
