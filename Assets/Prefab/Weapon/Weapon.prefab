@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 710539924399495106}
   - component: {fileID: 6092260637896832901}
   - component: {fileID: 1178952150220415533}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Body
-  m_TagString: PlayerProjectile
+  m_TagString: PlayerProj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -66,7 +66,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0015769005, y: 0.000113487244}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -77,7 +77,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.3848667, y: 2.3778763}
   m_EdgeRadius: 0
 --- !u!114 &6092260637896832901
 MonoBehaviour:
@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 1921940822443427338}
   - component: {fileID: 8082094747169211773}
   - component: {fileID: 832603226944567986}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Weapon
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.00000011920929, y: 0.15049696}
+  m_Offset: {x: 0.00000011920929, y: 0.1415112}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -221,7 +221,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.4600732, y: 2.4932566}
+  m_Size: {x: 2.3881876, y: 2.3764424}
   m_EdgeRadius: 0
 --- !u!50 &8082094747169211773
 Rigidbody2D:
@@ -262,22 +262,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7d213822afb1d41a7ff385270a1984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  temp:
-    _serializedList:
-    - Key: 0
-      Value:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    - Key: 0
-      Value:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
   _rainFirePref: {fileID: 1308840794168678689, guid: 61dfd4e0d12c42245a57e0967f798792, type: 3}
   _slowCirclePref: {fileID: 2437209667103863883, guid: 2245b28a2ac8d55499943e2a7e78ad22, type: 3}
   _protectShieldPref: {fileID: 3770749953129922182, guid: eb9abcf69696a7a4989981a10f40c18b, type: 3}

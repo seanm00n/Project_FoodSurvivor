@@ -106,7 +106,7 @@ public class Nexus : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if(collision.gameObject.CompareTag("MonsterProjectile")) {
+        if(collision.CompareTag("MonsterProj")) {
             HandleHit(collision.gameObject);
         }
     }
@@ -135,7 +135,7 @@ public class Nexus : MonoBehaviour
     }
 
     public void SetState(State state) { // use?
-        foreach(var variable in new[] { "Idle", "Ready", "Walk", "Run", "Jump", "Die" }) {
+        foreach(var variable in new[] { "Walk", "Die" }) {
             _animator.SetBool(variable, false);
         }
 

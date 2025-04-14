@@ -110,7 +110,7 @@ public class Weapon : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if(collision.gameObject.CompareTag("EXP")) {
+        if(collision.CompareTag("EXP")) {
             HandleExpGet(collision.GetComponent<EXP>().exp);
             Destroy(collision.gameObject);
         }
@@ -204,8 +204,8 @@ public class Weapon : MonoBehaviour
 
     #region Switching
 
-    public void OnSwitching() { // button click event
-        if(Time.time - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
+    public void OnSwitchButton() { // button click event
+        if(!_isSwitching && Time.time - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
             _lastSwitchTime = Time.time;
             _isSwitching = true;
 

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7455499155922914593}
   - component: {fileID: 2190942090019156019}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Overdrive
-  m_TagString: Untagged
+  m_TagString: PlayerProj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

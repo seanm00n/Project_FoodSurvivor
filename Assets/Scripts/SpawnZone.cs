@@ -6,7 +6,7 @@ public class SpawnZone : MonoBehaviour
     private Zone _zone;
 
     private void OnTriggerExit2D(Collider2D collision) {
-        if(collision.gameObject.CompareTag("Player")) {
+        if(collision.CompareTag("Player")) {
             Debug.Log("Player out of line");
             GM.I.SetZoneOut(_zone);
         }

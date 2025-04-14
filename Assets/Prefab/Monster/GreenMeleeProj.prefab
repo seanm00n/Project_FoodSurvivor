@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: -1561808935107621195}
   - component: {fileID: -8895521694904444500}
   - component: {fileID: 4487307180125002971}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: GreenMeleeProj
-  m_TagString: MonsterProjectile
+  m_TagString: MonsterProj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2947025
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

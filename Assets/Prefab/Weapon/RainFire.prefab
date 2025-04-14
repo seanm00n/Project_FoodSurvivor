@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4521612974044714555}
   - component: {fileID: 4949751791214652257}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RainFire
-  m_TagString: Untagged
+  m_TagString: PlayerProj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

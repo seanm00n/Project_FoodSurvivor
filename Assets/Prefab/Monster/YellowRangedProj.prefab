@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 240239624983886301}
   - component: {fileID: 115805547121247702}
   - component: {fileID: 5807750841216312458}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: YellowRangedProj
-  m_TagString: MonsterProjectile
+  m_TagString: MonsterProj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
