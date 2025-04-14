@@ -10,8 +10,8 @@ public class CameraMovement : MonoBehaviour
 
     private Vector3 _velocity = Vector3.zero;
 
-    private void Awake() {
-        _player = Weapon.I;
+    private void Start() {
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>();
     }
 
     private void LateUpdate() { // ?

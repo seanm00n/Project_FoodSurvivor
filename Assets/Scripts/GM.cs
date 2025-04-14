@@ -334,18 +334,10 @@ public class GM : MonoBehaviour
 
     public void HandleMonsterDeath(MonsterBase mob) {
         switch(mob.GetZone()) {
-            case Zone.Blue:
-                if(_blueMobs.Remove(mob.gameObject)) Destroy(mob.gameObject);
-                break;
-            case Zone.Green:
-                if(_greenMobs.Remove(mob.gameObject)) Destroy(mob.gameObject);
-                break;
-            case Zone.Yellow:
-                if(_yellowMobs.Remove(mob.gameObject)) Destroy(mob.gameObject);
-                break;
-            default:
-                Debug.Log("Monster doesn't have Zone");
-                break;
+            case Zone.Blue: _blueMobs.Remove(mob.gameObject); break;
+            case Zone.Green: _greenMobs.Remove(mob.gameObject); break;
+            case Zone.Yellow: _yellowMobs.Remove(mob.gameObject); break;
+            default: throw new NotSupportedException();
         }
         killCount++;
     }

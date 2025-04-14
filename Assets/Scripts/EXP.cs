@@ -7,7 +7,7 @@ public class EXP : MonoBehaviour
 
     private void Start() {
         _coll = GetComponent<Collider2D>();
-        StartCoroutine(DisableCollTemp(0.5f));
+        //StartCoroutine(DisableCollTemp(0.5f));
     }
 
     public float exp { get; private set; }

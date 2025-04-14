@@ -1,3 +1,4 @@
+
 public class BlueMeleeMob : MonsterBase {
 
     protected override void Initialize() {

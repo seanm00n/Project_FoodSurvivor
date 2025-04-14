@@ -101,7 +101,11 @@ public class Weapon : MonoBehaviour
     }
 
     private void Update() {
-        WeaponMovement();
+    #if UNITY_EDITOR
+        HandleMouseInput();
+    #else
+        HandleTouchInput();
+    #endif
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -141,35 +145,60 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private void WeaponMovement() {
-        if(_isSelected && !_isSwitching) {
-            transform.position = GetMouseWorldPosition() + _offset;
+    private void HandleMouseInput() {
+        if(Input.GetMouseButtonDown(0)) {
+            Vector2 mousePos = GetMouseWorldPosition();
+            int layerMask = 1 << LayerMask.NameToLayer("Player");
+            Collider2D hit = Physics2D.OverlapPoint(mousePos, layerMask);
+            if(hit != null && hit.gameObject == gameObject) {
+                _isSelected = true;
+                _offset = transform.position - (Vector3)mousePos;
+            }
+        } else if(Input.GetMouseButtonUp(0)) {
+            _isSelected = false;
+        }
+
+        if(_isSelected) {
+            Vector2 newPos = GetMouseWorldPosition();
+            transform.position = newPos + (Vector2)_offset;
         }
     }
+
+    private void HandleTouchInput() {
+        if(Input.touchCount > 0) {
+            Touch touch = Input.GetTouch(0);
+            Vector2 touchPos = _mainCamera.ScreenToWorldPoint(touch.position);
+
+            switch(touch.phase) {
+                case TouchPhase.Began:
+                    int layerMask = 1 << LayerMask.NameToLayer("Player");
+                    Collider2D hit = Physics2D.OverlapPoint(touchPos, layerMask);
+                    if(hit != null && hit.gameObject == gameObject) {
+                        _isSelected = true;
+                        _offset = transform.position - (Vector3)touchPos;
+                    }
+                    break;
+
+                case TouchPhase.Moved:
+                case TouchPhase.Stationary:
+                    if(_isSelected) {
+                        transform.position = touchPos + (Vector2)_offset;
+                    }
+                    break;
+
+                case TouchPhase.Ended:
+                case TouchPhase.Canceled:
+                    _isSelected = false;
+                    break;
+            }
+        }
+    }
+
 
     private Vector3 GetMouseWorldPosition() { // ?
         Vector3 mouseScreenPosition = Input.mousePosition;
-        mouseScreenPosition.z = 0;
+        mouseScreenPosition.z = Mathf.Abs(_mainCamera.transform.position.z); //0;
         return _mainCamera.ScreenToWorldPoint(mouseScreenPosition);
-    }
-
-    private void OnMouseDown() {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        // 특정 레이어만 감지
-        int layerMask = 1 << LayerMask.NameToLayer("Player");
-
-        // 해당 위치에서 Player 레이어의 오브젝트 감지
-        Collider2D hitCollider = Physics2D.OverlapPoint(mousePos, layerMask);
-
-        if(hitCollider != null && hitCollider.gameObject == gameObject) {
-            _isSelected = true;
-            _offset = transform.position - GetMouseWorldPosition();
-        }
-    }
-
-    private void OnMouseUp() {
-        _isSelected = false;
     }
 
     #region Switching
