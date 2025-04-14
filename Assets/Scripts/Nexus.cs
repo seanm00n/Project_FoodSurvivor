@@ -18,6 +18,8 @@ public class Nexus : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
 
+    private Animator _animator;
+
     #endregion
 
     #region Member variable
@@ -40,7 +42,7 @@ public class Nexus : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>(); 
 
         _lastMovedTime = 0f;
-        _moveOffset = 1f;
+        _moveOffset = 1.5f;
         _isMoving = false;
 
         ability = new Ability();
@@ -48,6 +50,8 @@ public class Nexus : MonoBehaviour
         //ability.SetHP(500f);
         ability.SetHP(5000000f);
         ability.SetMS(1f);
+
+        _animator = GetComponent<Animator>();
     }
 
     private void Start() {
@@ -71,6 +75,7 @@ public class Nexus : MonoBehaviour
 
     private IEnumerator MoveToTarget() {
         _isMoving = true;
+        SetState(State.Moving);
         Vector2 direction = (_weapon.transform.position - this.transform.position).normalized;
         float timer = Time.time;
         while(Time.time - timer < 1f) {
@@ -107,6 +112,7 @@ public class Nexus : MonoBehaviour
     }
 
     private void HandleHit(GameObject target) {
+        _animator.SetTrigger("Hit");
         ability.SetHP(ability.HP - target.GetComponent<MonsterProjBase>().GetAP());
         OnNexusHit.Invoke(this);
         CheckDeath();
@@ -120,10 +126,23 @@ public class Nexus : MonoBehaviour
     }
 
     private void HandleDeath() {
-        Destroy(gameObject);
+        SetState(State.Death);
+        Destroy(gameObject, 1f);
     }
 
     private void OnDestroy() {
         I = null;
+    }
+
+    public void SetState(State state) { // use?
+        foreach(var variable in new[] { "Idle", "Ready", "Walk", "Run", "Jump", "Die" }) {
+            _animator.SetBool(variable, false);
+        }
+
+        switch(state) {
+            case State.Moving: _animator.SetBool("Walk", true); break;
+            case State.Death: _animator.SetBool("Die", true); break;
+            default: throw new NotSupportedException();
+        }
     }
 }

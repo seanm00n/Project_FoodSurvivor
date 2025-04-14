@@ -92,7 +92,6 @@ public abstract class MonsterBase : MonoBehaviour
 
     private void HandleDeath() {
         _state = State.Death;
-        GetComponent<Collider2D>().enabled = false;
         SetState(State.Death);
         StartCoroutine(DropAndDestroy(1f));
     }
@@ -159,6 +158,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void ResetState() {
+        if(_state == State.Death) return;
         _state = State.Moving;
     }
 
