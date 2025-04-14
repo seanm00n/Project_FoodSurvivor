@@ -262,6 +262,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7d213822afb1d41a7ff385270a1984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  temp:
+    _serializedList:
+    - Key: 0
+      Value:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    - Key: 0
+      Value:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
   _rainFirePref: {fileID: 1308840794168678689, guid: 61dfd4e0d12c42245a57e0967f798792, type: 3}
   _slowCirclePref: {fileID: 2437209667103863883, guid: 2245b28a2ac8d55499943e2a7e78ad22, type: 3}
   _protectShieldPref: {fileID: 3770749953129922182, guid: eb9abcf69696a7a4989981a10f40c18b, type: 3}
