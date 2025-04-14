@@ -4,30 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Monster
-  - Nexus
-  - MonsterProjectile
-  - PlayerProjectile
-  - NexusProjectile
-  - Shield
   - Zone
-  - GameManager
-  - EXP
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Zone
+  - 
   - Water
   - UI
-  - Player
-  - Nexus
-  - Monster
-  - PlayerProjectile
-  - NexusProjectile
-  - MonsterProjectile
-  - Item
-  - EXP
   - 
   - 
   - 
@@ -37,6 +21,14 @@ TagManager:
   - 
   - 
   - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Layer 1
+  - Layer 2
+  - Layer 3
   - 
   - 
   - 
@@ -50,12 +42,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: BackGround
-    uniqueID: 1953448471
+  - name: Layer 1
+    uniqueID: 2425651459
     locked: 0
-  - name: Object
-    uniqueID: 4292020271
+  - name: Layer 2
+    uniqueID: 4250941897
     locked: 0
-  - name: UI
-    uniqueID: 671573115
+  - name: Layer 3
+    uniqueID: 4189426099
     locked: 0
