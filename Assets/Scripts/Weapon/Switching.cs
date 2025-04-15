@@ -1,5 +1,6 @@
 
 public class Switching : WeaponProjBase {
+
     protected override void LevelUp() {
         base.LevelUp();
         ability.SetLv(ability.Lv + 1);

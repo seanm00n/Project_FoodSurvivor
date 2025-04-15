@@ -16,9 +16,13 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager I { get; private set; }
 
-    public SerializedDictionary<Skill, List<GameObject>> cardPrefs;
+    //public SerializedDictionary<Skill, List<GameObject>> cardPrefs;
+
+    public SerializedDictionary<Skill, List<Texture2D>> cardImgs;
 
     public SerializedDictionary<Skill, Texture2D> _iconList;
+
+    public SerializedDictionary<SliderType, Slider> sliders;
 
     #region SerializeField
 
@@ -49,18 +53,25 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _timeResultText;
 
+    [SerializeField]
+    private TextMeshProUGUI _levelText;
+
+    [SerializeField]
+    private GameObject _switchButton;
 
     #endregion
 
     private Weapon _weapon;
 
+    private Nexus _nexus;
+
     private List<Skill> _options;
 
     private List<GameObject> _instCards;
 
-    private float _spacing = 300f;
+    private float _spacing = 600;
 
-    private int _iconNum = 0;
+    private int _iconBoxIndex = 0;
 
     private void Awake() {
         if(I != null && I != this) {
@@ -75,6 +86,7 @@ public class UIManager : MonoBehaviour
 
     private void Start() {
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>();
+        _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
         _skillSelectPanel.SetActive(false);
         _pausePanel.SetActive(false);
         _gameOverPanel.SetActive(false);
@@ -83,6 +95,32 @@ public class UIManager : MonoBehaviour
     private void Update() {
         SetPlayTimeText();
         SetSwitchCoolText();
+        SetSlider();
+        SetLevelText();
+    }
+
+    private void SetLevelText() {
+        _levelText.text = string.Format("Lv{0}", _weapon.ability.Lv.ToString());
+    }
+
+    private void SetSlider() {
+        float curExp = _weapon.ability.Exp;
+        Debug.Log("curr exp"+curExp);
+        float maxExp = GM.I.LevelData[_weapon.ability.Lv].reqEXP;
+        Debug.Log("mex exp"+maxExp);
+        sliders[SliderType.WeaponEXP].value = curExp / maxExp;
+
+        //Boss go = GameObject.FindGameObjectWithTag("Boss")?.GetComponent<Boss>();
+        //if(go != null) {
+        //    float curBossHP = go.ability.HP;
+        //    float maxBossHP = go.ability.MaxHP;
+        //    sliders[SliderType.BossHP].value = curBossHP / maxBossHP;
+        //}
+
+        float curNexusHP = _nexus.ability.HP;
+        float curNexusMaxHP = _nexus.ability.MaxHP;
+
+        sliders[SliderType.NexusHP].value = curNexusHP / curNexusMaxHP;
     }
 
     private void SetPlayTimeText() {
@@ -93,11 +131,13 @@ public class UIManager : MonoBehaviour
     }
 
     private void SetSwitchCoolText() {
-        int result = 0;
         int cooltime = Mathf.FloorToInt(_weapon.GetSwitchLeft());
-        
-        if(cooltime > 0) result = cooltime;
-        _switchCoolText.text = result.ToString();
+
+        if(cooltime > 0) {
+            _switchCoolText.text = cooltime.ToString();
+        } else {
+            _switchCoolText.text = "";
+        }
     }
 
     public void DrawSelectUI() {
@@ -110,11 +150,29 @@ public class UIManager : MonoBehaviour
             Skill skill = candidates[i];
             int skillLevel = Weapon.I.instSkills[skill].ability.Lv;
             // 오브젝트 생성 후 부착하는 식으로 수정
-            GameObject inst = Instantiate(cardPrefs[skill][skillLevel]);
-            GameObject card = new GameObject("Card"+i);
-            inst.transform.SetParent(_skillSelectPanel.transform, false);
-            inst.transform.SetAsLastSibling();
-            inst.GetComponent<Button>().onClick.AddListener(() => OnSkillSelect(skill));
+            GameObject card = new GameObject("Card" + i);
+
+            RectTransform rt = card.AddComponent<RectTransform>();
+            rt.sizeDelta = new Vector2(360, 843);
+            Image imgComp = card.AddComponent<Image>();
+            Sprite sprite = Sprite.Create(
+                cardImgs[skill][skillLevel],
+                new Rect(0, 0, cardImgs[skill][skillLevel].width, cardImgs[skill][skillLevel].height),
+                new Vector2(0.5f, 0.5f)
+                );
+            imgComp.sprite = sprite;
+
+            Button buttonComp = card.AddComponent<Button>();
+            buttonComp.onClick.AddListener(() => OnSkillSelect(skill));
+
+            card.transform.SetParent(_skillSelectPanel.transform);
+            card.transform.SetAsLastSibling();
+
+            //
+            //GameObject inst = Instantiate(cardPrefs[skill][skillLevel]);
+            //inst.transform.SetParent(_skillSelectPanel.transform, false);
+            //inst.transform.SetAsLastSibling();
+            //inst.GetComponent<Button>().onClick.AddListener(() => OnSkillSelect(skill));
 
             Vector2 pos = Vector2.zero;
             if(count == 3) {
@@ -123,13 +181,13 @@ public class UIManager : MonoBehaviour
                 pos = new Vector2((i == 0 ? -1 : 1) * _spacing / 2f, 0f);
             }
 
-            inst.GetComponent<RectTransform>().anchoredPosition = pos;
-            _instCards.Add(inst);
+            rt.anchoredPosition = pos;
+            _instCards.Add(card);
         }
     }
 
-    public void OnSkillSelect(Skill skill) {
-        if(Weapon.I.instSkills[skill].ability.Lv == 0) {
+    public void OnSkillSelect(Skill skill) { // skill list box
+        if(_weapon.instSkills[skill].ability.Lv == 0) {
             GameObject imgObject = new GameObject("Icon");
 
             RectTransform rt = imgObject.AddComponent<RectTransform>();
@@ -144,10 +202,10 @@ public class UIManager : MonoBehaviour
                 );
             imgComp.sprite = sprite;
 
-            imgObject.transform.SetParent(_skilBoxList[_iconNum].transform);
+            imgObject.transform.SetParent(_skilBoxList[_iconBoxIndex].transform);
             imgObject.transform.SetAsLastSibling();
 
-            _iconNum++;
+            _iconBoxIndex++;
         }
 
         foreach(var card in _instCards) {
@@ -157,6 +215,8 @@ public class UIManager : MonoBehaviour
 
         GM.I.OnSkillSelect(skill);
         _skillSelectPanel.SetActive(false);
+
+        if(skill == Skill.Switching) _switchButton.SetActive(true);
     }
 
     public void OnResume() {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 
 public class LobbyClick : MonoBehaviour, IPointerUpHandler, IPointerDownHandler 
@@ -28,5 +29,9 @@ public class LobbyClick : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 
     public void OnPointerUp (PointerEventData eventData) {
         image.sprite = oldSprite;
+    }
+
+    public void OnGameStartButton() {
+        SceneManager.LoadScene("InGame");
     }
 }

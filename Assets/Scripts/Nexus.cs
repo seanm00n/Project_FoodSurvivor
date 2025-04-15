@@ -47,8 +47,8 @@ public class Nexus : MonoBehaviour
 
         ability = new Ability();
         ability.SetMaxHP(500f);
-        //ability.SetHP(500f);
-        ability.SetHP(5000000f);
+        ability.SetHP(500f);
+        //ability.SetHP(5000000f);//test
         ability.SetMS(1f);
 
         _animator = GetComponent<Animator>();

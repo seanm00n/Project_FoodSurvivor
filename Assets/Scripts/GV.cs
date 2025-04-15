@@ -15,6 +15,10 @@ public enum Zone {
     Blue, Green, Yellow
 }
 
+public enum SliderType {
+    BossHP, NexusHP, WeaponEXP
+}
+
 public struct LvCol {
     public float reqEXP;
     public float AP;

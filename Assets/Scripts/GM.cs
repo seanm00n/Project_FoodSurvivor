@@ -130,6 +130,7 @@ public class GM : MonoBehaviour
 
         _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
         _nexus.OnNexusHit += HandleNexusHit;
+        _nexus.OnNexusDeath += HandleNexusDeath;
 
         _blueSpawnPoint = _blueZone.GetComponentsInChildren<Transform>().Where(t => t != _blueZone.transform).ToArray();
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
