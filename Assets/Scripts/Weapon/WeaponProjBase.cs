@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class WeaponProjBase : MonoBehaviour, IBattle

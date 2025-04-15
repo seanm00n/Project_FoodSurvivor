@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LobbyTest.unity
     guid: c51a6995cfc1ba24e879f23c40cfd464
+  - enabled: 1
+    path: Assets/Scenes/InGame.unity
+    guid: bed3b6a0a95bae94cbd8848df3c858e0
   m_configObjects:
+    com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: f8bb07a764c26544dae1f5d3bd7fee73, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 33020a83d52c7cd40bbdd49c8315e8de, type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: af0984502d50f4f4e8b515b2ce4fc109, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 52808f2498e4d144c9380785b00c959f, type: 2}
+  m_UseUCBPForAssetBundles: 0
