@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1911136685250453971}
   - component: {fileID: 3648189637037891223}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Switching
-  m_TagString: Untagged
+  m_TagString: PlayerProj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

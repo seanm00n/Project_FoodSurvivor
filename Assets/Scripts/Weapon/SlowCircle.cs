@@ -15,13 +15,13 @@ public class SlowCircle : WeaponProjBase {
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if(collision.gameObject.CompareTag("Monster")) {
+        if(collision.CompareTag("Monster")) {
             collision.gameObject?.GetComponent<MonsterBase>().AddDebuff(Debuff.Slow);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
-        if(collision.gameObject.CompareTag("Monster")) {
+        if(collision.CompareTag("Monster")) {
             collision.gameObject?.GetComponent<MonsterBase>().RemoveDebuff(Debuff.Slow);
         }
     }

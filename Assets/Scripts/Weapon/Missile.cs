@@ -25,10 +25,10 @@ public class Missile : MonoBehaviour, IBattle
         Movement();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) {
-        if(collision.gameObject.CompareTag("Monster")) {
+    private void OnTriggerEnter2D(Collider2D collision) { //oncolliderenter?
+        if(collision.CompareTag("Monster")) {
             Destroy(gameObject);
-        }
+        }        
     }
 
     private void SearchTarget() {

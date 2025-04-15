@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4381205161444782975}
   - component: {fileID: 6468959737416244531}
   - component: {fileID: 8386587215386003852}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 4404670056931082299}
   - component: {fileID: 2436029325947315003}
   - component: {fileID: 3950635015285663795}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: GreenMeleeMob
   m_TagString: Monster
   m_Icon: {fileID: 0}

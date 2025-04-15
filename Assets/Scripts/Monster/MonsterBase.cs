@@ -69,7 +69,7 @@ public abstract class MonsterBase : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision) {
         if(_state == State.Death) return;
 
-        if(collision.gameObject.CompareTag("PlayerProjectile")) {
+        if(collision.CompareTag("PlayerProj")) {
             _lastHitTime = Time.time;
             HandleHit(collision.gameObject);
         }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1522370041789138366}
   - component: {fileID: 7370679144322765489}
   - component: {fileID: 5759841353830293256}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 5499043400820174400}
   - component: {fileID: -5570818030593102797}
   - component: {fileID: 7086917538549154450}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: BlueRangedMob
   m_TagString: Monster
   m_Icon: {fileID: 0}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7377107065774037489}
   - component: {fileID: 5134152501592526110}
   - component: {fileID: 6021726619205855958}
-  m_Layer: 13
+  m_Layer: 11
   m_Name: GreenEXP
   m_TagString: EXP
   m_Icon: {fileID: 0}

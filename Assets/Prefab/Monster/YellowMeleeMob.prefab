@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7029639390717719750}
   - component: {fileID: 6080958712511462002}
   - component: {fileID: 8984861244294522700}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 4404670056931082299}
   - component: {fileID: 3971611505852085011}
   - component: {fileID: 2345840786189066861}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: YellowMeleeMob
   m_TagString: Monster
   m_Icon: {fileID: 0}

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7068324727731292955}
   - component: {fileID: 3792775055841030311}
   - component: {fileID: 5689695658796283291}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Nexus
   m_TagString: Nexus
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2947025
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: -540655286, guid: 7abab14565f22a648bfa7d494bd6d14c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -20,12 +20,6 @@ public class GM : MonoBehaviour
     private UIManager _uiManager;
 
     [SerializeField]
-    private GameObject _weaponPref; // 수정?
-
-    [SerializeField]
-    private GameObject _nexusPref; // 수정?
-
-    [SerializeField]
     private GameObject _blueZone;
 
     [SerializeField]
@@ -59,17 +53,15 @@ public class GM : MonoBehaviour
 
     #region Member ref
 
-    private GameObject _instNexus;
+    private Weapon _weapon;
 
-    private GameObject _InstWeapon;
+    private Nexus _nexus;
 
     private Transform[] _blueSpawnPoint;
 
     private Transform[] _greenSpawnPoint;
 
     private Transform[] _yellowSpawnPoint;
-
-    private Camera _mainCamera;
 
     #endregion
 
@@ -127,24 +119,24 @@ public class GM : MonoBehaviour
         SkillData = LoadSkilDataCSV();
         MobSpawnData = LoadMobSpawnDataCSV();
 
-        CreateWeapon();
-        CreateNexus(); 
-
-        _mainCamera = Camera.main;
-
         _blueMobs = new HashSet<GameObject>();
         _greenMobs = new HashSet<GameObject>();
         _yellowMobs = new HashSet<GameObject>();
+    }
+
+    private void Start() {
+        _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>();
+        _weapon.OnWeaponLevelUp += HandleWeaponLevelUp;
+
+        _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
+        _nexus.OnNexusHit += HandleNexusHit;
+        _nexus.OnNexusDeath += HandleNexusDeath;
 
         _blueSpawnPoint = _blueZone.GetComponentsInChildren<Transform>().Where(t => t != _blueZone.transform).ToArray();
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
         _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
-
     }
 
-    private void Start() {
-
-    }
 
     private void Update() {
         UpdateMonsterMax();
@@ -339,20 +331,7 @@ public class GM : MonoBehaviour
             case Zone.Yellow: _yellowMobs.Remove(mob.gameObject); break;
             default: throw new NotSupportedException();
         }
-        killCount++;
-    }
-
-    private void CreateNexus() {
-        _instNexus = Instantiate(_nexusPref, new Vector2(0, -4), Quaternion.identity);
-        Nexus instNexus = _instNexus.GetComponent<Nexus>();
-        instNexus.OnNexusDeath += HandleNexusDeath;
-        instNexus.OnNexusHit += HandleNexusHit;
-    }
-
-    private void CreateWeapon() {
-        _InstWeapon = Instantiate(_weaponPref, new Vector2(0, 0), Quaternion.identity);
-        Weapon instWeapon = _InstWeapon.GetComponent<Weapon>();
-        instWeapon.OnWeaponLevelUp += HandleWeaponLevelUp;
+        _uiManager.SetKillCountText(killCount++);
     }
 
     public void SetZoneOut(Zone monsterZone) {
@@ -404,7 +383,6 @@ public class GM : MonoBehaviour
     }
 
     public void OnPauseButton() {
-        Debug.Log("pausebutton");
         if(!_isGamePaused) {
             PauseGame();
         } else {
@@ -413,7 +391,7 @@ public class GM : MonoBehaviour
     }
 
     public void OnSkillSelect(Skill skill) {
-        Weapon.I.SkillLevelUp(skill);
+        _weapon.SkillLevelUp(skill);
         ResumeGame();
     }
 

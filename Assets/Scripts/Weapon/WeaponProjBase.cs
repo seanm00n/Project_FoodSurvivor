@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class WeaponProjBase : MonoBehaviour, IBattle
@@ -14,15 +15,15 @@ public abstract class WeaponProjBase : MonoBehaviour, IBattle
     }
 
     protected virtual void Initialize() {
-        gameObject.SetActive(false);
         ability = new Ability();
         ability.SetAP(0f);
         ability.SetLv(0);
+        gameObject.SetActive(false);
     }
 
     protected abstract void SkillAction();
 
-    private void Awake() => Initialize();
+    private void Start() => Initialize(); // Awake() 같은 초기화 타이밍에서 virtual 함수를 호출하면 위험
 
     private void Update() => SkillAction();
 }

@@ -5,19 +5,26 @@ TagManager:
   serializedVersion: 2
   tags:
   - Zone
+  - Nexus
+  - Monster
+  - EXP
+  - PlayerProj
+  - MonsterProj
+  - Shield
+  - UIManager
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerProj
+  - Monster
+  - MonsterProj
+  - Nexus
+  - Background
+  - EXP
   - 
   - 
   - 

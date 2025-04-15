@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5380468691589033751}
   - component: {fileID: 1914935742151723688}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: VitalSurge
-  m_TagString: Untagged
+  m_TagString: PlayerProj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
