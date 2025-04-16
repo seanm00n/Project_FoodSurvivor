@@ -328,7 +328,8 @@ public class GM : MonoBehaviour
             case Zone.Yellow: _yellowMobs.Remove(mob.gameObject); break;
             default: throw new NotSupportedException();
         }
-        _uiManager.SetKillCountText(killCount++);
+        killCount++;
+        _uiManager.SetKillCountText(killCount);
     }
 
     public void SetZoneOut(Zone monsterZone) {

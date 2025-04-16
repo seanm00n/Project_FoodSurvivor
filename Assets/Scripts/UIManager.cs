@@ -96,7 +96,7 @@ public class UIManager : MonoBehaviour
     }
 
     private void SetLevelText() {
-        _levelText.text = string.Format("Lv{0}", _weapon.ability.Lv.ToString());
+        _levelText.text = string.Format("Lv {0}", _weapon.ability.Lv.ToString());
     }
 
     private void SetSlider() {
@@ -120,7 +120,7 @@ public class UIManager : MonoBehaviour
     }
 
     private void SetPlayTimeText() {
-        float time = Time.time;
+        float time = Time.timeSinceLevelLoad;
         int minutes = Mathf.FloorToInt(time / 60);
         int seconds = Mathf.FloorToInt(time % 60);
         _playTimeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
@@ -238,6 +238,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void LoadLobbyScene() {
+        GM.I.OnPauseButton();
         SceneManager.LoadScene("Lobby");
     }
 }

@@ -89,7 +89,7 @@ public abstract class MonsterBase : MonoBehaviour
             HandleDeath();
         }
     }
-
+    
     private void HandleDeath() {
         _state = State.Death;
         SetState(State.Death);
@@ -160,6 +160,7 @@ public abstract class MonsterBase : MonoBehaviour
     private void ResetState() {
         if(_state == State.Death) return;
         _state = State.Moving;
+        SetState(State.Moving);
     }
 
     public void AddDebuff(Debuff debuff) {

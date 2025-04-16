@@ -8,12 +8,15 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
-    path: Assets/Scenes/LobbyTest.unity
+  - enabled: 0
+    path: Assets/Scenes/TextScene/LobbyTest.unity
     guid: c51a6995cfc1ba24e879f23c40cfd464
   - enabled: 1
     path: Assets/Scenes/InGame.unity
     guid: bed3b6a0a95bae94cbd8848df3c858e0
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: a03549b28b3fca54ca6d3a9b138e22db
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: f8bb07a764c26544dae1f5d3bd7fee73, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 33020a83d52c7cd40bbdd49c8315e8de, type: 2}
