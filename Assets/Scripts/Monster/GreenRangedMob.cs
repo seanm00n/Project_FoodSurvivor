@@ -4,8 +4,8 @@ public class GreenRangedMob : MonsterBase
         ability.SetAP(GM.I.MobData[(1, 1)].AP);
         ability.SetHP(GM.I.MobData[(1, 1)].HP);
         ability.SetMaxHP(GM.I.MobData[(1, 1)].HP);
-        ability.SetAS(1f);
-        ability.SetAR(5f);
+        ability.SetAS(0.5f);
+        ability.SetAR(2f);
         ability.SetMS(1f);
         ability.SetLifeTime(4f);
         ability.SetExp(GM.I.MobData[(1, 1)].Exp);

@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
 
     public SerializedDictionary<Skill, List<Texture2D>> cardImgs;
 
-    public SerializedDictionary<Skill, Texture2D> _iconList;
+    public SerializedDictionary<Skill, Sprite> _iconList;
 
     public SerializedDictionary<SliderType, Slider> sliders;
 
@@ -33,6 +33,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private GameObject _gameOverPanel;
+
+    [SerializeField]
+    private GameObject _tutorialPanel;
     
     [SerializeField]
     private TextMeshProUGUI _killCountText;
@@ -101,9 +104,7 @@ public class UIManager : MonoBehaviour
 
     private void SetSlider() {
         float curExp = _weapon.ability.Exp;
-        Debug.Log("curr exp"+curExp);
         float maxExp = GM.I.LevelData[_weapon.ability.Lv].reqEXP;
-        Debug.Log("mex exp"+maxExp);
         sliders[SliderType.WeaponEXP].value = curExp / maxExp;
 
         //Boss go = GameObject.FindGameObjectWithTag("Boss")?.GetComponent<Boss>();
@@ -188,18 +189,14 @@ public class UIManager : MonoBehaviour
 
             RectTransform rt = imgObject.AddComponent<RectTransform>();
             rt.sizeDelta = new Vector2(150f, 150f);
-
+            
             Image imgComp = imgObject.AddComponent<Image>();
-
-            Sprite sprite = Sprite.Create(
-                _iconList[skill], 
-                new Rect(0, 0, _iconList[skill].width, _iconList[skill].height), 
-                new Vector2(0.5f, 0.5f)
-                );
-            imgComp.sprite = sprite;
+            imgComp.sprite = _iconList[skill];
 
             imgObject.transform.SetParent(_skilBoxList[_iconBoxIndex].transform);
             imgObject.transform.SetAsLastSibling();
+            imgObject.transform.localPosition = Vector3.zero;
+            imgObject.transform.localScale = Vector3.one;
 
             _iconBoxIndex++;
         }
@@ -219,6 +216,10 @@ public class UIManager : MonoBehaviour
         _pausePanel.SetActive(false);
     }
 
+    public void OnPlayButton() {
+        _tutorialPanel.SetActive(false);
+    }
+
     public void DrawNexusHitUI() {
 
     }
@@ -233,6 +234,9 @@ public class UIManager : MonoBehaviour
         _timeResultText.text = _playTimeText.text;
     }
 
+    public void DrawTutorial() {
+        _tutorialPanel.SetActive(true);
+    }
     public void SetKillCountText(int value) {
         _killCountText.text = value.ToString();
     }

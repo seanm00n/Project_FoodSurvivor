@@ -24,11 +24,12 @@ public class Nexus : MonoBehaviour
 
     #region Member variable
 
-    private float _lastMovedTime;
+    private float _moveOffset = 1f;
 
-    private float _moveOffset;
+    float _duration = 1f; // 주기
 
-    private bool _isMoving;
+    float _elapsedTime = 0f; // 경과 시간
+
 
     #endregion
 
@@ -39,11 +40,6 @@ public class Nexus : MonoBehaviour
         }
         I = this;
 
-        _spriteRenderer = GetComponent<SpriteRenderer>(); 
-
-        _lastMovedTime = 0f;
-        _moveOffset = 1.5f;
-        _isMoving = false;
 
         ability = new Ability();
         ability.SetMaxHP(500f);
@@ -51,58 +47,49 @@ public class Nexus : MonoBehaviour
         //ability.SetHP(5000000f);//test
         ability.SetMS(1f);
 
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
     }
 
     private void Start() {
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>(); // 초기화 시점 문제로 사용
+        SetState(State.Moving);
     }
 
     private void Update() {
         Movement();
+        Rotation();
     }
 
     private void Movement() {
-        if(!_isMoving && Time.time - _lastMovedTime > 1.5f ) {
-            float distance = Vector2.Distance(_weapon.transform.position, this.transform.position);
-            if(distance > _moveOffset ) {
-                _lastMovedTime = Time.time;
-                StartCoroutine(MoveToTarget());
-                StartCoroutine(RotateToTarget());
+        float distance = Vector2.Distance(_weapon.transform.position, transform.position);
+        if(distance > _moveOffset) {
+            Vector2 direction = (_weapon.transform.position - transform.position).normalized;
+            transform.position += (Vector3)direction * ability.MS * Time.deltaTime;
+        }
+    }
+
+    //private IEnumerator MoveToTarget() {
+    //    _isMoving = true;
+    //    float timer = Time.time;
+    //    while(Time.time - timer < 1f) {
+    //        yield return null;
+    //    }
+    //    _isMoving = false;
+    //}
+
+    private void Rotation() {
+        _elapsedTime += Time.deltaTime;
+
+        if(_elapsedTime > _duration) {
+            _elapsedTime = 0f;
+            Vector3 direction = _weapon.transform.position - transform.position;
+            if(direction.x >= 0) {
+                _spriteRenderer.flipX = false;
+            } else {
+                _spriteRenderer.flipX = true;
             }
         }
-    }
-
-    private IEnumerator MoveToTarget() {
-        _isMoving = true;
-        SetState(State.Moving);
-        Vector2 direction = (_weapon.transform.position - this.transform.position).normalized;
-        float timer = Time.time;
-        while(Time.time - timer < 1f) {
-            this.transform.position += (Vector3)direction * ability.MS * Time.deltaTime;
-            yield return null;
-        }
-        _isMoving = false;
-    }
-
-    private IEnumerator RotateToTarget() {
-        float duration = 1.5f; // 주기
-        float elapsedTime = 0f; // 경과 시간
-
-        while(elapsedTime < duration) {
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        elapsedTime = 0f;
-        Vector3 direction = _weapon.transform.position - this.transform.position;
-
-        if(direction.x >= 0) {
-            _spriteRenderer.flipX = false;
-        } else {
-            _spriteRenderer.flipX = true;
-        }
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

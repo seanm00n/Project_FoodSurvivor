@@ -4,7 +4,7 @@ public class YellowMeleeMob : MonsterBase
         ability.SetAP(GM.I.MobData[(2, 0)].AP);
         ability.SetHP(GM.I.MobData[(2, 0)].HP);
         ability.SetMaxHP(GM.I.MobData[(2, 0)].HP);
-        ability.SetAS(1f);
+        ability.SetAS(0.5f);
         ability.SetAR(0f);
         ability.SetMS(1f);
         ability.SetLifeTime(0.2f);

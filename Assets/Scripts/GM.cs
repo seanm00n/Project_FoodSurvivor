@@ -132,6 +132,8 @@ public class GM : MonoBehaviour
         _blueSpawnPoint = _blueZone.GetComponentsInChildren<Transform>().Where(t => t != _blueZone.transform).ToArray();
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
         _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
+
+        Invoke(nameof(Tutorial), 0.2f);
     }
 
 
@@ -378,6 +380,11 @@ public class GM : MonoBehaviour
 
         Time.timeScale = 1f;
         _isGamePaused = false;
+    }
+
+    private void Tutorial() {
+        PauseGame();
+        _uiManager.DrawTutorial();
     }
 
     public void OnPauseButton() {

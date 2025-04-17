@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ProtectShield : WeaponProjBase {
 
-    private float _rotateSpeed;
+    private float _rotateSpeed = 120f;
 
     protected override void LevelUp() {
         base.LevelUp();

@@ -42,9 +42,13 @@ public abstract class MonsterBase : MonoBehaviour
 
     private float _lastAttackTime = 0f;
 
-    private float _rangeOffset = 0.2f;
+    private float _rangeOffset = 0.8f;
 
     private State _state = State.Idle;
+
+    private Color _originalColor;
+
+    private Coroutine _hitCoroutine;
 
     #endregion
 
@@ -56,6 +60,7 @@ public abstract class MonsterBase : MonoBehaviour
         _nexus = Nexus.I;
         _nexusColl = _nexus?.GetComponent<BoxCollider2D>(); // 싱글턴 클래스라서 destroy되어도 Nexus.I는 남아있음
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _originalColor = _spriteRenderer.color;
         _animator = GetComponent<Animator>();
         SetState(State.Moving);
         Initialize();
@@ -70,13 +75,16 @@ public abstract class MonsterBase : MonoBehaviour
         if(_state == State.Death) return;
 
         if(collision.CompareTag("PlayerProj")) {
-            _lastHitTime = Time.time;
+            //_lastHitTime = Time.time;
             HandleHit(collision.gameObject);
         }
     }
 
     private void HandleHit(GameObject target) {
         IBattle battle = target.GetComponent<IBattle>();
+        if(_hitCoroutine != null) StopCoroutine(_hitCoroutine);
+        _hitCoroutine = StartCoroutine(HitEffect());
+
         if(battle != null) {
             ability.SetHP(ability.HP - battle.GetAP());
             CheckDeath();
@@ -113,7 +121,7 @@ public abstract class MonsterBase : MonoBehaviour
 
         float distance = Vector3.Distance(_nexus.transform.position, transform.position);
 
-        if(distance > ability.AR + _nexusColl.size.x + _rangeOffset) {
+        if(distance > ability.AR + _rangeOffset) { //_nexusColl.size.x + 
             _state = State.Moving;
             SetState(State.Moving);
             Vector3 direction = (_nexus.transform.position - transform.position).normalized;
@@ -147,10 +155,9 @@ public abstract class MonsterBase : MonoBehaviour
 
         float radius = GetComponent<BoxCollider2D>().size.x / 2f + 0.1f;
         Vector3 spawnDir = (_nexus.transform.position - transform.position).normalized;
-        Vector3 spawnPos = transform.position + spawnDir * radius; // 반지름 만큼의 거리
         float angle = Mathf.Atan2(spawnDir.y, spawnDir.x) * Mathf.Rad2Deg;
 
-        GameObject instProj = Instantiate(projPref, spawnPos, Quaternion.Euler(0, 0, angle)); // 적 방향으로
+        GameObject instProj = Instantiate(projPref, transform.position, Quaternion.Euler(0, 0, angle)); // 적 방향으로
         MonsterProjBase projBase = instProj.GetComponent<MonsterProjBase>();
 
         projBase.SetAbility(ability);
@@ -161,6 +168,13 @@ public abstract class MonsterBase : MonoBehaviour
         if(_state == State.Death) return;
         _state = State.Moving;
         SetState(State.Moving);
+    }
+
+    private IEnumerator HitEffect() {
+        Debug.Log("HitEffect");
+        _spriteRenderer.color = Color.white;
+        yield return new WaitForSeconds(0.05f);
+        _spriteRenderer.color = _originalColor;
     }
 
     public void AddDebuff(Debuff debuff) {
