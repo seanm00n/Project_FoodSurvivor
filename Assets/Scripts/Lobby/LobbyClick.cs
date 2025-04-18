@@ -9,6 +9,7 @@ public class LobbyClick : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     public Image image;
     public Sprite newSprite;
     public Sprite oldSprite;
+    public AudioSource clickAudio;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +29,11 @@ public class LobbyClick : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     public void OnPointerUp (PointerEventData eventData) {
         image.sprite = oldSprite;
     }
-
+     public void pressButton()
+    {
+        clickAudio.Play();
+    }
+  
     public void OnGameStartButton() {
         SceneManager.LoadScene("InGame");
     }
