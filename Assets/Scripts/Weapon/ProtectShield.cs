@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ProtectShield : WeaponProjBase {
@@ -22,10 +23,15 @@ public class ProtectShield : WeaponProjBase {
         }
 
         if(collision.CompareTag("Monster")) {
-            float pushPower = 1f;
-            Vector2 pushDir = (collision.transform.position - transform.position).normalized;
-            collision.GetComponent<Rigidbody2D>().AddForce(pushDir * pushPower, ForceMode2D.Impulse);
-            Debug.Log("Push");
+            StartCoroutine(PushMob(collision));
         }
+    }
+    
+    private IEnumerator PushMob(Collider2D collision) {
+        float pushPower = 2f;
+        Vector2 pushDir = (collision.transform.position - transform.position).normalized;
+        collision.GetComponent<Rigidbody2D>().AddForce(pushDir * pushPower, ForceMode2D.Impulse);
+        yield return new WaitForSeconds(0.2f);
+        if(collision != null) collision.attachedRigidbody.linearVelocity = Vector2.zero;
     }
 }

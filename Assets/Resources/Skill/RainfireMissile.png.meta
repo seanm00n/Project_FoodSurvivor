@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3bc2f2b2009c9a24789bec8979104677
+guid: 2e40fc8b2bdac634e9023e06ff435e03
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 508226913392479039
-    second: PlayButtonImg_0
+      213: -2085131975009966180
+    second: RainfireMissile_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayButtonImg_0
+      name: RainfireMissile_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 426
-        height: 199
+        x: 2
+        y: 4
+        width: 121
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f3b4d0e5fa59d0700800000000000000
-      internalID: 508226913392479039
+      spriteID: c97e8b7248f1013e0800000000000000
+      internalID: -2085131975009966180
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      PlayButtonImg_0: 508226913392479039
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

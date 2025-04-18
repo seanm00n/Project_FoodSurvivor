@@ -8,24 +8,21 @@ public class Missile : MonoBehaviour, IBattle
 
     private GameObject _target = null;
 
-    private Vector3 _lastDirection = Vector3.zero; //
-
-    private float _lastRotationZ = 0f; //
-
     private Vector3 _direction;
 
-    private float _rotationZ;
+    private float _angle;
 
     private void Start() {
         Destroy(gameObject, 4f);
-        InvokeRepeating(nameof(SearchTarget), 0f, 0.2f);
+        SearchTarget();
+        InvokeRepeating(nameof(SearchTarget), 0.2f, 0.2f);
     }
 
     private void Update() {
         Movement();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) { //oncolliderenter?
+    private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("Monster")) {
             Destroy(gameObject);
         }        
@@ -39,35 +36,13 @@ public class Missile : MonoBehaviour, IBattle
 
         // 방향 갱신
         _direction = (_target.transform.position - transform.position).normalized;
-        _rotationZ = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
+        _angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
     }
 
     private void Movement() {
-        transform.position += _direction * ability.MS * Time.deltaTime;
-        transform.rotation = Quaternion.Euler(0, 0, _rotationZ);
-    }
-
-    private void SearchTargetOld() {
-        if(_target == null) {
-            _target = FindNearestMonster();
-
-            if(_target == null) { // 새로운 목표도 없으면 기존 방향 유지
-                transform.position += _lastDirection * ability.MS * Time.deltaTime;
-                transform.rotation = Quaternion.Euler(0, 0, _lastRotationZ); // 마지막 회전값 유지
-                return;
-            }
-        }
-
-        // 목표가 있을 경우 방향 계산 및 저장
-        Vector3 direction = (_target.transform.position - transform.position).normalized;
-        _lastDirection = direction; // 마지막 이동 방향 저장
-        _lastRotationZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 2D에서 회전값(Z축) 저장
-
-        float resultSpeed = ability.MS;
-        transform.position += direction * resultSpeed * Time.deltaTime;
-
-        // Z축만 회전하도록 설정
-        transform.rotation = Quaternion.Euler(0, 0, _lastRotationZ);
+        Vector3 direction = _direction != Vector3.zero ? _direction : transform.right;
+        transform.position += direction * ability.MS * Time.deltaTime;
+        transform.rotation = Quaternion.Euler(0, 0, _angle);
     }
 
     private GameObject FindNearestMonster() {

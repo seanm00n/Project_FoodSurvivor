@@ -47,6 +47,8 @@ public abstract class MonsterBase : MonoBehaviour
 
     private State _state = State.Idle;
 
+    private Coroutine _effectCoroutine;
+
     private Coroutine _hitCoroutine;
 
     private SpriteRenderer _effectSR;
@@ -72,17 +74,36 @@ public abstract class MonsterBase : MonoBehaviour
         Rotation();
     }
 
+    private void OnTriggerStay2D(Collider2D collision) { // 지속 데미지
+        if(_state == State.Death) return;
+        if(collision.CompareTag("PlayerProj") && _hitCoroutine == null) {
+            _hitCoroutine = StartCoroutine(LateHit(collision.gameObject));
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collision) {
         if(_state == State.Death) return;
         if(collision.CompareTag("PlayerProj")) {
+            if(_hitCoroutine != null) {
+                StopCoroutine(_hitCoroutine);
+                _hitCoroutine = null;
+            }
+            
             HandleHit(collision.gameObject);
         }
     }
 
+    private IEnumerator LateHit(GameObject target) {
+        yield return new WaitForSeconds(1f);
+        HandleHit(target);
+        _hitCoroutine = null;
+    }
+
     private void HandleHit(GameObject target) {
         IBattle battle = target.GetComponent<IBattle>();
-        if(_hitCoroutine != null) StopCoroutine(_hitCoroutine);
-        _hitCoroutine = StartCoroutine(HitEffect());
+        if(_effectCoroutine != null) StopCoroutine(_effectCoroutine);
+        _effectCoroutine = StartCoroutine(HitEffect());
+        
         if(battle != null) {
             ability.SetHP(ability.HP - battle.GetAP());
             CheckDeath();
@@ -173,6 +194,7 @@ public abstract class MonsterBase : MonoBehaviour
         _effectObject.SetActive(true);
         yield return new WaitForSeconds(0.05f);
         _effectObject.SetActive(false);
+        _effectCoroutine = null;
     }
 
     public void AddDebuff(Debuff debuff) {
@@ -196,4 +218,8 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     public Zone GetZone() => _zone;
+
+    private void OnDestroy() {
+        StopAllCoroutines();
+    }
 }

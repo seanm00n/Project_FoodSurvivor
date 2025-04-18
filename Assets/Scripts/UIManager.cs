@@ -13,8 +13,6 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager I { get; private set; }
 
-    //public SerializedDictionary<Skill, List<GameObject>> cardPrefs;
-
     public SerializedDictionary<Skill, List<Texture2D>> cardImgs;
 
     public SerializedDictionary<Skill, Sprite> _iconList;
