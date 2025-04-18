@@ -6,7 +6,6 @@ public class LobbyPopUp : MonoBehaviour
 {
     public Image imageA;
     public Image imageB;
-
     void Start()
     {
         // Ensure ImageB is initially hidden
@@ -26,4 +25,5 @@ public class LobbyPopUp : MonoBehaviour
     {
         imageB.gameObject.SetActive(false);
     }
+
 }
