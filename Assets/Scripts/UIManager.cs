@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using AYellowpaper.SerializedCollections;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -89,6 +90,8 @@ public class UIManager : MonoBehaviour
         _skillSelectPanel.SetActive(false);
         _pausePanel.SetActive(false);
         _gameOverPanel.SetActive(false);
+
+        StartCoroutine(SwitchStart()); // level 1 start
     }
 
     private void Update() {
@@ -96,6 +99,11 @@ public class UIManager : MonoBehaviour
         SetSwitchCoolText();
         SetSlider();
         SetLevelText();
+    }
+
+    private IEnumerator SwitchStart() {
+        yield return null;
+        AddSkillList(Skill.Switching);
     }
 
     private void SetLevelText() {
@@ -134,6 +142,25 @@ public class UIManager : MonoBehaviour
             _switchCoolText.text = cooltime.ToString();
         } else {
             _switchCoolText.text = "";
+        }
+    }
+
+    private void AddSkillList(Skill skill) {
+        if(_weapon.instSkills[skill].ability.Lv == 0) {
+            GameObject imgObject = new GameObject("Icon");
+
+            RectTransform rt = imgObject.AddComponent<RectTransform>();
+            rt.sizeDelta = new Vector2(150f, 150f);
+
+            Image imgComp = imgObject.AddComponent<Image>();
+            imgComp.sprite = _iconList[skill];
+
+            imgObject.transform.SetParent(_skilBoxList[_iconBoxIndex].transform);
+            imgObject.transform.SetAsLastSibling();
+            imgObject.transform.localPosition = Vector3.zero;
+            imgObject.transform.localScale = Vector3.one;
+
+            _iconBoxIndex++;
         }
     }
 
@@ -184,22 +211,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void OnSkillSelect(Skill skill) { // skill list box
-        if(_weapon.instSkills[skill].ability.Lv == 0) {
-            GameObject imgObject = new GameObject("Icon");
-
-            RectTransform rt = imgObject.AddComponent<RectTransform>();
-            rt.sizeDelta = new Vector2(150f, 150f);
-            
-            Image imgComp = imgObject.AddComponent<Image>();
-            imgComp.sprite = _iconList[skill];
-
-            imgObject.transform.SetParent(_skilBoxList[_iconBoxIndex].transform);
-            imgObject.transform.SetAsLastSibling();
-            imgObject.transform.localPosition = Vector3.zero;
-            imgObject.transform.localScale = Vector3.one;
-
-            _iconBoxIndex++;
-        }
+        AddSkillList(skill);
 
         foreach(var card in _instCards) {
             Destroy(card);
@@ -208,8 +220,6 @@ public class UIManager : MonoBehaviour
 
         GM.I.OnSkillSelect(skill);
         _skillSelectPanel.SetActive(false);
-
-        if(skill == Skill.Switching) _switchButton.SetActive(true);
     }
 
     public void OnResume() {

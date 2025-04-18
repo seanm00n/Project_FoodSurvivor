@@ -1,7 +1,8 @@
+
 public class Overdrive : WeaponProjBase {
+
     protected override void LevelUp() {
         base.LevelUp();
-        ability.SetLv(ability.Lv + 1);
         ability.SetAP(GM.I.SkillData[("Overdrive", ability.Lv)]);
     }
 

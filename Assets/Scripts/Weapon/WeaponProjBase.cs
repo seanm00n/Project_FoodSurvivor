@@ -11,6 +11,7 @@ public abstract class WeaponProjBase : MonoBehaviour, IBattle
     protected virtual void LevelUp() {
         gameObject.SetActive(true);
         if(ability.Lv == 5) return;
+        ability.SetLv(ability.Lv + 1);
     }
 
     protected virtual void Initialize() {

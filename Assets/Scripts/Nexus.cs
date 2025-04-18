@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class Nexus : MonoBehaviour
@@ -44,7 +43,7 @@ public class Nexus : MonoBehaviour
         ability = new Ability();
         ability.SetMaxHP(500f);
         ability.SetHP(500f);
-        //ability.SetHP(5000000f);//test
+        ability.SetHP(50000f);//test
         ability.SetMS(1f);
 
         _spriteRenderer = GetComponent<SpriteRenderer>();

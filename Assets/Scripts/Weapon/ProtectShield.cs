@@ -6,7 +6,6 @@ public class ProtectShield : WeaponProjBase {
 
     protected override void LevelUp() {
         base.LevelUp();
-        ability.SetLv(ability.Lv + 1);
         ability.SetAP(GM.I.SkillData[("ProtectShield", ability.Lv)]);
     }
 
@@ -20,6 +19,13 @@ public class ProtectShield : WeaponProjBase {
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("MonsterProj")) {
             Destroy(collision.gameObject);
+        }
+
+        if(collision.CompareTag("Monster")) {
+            float pushPower = 1f;
+            Vector2 pushDir = (collision.transform.position - transform.position).normalized;
+            collision.GetComponent<Rigidbody2D>().AddForce(pushDir * pushPower, ForceMode2D.Impulse);
+            Debug.Log("Push");
         }
     }
 }

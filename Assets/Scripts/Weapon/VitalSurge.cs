@@ -4,7 +4,6 @@ public class VitalSurge : WeaponProjBase {
 
     protected override void LevelUp() {
         base.LevelUp();
-        ability.SetLv(ability.Lv + 1);
         ability.SetAP(GM.I.SkillData[("VitalSurge", ability.Lv)]);
         
         nexus.ability.SetMaxHP(nexus.ability.MaxHP + ability.AP);

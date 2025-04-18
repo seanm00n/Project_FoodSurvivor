@@ -74,12 +74,10 @@ public class Weapon : MonoBehaviour
 
         SetCamera();
         instSkills = new Dictionary<Skill, WeaponProjBase>();
-
     }
 
     private void Start() {       
         _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>(); // 초기화 시점 문제로 사용
-
         WeaponProjBase instRainFire = Instantiate(_rainFirePref, _nexus.transform).GetComponent<WeaponProjBase>();
         instSkills.Add(Skill.RainFire, instRainFire);
 
@@ -97,6 +95,8 @@ public class Weapon : MonoBehaviour
 
         WeaponProjBase instOverdrive = Instantiate(_overdrivePref, transform).GetComponent<WeaponProjBase>();
         instSkills.Add(Skill.Overdrive, instOverdrive);
+
+        StartCoroutine(SwitchStart()); // level 1 start
     }
 
     private void Update() {
@@ -114,6 +114,11 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    private IEnumerator SwitchStart() {
+        yield return null;
+        instSkills[Skill.Switching].OnLevelUp();
+
+    }
     private void HandleExpGet(float value) {
         if(ability.Lv < _weaponMaxLv && value + ability.Exp >= ability.reqExp) {
             ability.SetExp((value + ability.Exp) - ability.reqExp);

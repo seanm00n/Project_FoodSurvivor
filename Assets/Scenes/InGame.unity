@@ -225,7 +225,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1825,7 +1825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &651632470
 RectTransform:
   m_ObjectHideFlags: 0
@@ -92575,26 +92575,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 710539924399495106, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921940822443427338, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
-      propertyPath: m_Size.y
-      value: 2.3815444
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921940822443427338, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
-      propertyPath: m_Offset.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1921940822443427338, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
-      propertyPath: m_Offset.y
-      value: 0.14285517
-      objectReference: {fileID: 0}
-    - target: {fileID: 2401755742922430965, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7761268160000418982, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
       propertyPath: m_Name
       value: Weapon

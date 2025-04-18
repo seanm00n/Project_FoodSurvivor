@@ -12,7 +12,6 @@ public class RainFire : WeaponProjBase {
 
     protected override void LevelUp() {
         base.LevelUp();
-        ability.SetLv(ability.Lv + 1);
         ability.SetAP(GM.I.SkillData[("RainFire", ability.Lv)]);
     }
 

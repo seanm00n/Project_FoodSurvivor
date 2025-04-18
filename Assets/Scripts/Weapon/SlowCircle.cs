@@ -1,11 +1,9 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlowCircle : WeaponProjBase {
     SpriteRenderer _spriteRenderer;
     protected override void LevelUp() {
         base.LevelUp();
-        ability.SetLv(ability.Lv + 1);
         ability.SetAP(GM.I.SkillData[("SlowCircle", ability.Lv)]);
     }
 
@@ -17,7 +15,7 @@ public class SlowCircle : WeaponProjBase {
     protected override void SkillAction() {
         transform.localPosition = Vector3.zero; // 밀리는 현상 해결 update에
         Color currentColor = _spriteRenderer.color;
-        currentColor.a = Mathf.PingPong(Time.time, 0.6f);
+        currentColor.a = Mathf.PingPong(Time.time, 0.8f);
         _spriteRenderer.color = currentColor;
     }
 
