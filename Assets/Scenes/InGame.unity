@@ -414,7 +414,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1132,38 +1132,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434234117}
   m_CullTransparentMesh: 1
---- !u!1 &465403181 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2401755742922430965, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
-  m_PrefabInstance: {fileID: 1843823675}
-  m_PrefabAsset: {fileID: 0}
---- !u!50 &465403186
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 465403181}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!1 &476130672
 GameObject:
   m_ObjectHideFlags: 0
@@ -1778,7 +1746,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &611221166
 RectTransform:
   m_ObjectHideFlags: 0
@@ -90034,14 +90002,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Nexus
       objectReference: {fileID: 0}
-    - target: {fileID: 7068324727731292955, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
-      propertyPath: m_BodyType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7068324727731292955, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
-      propertyPath: m_Simulated
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7350868339810101519, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -90080,26 +90040,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7350868339810101519, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8401310562582179709, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
-      propertyPath: m_Size.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8401310562582179709, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
-      propertyPath: m_Size.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8401310562582179709, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8401310562582179709, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
-      propertyPath: m_Offset.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8401310562582179709, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
-      propertyPath: m_Offset.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -91645,7 +91585,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -92136,7 +92076,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -92880,10 +92820,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2401755742922430965, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 465403186}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
 --- !u!114 &1843823676 stripped
 MonoBehaviour:

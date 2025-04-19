@@ -75,7 +75,7 @@ public class UIManager : MonoBehaviour
 
     private List<GameObject> _instCards;
 
-    private float _spacing = 600;
+    //private float _spacing = 600;
 
     private int _iconBoxIndex = 0;
 
@@ -178,15 +178,32 @@ public class UIManager : MonoBehaviour
             .OrderBy(x => Random.value).Take(3).ToList();
 
         int count = candidates.Count;
-        for(int i = 0; i < count; ++i) {
-            Skill skill = candidates[i];
-            int skillLevel = Weapon.I.instSkills[skill].ability.Lv;
-            // 오브젝트 생성 후 부착하는 식으로 수정
-            GameObject card = new GameObject("Card" + i);
 
-            RectTransform rt = card.AddComponent<RectTransform>();
-            rt.sizeDelta = new Vector2(360, 843);
-            Image imgComp = card.AddComponent<Image>();
+        Vector2[] offsets = null;
+        if(count == 3) {
+            offsets = new Vector2[] {
+                new Vector2(50f, 970f),   // 왼쪽
+                new Vector2(510f, 510f),  // 가운데
+                new Vector2(970f, 50f)    // 오른쪽
+            };
+        } else if(count == 2) {
+            offsets = new Vector2[] {
+                new Vector2(200f, 820f),  // 왼쪽
+                new Vector2(820f, 200f)   // 오른쪽
+            };
+        } else {
+            offsets = new Vector2[] {
+                new Vector2(510f, 510f)   // 가운데
+            };
+        }
+
+        for(int index = 0; index < count; ++index) {
+            Skill skill = candidates[index];
+            int skillLevel = Weapon.I.instSkills[skill].ability.Lv;
+            
+            GameObject card = new GameObject("Card" + index);
+
+            Image imgComp = card.AddComponent<Image>(); // image
             Sprite sprite = Sprite.Create(
                 cardImgs[skill][skillLevel],
                 new Rect(0, 0, cardImgs[skill][skillLevel].width, cardImgs[skill][skillLevel].height),
@@ -194,33 +211,30 @@ public class UIManager : MonoBehaviour
                 );
             imgComp.sprite = sprite;
 
-            Button buttonComp = card.AddComponent<Button>();
+            Button buttonComp = card.AddComponent<Button>(); // button 
             buttonComp.onClick.AddListener(() => OnSkillSelect(skill));
 
-            card.transform.SetParent(_skillSelectPanel.transform);
+            card.transform.SetParent(_skillSelectPanel.transform); // priority
             card.transform.SetAsLastSibling();
 
-            //
-            //GameObject inst = Instantiate(cardPrefs[skill][skillLevel]);
-            //inst.transform.SetParent(_skillSelectPanel.transform, false);
-            //inst.transform.SetAsLastSibling();
-            //inst.GetComponent<Button>().onClick.AddListener(() => OnSkillSelect(skill));
-
-            Vector2 pos = Vector2.zero;
-            if(count == 3) {
-                pos = new Vector2((i - 1) * _spacing, 0f);
-            }else if(count == 2) {
-                pos = new Vector2((i == 0 ? -1 : 1) * _spacing / 2f, 0f);
+            RectTransform rectComp = card.GetComponent<RectTransform>(); // position
+            rectComp.anchorMin = new Vector2(0f, 0.5f);
+            rectComp.anchorMax = new Vector2(1f, 0.5f);
+            rectComp.pivot = new Vector2(0.5f, 0.5f);
+            rectComp.anchoredPosition = new Vector2(0f, -330f);
+            rectComp.sizeDelta = new Vector2(0f, 980f);
+            if(offsets != null && index < offsets.Length) { //
+                rectComp.offsetMin = new Vector2(offsets[index].x, rectComp.offsetMin.y);
+                rectComp.offsetMax = new Vector2(-offsets[index].y, rectComp.offsetMax.y);
             }
 
-            rt.anchoredPosition = pos;
             _instCards.Add(card);
         }
     }
 
     public void OnSkillSelect(Skill skill) { // skill list box
         AddSkillList(skill);
-
+        _audioSource.PlayOneShot(_buttonSound);
         foreach(var card in _instCards) {
             Destroy(card);
         }

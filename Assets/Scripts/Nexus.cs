@@ -11,8 +11,6 @@ public class Nexus : MonoBehaviour
 
     public Ability ability { get; private set; }
 
-    public bool _isSwitching { get; private set; } = false;
-
     [SerializeField]
     private AudioClip _hitSound;
 
@@ -69,22 +67,12 @@ public class Nexus : MonoBehaviour
     }
 
     private void Movement() {
-        //if(_isSwitching) return;
         float distance = Vector2.Distance(_weapon.transform.position, transform.position);
         if(distance > _moveOffset) {
             Vector2 direction = (_weapon.transform.position - transform.position).normalized;
             transform.position += (Vector3)direction * ability.MS * Time.deltaTime;
         }
     }
-
-    //private IEnumerator MoveToTarget() {
-    //    _isMoving = true;
-    //    float timer = Time.time;
-    //    while(Time.time - timer < 1f) {
-    //        yield return null;
-    //    }
-    //    _isMoving = false;
-    //}
 
     private void Rotation() {
         _elapsedTime += Time.deltaTime;
@@ -103,6 +91,11 @@ public class Nexus : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("MonsterProj")) {
             HandleHit(collision.gameObject);
+        }
+
+        if(collision.CompareTag("EXP")) {
+            _weapon.HandleExpGet(collision.GetComponent<EXP>().exp);
+            Destroy(collision.gameObject);
         }
     }
 
@@ -140,9 +133,5 @@ public class Nexus : MonoBehaviour
             case State.Death: _animator.SetBool("Die", true); break;
             default: throw new NotSupportedException();
         }
-    }
-
-    public void SetSwitching(bool value) {
-        _isSwitching = value;
     }
 }

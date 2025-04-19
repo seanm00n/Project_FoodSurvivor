@@ -6,7 +6,7 @@ public class CameraMovement : MonoBehaviour
 
     private float cameraOffset = 2f; // 화면 이동 거리
 
-    private float _smoothTime = 0.3f;
+    private float _smoothTime = 0.2f; // 0.3f
 
     private Vector3 _velocity = Vector3.zero;
 

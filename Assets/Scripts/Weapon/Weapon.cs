@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Weapon : MonoBehaviour
 {
@@ -46,21 +47,16 @@ public class Weapon : MonoBehaviour
 
     private AudioSource _audioSource;
 
-    // private GameObject _body;
-
     #endregion
 
     #region Member variable
 
     private bool _isSelected = false;
 
-    //private bool _isSwitching = false;
-
     private float _lastSwitchTime = -60f;
 
     private int _weaponMaxLv = 30;
 
-    //private Vector3 _offset; // 클릭 시 오브젝트 튐 방지
 
     #endregion
 
@@ -81,8 +77,6 @@ public class Weapon : MonoBehaviour
 
         SetCamera();
         instSkills = new Dictionary<Skill, WeaponProjBase>();
-
-        // _body = transform.GetChild(0).gameObject;
     }
 
     private void Start() {       
@@ -108,8 +102,6 @@ public class Weapon : MonoBehaviour
         instSkills.Add(Skill.Overdrive, instOverdrive);
 
         StartCoroutine(SwitchStart()); // level 1 start
-
-        //_body.SetActive(false);
     }
 
     private void Update() {
@@ -157,113 +149,61 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    //private void HandleMouseInputOld() {
-    //    if(Input.GetMouseButtonDown(0)) {
-    //        Vector2 mousePos = GetMouseWorldPosition();
-    //        int layerMask = 1 << LayerMask.NameToLayer("Player");
-    //        Collider2D hit = Physics2D.OverlapPoint(mousePos, layerMask);
-    //        if(hit != null && hit.gameObject == gameObject) {
-    //            _isSelected = true;
-    //            _offset = transform.position - (Vector3)mousePos;
-    //        }
-    //    } else if(Input.GetMouseButtonUp(0)) {
-    //        _isSelected = false;
-    //    }
+    public bool IsPointerOverUIObject() {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+#if UNITY_ANDROID
+        eventData.position = Input.mousePosition;
+#else
+        eventData.position = Input.GetTouch(0).position;
+#endif
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
 
-    //    if(_isSelected) {
-    //        Vector2 newPos = GetMouseWorldPosition();
-    //        transform.position = newPos + (Vector2)_offset;
-    //    }
-    //}
+        return results.Count > 0;
+    }
 
     private void HandleMouseInput() {
-        if(Input.GetMouseButtonDown(0)) {
-            //Vector2 mousePos = GetMouseWorldPosition();
-            //int layerMask = 1 << LayerMask.NameToLayer("Player");
-            //Collider2D hit = Physics2D.OverlapPoint(mousePos, layerMask);
-            //if(hit != null && hit.gameObject == gameObject) {
-                _isSelected = true;
-            //_offset = transform.position - (Vector3)mousePos;
-            //_body.SetActive(true);
-            
-            //}
-        } else if(Input.GetMouseButtonUp(0)) {
+        if(Input.GetMouseButtonDown(0) && !IsPointerOverUIObject()) {
+            _isSelected = true;
+        }else if(Input.GetMouseButtonUp(0)) {
             _isSelected = false;
-            //_body.SetActive(false);
         }
 
         if(_isSelected) {
             Vector2 newPos = GetMouseWorldPosition();
-            transform.position = newPos;// + (Vector2)_offset;
+            transform.position = newPos;
         }
     }
 
-    //private void HandleTouchInputOld() {
-    //    if(Input.touchCount > 0) {
-    //        Touch touch = Input.GetTouch(0);
-    //        Vector2 touchPos = _mainCamera.ScreenToWorldPoint(touch.position);
-
-    //        switch(touch.phase) {
-    //            case TouchPhase.Began:
-    //                int layerMask = 1 << LayerMask.NameToLayer("Player");
-    //                Collider2D hit = Physics2D.OverlapPoint(touchPos, layerMask);
-    //                if(hit != null && hit.gameObject == gameObject) {
-    //                    _isSelected = true;
-    //                    _offset = transform.position - (Vector3)touchPos;
-    //                }
-    //                break;
-
-    //            case TouchPhase.Moved:
-    //            case TouchPhase.Stationary:
-    //                if(_isSelected) {
-    //                    transform.position = touchPos + (Vector2)_offset;
-    //                }
-    //                break;
-
-    //            case TouchPhase.Ended:
-    //            case TouchPhase.Canceled:
-    //                _isSelected = false;
-    //                break;
-    //        }
-    //    }
-    //}
-
-    private void HandleTouchInput() { // 수정
+    private void HandleTouchInput() {
         if(Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
-            Vector2 touchPos = _mainCamera.ScreenToWorldPoint(touch.position);
-            transform.position = touchPos;
 
-            //switch(touch.phase) {
-            //    case TouchPhase.Began:
-            //        int layerMask = 1 << LayerMask.NameToLayer("Player");
-            //        Collider2D hit = Physics2D.OverlapPoint(touchPos, layerMask);
-            //        if(hit != null && hit.gameObject == gameObject) {
-            //            _isSelected = true;
-            //            _offset = transform.position - (Vector3)touchPos;
-            //        }
-            //        transform.position = touchPos;
-            //        break;
+            if(IsPointerOverUIObject()) return;
 
-            //    case TouchPhase.Moved:
-            //        break;
-            //    case TouchPhase.Stationary:
-            //        if(_isSelected) {
-            //            transform.position = touchPos + (Vector2)_offset;
-            //        }
-            //        break;
+            switch(touch.phase) {
+                case TouchPhase.Began:
+                    _isSelected = true;
+                    break;
+                case TouchPhase.Ended:
+                case TouchPhase.Canceled:
+                    _isSelected = false;
+                    break;
+            }
 
-            //    case TouchPhase.Ended:
-            //    case TouchPhase.Canceled:
-            //        _isSelected = false;
-            //        break;
-            //}
+            if(_isSelected) {
+                Vector2 touchPos = _mainCamera.ScreenToWorldPoint(touch.position);
+                transform.position = touchPos;
+            }
+
+        } else {
+            _isSelected = false;
         }
     }
 
-    private Vector3 GetMouseWorldPosition() { // ?
+    private Vector3 GetMouseWorldPosition() {
         Vector3 mouseScreenPosition = Input.mousePosition;
-        mouseScreenPosition.z = Mathf.Abs(_mainCamera.transform.position.z); //0;
+        mouseScreenPosition.z = Mathf.Abs(_mainCamera.transform.position.z);
         return _mainCamera.ScreenToWorldPoint(mouseScreenPosition);
     }
 
@@ -274,14 +214,12 @@ public class Weapon : MonoBehaviour
             _lastSwitchTime = Time.time;
 
             _audioSource.PlayOneShot(_switchingSound);
+
             Vector3 tmpPos = transform.position;
             transform.position = _nexus.transform.position;
-            _nexus.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
-            Vector2 newPos = new Vector2(tmpPos.x, tmpPos.y);
-            _nexus.GetComponent<Rigidbody2D>().MovePosition(newPos); // or moveposition
+            _nexus.transform.position = tmpPos;
 
             StartCoroutine(SmoothCameraTransition(transform.position, 0.3f));
-
         }
     }
 
@@ -303,12 +241,6 @@ public class Weapon : MonoBehaviour
             yield return null; // 한 프레임 대기
         }
     }
-
-    //private IEnumerator ResumeNexusMovement() { // 스위칭 직후 조작 방지
-    //    //_nexus.SetSwitching(true);
-    //    yield return new WaitForSeconds(2f);
-    //    _nexus.SetSwitching(false);
-    //}
 
     public float GetSwitchLeft() { // UI 확인용
         return instSkills[Skill.Switching].GetAP() - (Time.time - _lastSwitchTime);
