@@ -57,11 +57,19 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _switchButton;
 
+    [SerializeField]
+    private AudioClip _buttonSound;
+
+    [SerializeField]
+    private AudioClip _levelUpSound;
+
     #endregion
 
     private Weapon _weapon;
 
     private Nexus _nexus;
+
+    private AudioSource _audioSource;
 
     private List<Skill> _options;
 
@@ -85,6 +93,7 @@ public class UIManager : MonoBehaviour
     private void Start() {
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>();
         _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
+        _audioSource = GetComponent<AudioSource>();
         _skillSelectPanel.SetActive(false);
         _pausePanel.SetActive(false);
         _gameOverPanel.SetActive(false);
@@ -163,6 +172,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void DrawSelectUI() {
+        _audioSource.PlayOneShot(_levelUpSound);
         _skillSelectPanel.SetActive(true);
         List<Skill> candidates = _options.Where(x => Weapon.I.instSkills[x].ability.Lv < 5)
             .OrderBy(x => Random.value).Take(3).ToList();
@@ -220,11 +230,13 @@ public class UIManager : MonoBehaviour
         _skillSelectPanel.SetActive(false);
     }
 
-    public void OnResume() {
+    public void OnResumeButton() {
+        _audioSource.PlayOneShot(_buttonSound);
         _pausePanel.SetActive(false);
     }
 
     public void OnPlayButton() {
+        _audioSource.PlayOneShot(_buttonSound);
         _tutorialPanel.SetActive(false);
     }
 
@@ -245,11 +257,13 @@ public class UIManager : MonoBehaviour
     public void DrawTutorial() {
         _tutorialPanel.SetActive(true);
     }
+
     public void SetKillCountText(int value) {
         _killCountText.text = value.ToString();
     }
 
     public void LoadLobbyScene() {
+        _audioSource.PlayOneShot(_buttonSound);
         GM.I.OnPauseButton();
         SceneManager.LoadScene("Lobby");
     }

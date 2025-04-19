@@ -351,7 +351,7 @@ public class GM : MonoBehaviour
     }
 
     private void PauseGame() { // 문제시 interface 패턴 사용
-        MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>(true);
+        MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>(true); // 안쓰이는 기능 수정
 
         List<MonoBehaviour> exceptChilds = new List<MonoBehaviour>();
         foreach(var child in exceptions) {

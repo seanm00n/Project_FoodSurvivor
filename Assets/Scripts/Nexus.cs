@@ -11,6 +11,11 @@ public class Nexus : MonoBehaviour
 
     public Ability ability { get; private set; }
 
+    public bool _isSwitching { get; private set; } = false;
+
+    [SerializeField]
+    private AudioClip _hitSound;
+
     #region Member ref
 
     private Weapon _weapon;
@@ -18,6 +23,8 @@ public class Nexus : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
 
     private Animator _animator;
+
+    private AudioSource _audioSource;
 
     #endregion
 
@@ -52,6 +59,7 @@ public class Nexus : MonoBehaviour
 
     private void Start() {
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>(); // 초기화 시점 문제로 사용
+        _audioSource = GetComponent<AudioSource>();
         SetState(State.Moving);
     }
 
@@ -61,6 +69,7 @@ public class Nexus : MonoBehaviour
     }
 
     private void Movement() {
+        //if(_isSwitching) return;
         float distance = Vector2.Distance(_weapon.transform.position, transform.position);
         if(distance > _moveOffset) {
             Vector2 direction = (_weapon.transform.position - transform.position).normalized;
@@ -99,6 +108,7 @@ public class Nexus : MonoBehaviour
 
     private void HandleHit(GameObject target) {
         _animator.SetTrigger("Hit");
+        _audioSource.PlayOneShot(_hitSound);
         ability.SetHP(ability.HP - target.GetComponent<MonsterProjBase>().GetAP());
         OnNexusHit.Invoke(this);
         CheckDeath();
@@ -130,5 +140,9 @@ public class Nexus : MonoBehaviour
             case State.Death: _animator.SetBool("Die", true); break;
             default: throw new NotSupportedException();
         }
+    }
+
+    public void SetSwitching(bool value) {
+        _isSwitching = value;
     }
 }

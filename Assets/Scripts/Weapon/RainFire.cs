@@ -6,6 +6,11 @@ public class RainFire : WeaponProjBase {
     [SerializeField] 
     private GameObject _missilePref;
 
+    [SerializeField]
+    private AudioClip _launchSound;
+
+    private AudioSource _audioSource;
+
     private int _missileNum = 5;
 
     private float _missileDelay = 0.3f;
@@ -22,6 +27,7 @@ public class RainFire : WeaponProjBase {
     protected override void Initialize() {
         base.Initialize();
         ability.SetMS(5f);
+        _audioSource = GetComponent<AudioSource>();
     }
 
     protected override void SkillAction() {
@@ -35,6 +41,7 @@ public class RainFire : WeaponProjBase {
 
     IEnumerator Fire() {
         for(int i = 0; i < _missileNum; ++i) {
+            _audioSource.PlayOneShot(_launchSound);
             GameObject instMissie = Instantiate(_missilePref, transform.position, Quaternion.identity);
             instMissie.GetComponent<Missile>().SetAbility(ability);
             yield return new WaitForSeconds(_missileDelay);

@@ -23,6 +23,9 @@ public abstract class MonsterBase : MonoBehaviour
     [SerializeField]
     private Zone _zone;
 
+    [SerializeField]
+    private AudioClip _hitSound;
+
     #endregion
 
     #region Member Ref
@@ -34,6 +37,8 @@ public abstract class MonsterBase : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
 
     private Animator _animator;
+
+    private AudioSource _audioSource;
 
     #endregion
 
@@ -65,6 +70,7 @@ public abstract class MonsterBase : MonoBehaviour
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _effectSR = _effectObject.GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         SetState(State.Moving);
         Initialize();
     }
@@ -100,6 +106,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void HandleHit(GameObject target) {
+        _audioSource.PlayOneShot(_hitSound);
         IBattle battle = target.GetComponent<IBattle>();
         if(_effectCoroutine != null) StopCoroutine(_effectCoroutine);
         _effectCoroutine = StartCoroutine(HitEffect());
@@ -120,7 +127,8 @@ public abstract class MonsterBase : MonoBehaviour
     private void HandleDeath() {
         _state = State.Death;
         SetState(State.Death);
-        StartCoroutine(DropAndDestroy(1f));
+        GetComponent<BoxCollider2D>().enabled = false;
+        StartCoroutine(DropAndDestroy(0.5f));
     }
 
     private IEnumerator DropAndDestroy(float value) {

@@ -33,6 +33,9 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     private GameObject _overdrivePref;
 
+    [SerializeField]
+    private AudioClip _switchingSound;
+
     #endregion
 
     #region Member ref
@@ -41,19 +44,23 @@ public class Weapon : MonoBehaviour
 
     private Nexus _nexus;
 
+    private AudioSource _audioSource;
+
+    // private GameObject _body;
+
     #endregion
 
     #region Member variable
 
     private bool _isSelected = false;
 
-    private bool _isSwitching = false;
+    //private bool _isSwitching = false;
 
-    private float _lastSwitchTime = 0f;
+    private float _lastSwitchTime = -60f;
 
     private int _weaponMaxLv = 30;
 
-    private Vector3 _offset; // 클릭 시 오브젝트 튐 방지
+    //private Vector3 _offset; // 클릭 시 오브젝트 튐 방지
 
     #endregion
 
@@ -74,10 +81,14 @@ public class Weapon : MonoBehaviour
 
         SetCamera();
         instSkills = new Dictionary<Skill, WeaponProjBase>();
+
+        // _body = transform.GetChild(0).gameObject;
     }
 
     private void Start() {       
         _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>(); // 초기화 시점 문제로 사용
+        _audioSource = GetComponent<AudioSource>();
+
         WeaponProjBase instRainFire = Instantiate(_rainFirePref, _nexus.transform).GetComponent<WeaponProjBase>();
         instSkills.Add(Skill.RainFire, instRainFire);
 
@@ -97,6 +108,8 @@ public class Weapon : MonoBehaviour
         instSkills.Add(Skill.Overdrive, instOverdrive);
 
         StartCoroutine(SwitchStart()); // level 1 start
+
+        //_body.SetActive(false);
     }
 
     private void Update() {
@@ -107,22 +120,14 @@ public class Weapon : MonoBehaviour
     #endif
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if(collision.CompareTag("EXP")) {
-            HandleExpGet(collision.GetComponent<EXP>().exp);
-            Destroy(collision.gameObject);
-        }
-    }
-
     private IEnumerator SwitchStart() {
         yield return null;
         instSkills[Skill.Switching].OnLevelUp();
-
     }
-    private void HandleExpGet(float value) {
-        if(ability.Lv < _weaponMaxLv && value + ability.Exp >= ability.reqExp) {
+
+    public void HandleExpGet(float value) {
+        if(ability.Lv <= _weaponMaxLv && value + ability.Exp >= ability.reqExp) {
             ability.SetExp((value + ability.Exp) - ability.reqExp);
-            OnWeaponLevelUp.Invoke(this); // show level up UI
             LevelUp();
         } else {
             ability.SetExp(ability.Exp + value);
@@ -131,10 +136,13 @@ public class Weapon : MonoBehaviour
 
     private void LevelUp() {
         ability.SetLv(ability.Lv + 1);
+        if(ability.Lv < _weaponMaxLv) OnWeaponLevelUp.Invoke(this); // show level up UI
+
         float baseAP = GM.I.LevelData[ability.Lv].AP;
         float passiveAP = instSkills[Skill.Overdrive].GetAP();
         ability.SetAP(baseAP + passiveAP);
         ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
+
         if(ability.Lv == 30) ability.SetExp(0f);
     }
 
@@ -149,55 +157,109 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    //private void HandleMouseInputOld() {
+    //    if(Input.GetMouseButtonDown(0)) {
+    //        Vector2 mousePos = GetMouseWorldPosition();
+    //        int layerMask = 1 << LayerMask.NameToLayer("Player");
+    //        Collider2D hit = Physics2D.OverlapPoint(mousePos, layerMask);
+    //        if(hit != null && hit.gameObject == gameObject) {
+    //            _isSelected = true;
+    //            _offset = transform.position - (Vector3)mousePos;
+    //        }
+    //    } else if(Input.GetMouseButtonUp(0)) {
+    //        _isSelected = false;
+    //    }
+
+    //    if(_isSelected) {
+    //        Vector2 newPos = GetMouseWorldPosition();
+    //        transform.position = newPos + (Vector2)_offset;
+    //    }
+    //}
+
     private void HandleMouseInput() {
         if(Input.GetMouseButtonDown(0)) {
-            Vector2 mousePos = GetMouseWorldPosition();
-            int layerMask = 1 << LayerMask.NameToLayer("Player");
-            Collider2D hit = Physics2D.OverlapPoint(mousePos, layerMask);
-            if(hit != null && hit.gameObject == gameObject) {
+            //Vector2 mousePos = GetMouseWorldPosition();
+            //int layerMask = 1 << LayerMask.NameToLayer("Player");
+            //Collider2D hit = Physics2D.OverlapPoint(mousePos, layerMask);
+            //if(hit != null && hit.gameObject == gameObject) {
                 _isSelected = true;
-                _offset = transform.position - (Vector3)mousePos;
-            }
+            //_offset = transform.position - (Vector3)mousePos;
+            //_body.SetActive(true);
+            
+            //}
         } else if(Input.GetMouseButtonUp(0)) {
             _isSelected = false;
+            //_body.SetActive(false);
         }
 
         if(_isSelected) {
             Vector2 newPos = GetMouseWorldPosition();
-            transform.position = newPos + (Vector2)_offset;
+            transform.position = newPos;// + (Vector2)_offset;
         }
     }
 
-    private void HandleTouchInput() {
+    //private void HandleTouchInputOld() {
+    //    if(Input.touchCount > 0) {
+    //        Touch touch = Input.GetTouch(0);
+    //        Vector2 touchPos = _mainCamera.ScreenToWorldPoint(touch.position);
+
+    //        switch(touch.phase) {
+    //            case TouchPhase.Began:
+    //                int layerMask = 1 << LayerMask.NameToLayer("Player");
+    //                Collider2D hit = Physics2D.OverlapPoint(touchPos, layerMask);
+    //                if(hit != null && hit.gameObject == gameObject) {
+    //                    _isSelected = true;
+    //                    _offset = transform.position - (Vector3)touchPos;
+    //                }
+    //                break;
+
+    //            case TouchPhase.Moved:
+    //            case TouchPhase.Stationary:
+    //                if(_isSelected) {
+    //                    transform.position = touchPos + (Vector2)_offset;
+    //                }
+    //                break;
+
+    //            case TouchPhase.Ended:
+    //            case TouchPhase.Canceled:
+    //                _isSelected = false;
+    //                break;
+    //        }
+    //    }
+    //}
+
+    private void HandleTouchInput() { // 수정
         if(Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
             Vector2 touchPos = _mainCamera.ScreenToWorldPoint(touch.position);
+            transform.position = touchPos;
 
-            switch(touch.phase) {
-                case TouchPhase.Began:
-                    int layerMask = 1 << LayerMask.NameToLayer("Player");
-                    Collider2D hit = Physics2D.OverlapPoint(touchPos, layerMask);
-                    if(hit != null && hit.gameObject == gameObject) {
-                        _isSelected = true;
-                        _offset = transform.position - (Vector3)touchPos;
-                    }
-                    break;
+            //switch(touch.phase) {
+            //    case TouchPhase.Began:
+            //        int layerMask = 1 << LayerMask.NameToLayer("Player");
+            //        Collider2D hit = Physics2D.OverlapPoint(touchPos, layerMask);
+            //        if(hit != null && hit.gameObject == gameObject) {
+            //            _isSelected = true;
+            //            _offset = transform.position - (Vector3)touchPos;
+            //        }
+            //        transform.position = touchPos;
+            //        break;
 
-                case TouchPhase.Moved:
-                case TouchPhase.Stationary:
-                    if(_isSelected) {
-                        transform.position = touchPos + (Vector2)_offset;
-                    }
-                    break;
+            //    case TouchPhase.Moved:
+            //        break;
+            //    case TouchPhase.Stationary:
+            //        if(_isSelected) {
+            //            transform.position = touchPos + (Vector2)_offset;
+            //        }
+            //        break;
 
-                case TouchPhase.Ended:
-                case TouchPhase.Canceled:
-                    _isSelected = false;
-                    break;
-            }
+            //    case TouchPhase.Ended:
+            //    case TouchPhase.Canceled:
+            //        _isSelected = false;
+            //        break;
+            //}
         }
     }
-
 
     private Vector3 GetMouseWorldPosition() { // ?
         Vector3 mouseScreenPosition = Input.mousePosition;
@@ -207,23 +269,19 @@ public class Weapon : MonoBehaviour
 
     #region Switching
 
-    public void OnSwitchButton() { // button click event
-        if(!_isSwitching && Time.time - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
+    public void OnSwitchButton() { // button click event 
+        if(/*!_isSwitching && */Time.time - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
             _lastSwitchTime = Time.time;
-            _isSwitching = true;
 
-            Nexus nexus = Nexus.I;
-            Vector3 pos = transform.position;
-            transform.position = nexus.transform.position;
-            nexus.transform.position = pos;
+            _audioSource.PlayOneShot(_switchingSound);
+            Vector3 tmpPos = transform.position;
+            transform.position = _nexus.transform.position;
+            _nexus.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            Vector2 newPos = new Vector2(tmpPos.x, tmpPos.y);
+            _nexus.GetComponent<Rigidbody2D>().MovePosition(newPos); // or moveposition
 
-            Vector2 newCameraPos = new Vector2(transform.position.x, transform.position.y);
-            Vector2 mousePos = GetMouseWorldPosition();
-            Vector3 result = mousePos - newCameraPos;
+            StartCoroutine(SmoothCameraTransition(transform.position, 0.3f));
 
-            Vector3 targetPos = _mainCamera.transform.position - new Vector3(result.x, result.y, 0);
-            StartCoroutine(SmoothCameraTransition(targetPos, 0.2f));
-            StartCoroutine(ResumeWeaponMovement());
         }
     }
 
@@ -246,10 +304,11 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private IEnumerator ResumeWeaponMovement() { // 스위칭 직후 조작 방지
-        yield return new WaitForSeconds(0.4f); 
-        _isSwitching = false;
-    }
+    //private IEnumerator ResumeNexusMovement() { // 스위칭 직후 조작 방지
+    //    //_nexus.SetSwitching(true);
+    //    yield return new WaitForSeconds(2f);
+    //    _nexus.SetSwitching(false);
+    //}
 
     public float GetSwitchLeft() { // UI 확인용
         return instSkills[Skill.Switching].GetAP() - (Time.time - _lastSwitchTime);
