@@ -15,7 +15,7 @@ public class SlowCircle : WeaponProjBase {
     protected override void SkillAction() {
         transform.localPosition = Vector3.zero; // 밀리는 현상 해결 update에
         Color currentColor = _spriteRenderer.color;
-        currentColor.a = Mathf.PingPong(Time.time, 0.8f);
+        currentColor.a = Mathf.PingPong(Time.timeSinceLevelLoad, 0.8f);
         _spriteRenderer.color = currentColor;
     }
 

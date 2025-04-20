@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class Shield : MonoBehaviour
-{
+public class NoRotation : MonoBehaviour {
     Quaternion initialRotation;
 
     void Start() {

@@ -118,24 +118,30 @@ public class Weapon : MonoBehaviour
     }
 
     public void HandleExpGet(float value) {
-        if(ability.Lv <= _weaponMaxLv && value + ability.Exp >= ability.reqExp) {
-            ability.SetExp((value + ability.Exp) - ability.reqExp);
-            LevelUp();
-        } else {
-            ability.SetExp(ability.Exp + value);
+        if(ability.Lv < _weaponMaxLv) {
+            if(ability.Exp + value >= ability.reqExp) {
+                ability.SetExp((ability.Exp + value) - ability.reqExp);
+                OnWeaponLevelUp.Invoke(this); // show level up UI
+                LevelUp();
+            } else {
+                ability.SetExp(ability.Exp + value);
+            }
         }
     }
 
     private void LevelUp() {
         ability.SetLv(ability.Lv + 1);
-        if(ability.Lv < _weaponMaxLv) OnWeaponLevelUp.Invoke(this); // show level up UI
 
         float baseAP = GM.I.LevelData[ability.Lv].AP;
         float passiveAP = instSkills[Skill.Overdrive].GetAP();
+
         ability.SetAP(baseAP + passiveAP);
         ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
 
-        if(ability.Lv == 30) ability.SetExp(0f);
+        if(ability.Lv >= _weaponMaxLv) {
+            ability.SetExp(1f);
+            ability.SetReqEXP(1f);
+        }
     }
 
     public void SkillLevelUp(Skill skill) { // LevelUp -> UI select -> SkillLevelUP(select)
@@ -210,8 +216,8 @@ public class Weapon : MonoBehaviour
     #region Switching
 
     public void OnSwitchButton() { // button click event 
-        if(/*!_isSwitching && */Time.time - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
-            _lastSwitchTime = Time.time;
+        if(Time.timeSinceLevelLoad - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
+            _lastSwitchTime = Time.timeSinceLevelLoad;
 
             _audioSource.PlayOneShot(_switchingSound);
 
@@ -243,7 +249,7 @@ public class Weapon : MonoBehaviour
     }
 
     public float GetSwitchLeft() { // UI 확인용
-        return instSkills[Skill.Switching].GetAP() - (Time.time - _lastSwitchTime);
+        return instSkills[Skill.Switching].GetAP() - (Time.timeSinceLevelLoad - _lastSwitchTime);
     }
 
     #endregion

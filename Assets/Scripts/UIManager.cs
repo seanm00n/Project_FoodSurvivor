@@ -35,7 +35,10 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private GameObject _tutorialPanel;
-    
+
+    [SerializeField]
+    private GameObject _directionArrow;
+
     [SerializeField]
     private TextMeshProUGUI _killCountText;
 
@@ -65,19 +68,26 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    #region Reference
+
     private Weapon _weapon;
 
     private Nexus _nexus;
 
     private AudioSource _audioSource;
 
+    private Image _arrowImage;
+
+    private Image _childArrowImage;
+
+    #endregion
+
     private List<Skill> _options;
 
     private List<GameObject> _instCards;
 
-    //private float _spacing = 600;
-
     private int _iconBoxIndex = 0;
+
 
     private void Awake() {
         if(I != null && I != this) {
@@ -85,7 +95,7 @@ public class UIManager : MonoBehaviour
             return;
         }
         I = this;
-
+        
         _options = Enum.GetValues(typeof(Skill)).Cast<Skill>().ToList();
         _instCards = new List<GameObject>();
     }
@@ -93,6 +103,8 @@ public class UIManager : MonoBehaviour
     private void Start() {
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>();
         _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
+        _arrowImage = _directionArrow.GetComponent<Image>();
+        _childArrowImage = _directionArrow.transform.Find("Icon").GetComponent<Image>();
         _audioSource = GetComponent<AudioSource>();
         _skillSelectPanel.SetActive(false);
         _pausePanel.SetActive(false);
@@ -106,6 +118,22 @@ public class UIManager : MonoBehaviour
         SetSwitchCoolText();
         SetSlider();
         SetLevelText();
+        SetArrowVisible();
+    }
+
+    private void SetArrowVisible() {
+        Vector3 viewportPos = Camera.main.WorldToViewportPoint(_nexus.transform.position);
+
+        bool isVisible =
+            viewportPos.z > 0f &&                       // 카메라 앞에 있으며
+            viewportPos.x > 0f && viewportPos.x < 1f && // 화면 좌우 안에 있으며
+            viewportPos.y > 0f && viewportPos.y < 1f;   // 화면 상하 안에 있음
+
+        Color color = Color.white;
+        color.a = isVisible ? 0f : 1f;
+
+        _arrowImage.color = color;
+        _childArrowImage.color = color;
     }
 
     private IEnumerator SwitchStart() {
@@ -214,8 +242,9 @@ public class UIManager : MonoBehaviour
             Button buttonComp = card.AddComponent<Button>(); // button 
             buttonComp.onClick.AddListener(() => OnSkillSelect(skill));
 
-            card.transform.SetParent(_skillSelectPanel.transform); // priority
+            card.transform.SetParent(_skillSelectPanel.transform, false); // priority
             card.transform.SetAsLastSibling();
+            card.transform.localScale = Vector3.one;
 
             RectTransform rectComp = card.GetComponent<RectTransform>(); // position
             rectComp.anchorMin = new Vector2(0f, 0.5f);
@@ -259,6 +288,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void DrawPauseUI() {
+        _audioSource.PlayOneShot(_buttonSound);
         _pausePanel.SetActive(true);
     }
 

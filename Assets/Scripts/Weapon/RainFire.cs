@@ -33,8 +33,8 @@ public class RainFire : WeaponProjBase {
     protected override void SkillAction() {
         if(ability.Lv == 0) return;
 
-        if(Time.time - _lastLaunch > _launchCool) {
-            _lastLaunch = Time.time;
+        if(Time.timeSinceLevelLoad - _lastLaunch > _launchCool) {
+            _lastLaunch = Time.timeSinceLevelLoad;
             StartCoroutine(Fire());
         }
     }

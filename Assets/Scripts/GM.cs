@@ -291,7 +291,7 @@ public class GM : MonoBehaviour
             _blueLastIndex = (_blueLastIndex + 1) % _blueSpawnPoint.Length;
         }
 
-        if(Time.time / 240 >= 1 || _isBlueZoneOut) {
+        if(Time.timeSinceLevelLoad / 240 >= 1 || _isBlueZoneOut) {
             while(_greenMobs.Count < _greenMaxNum) {
                 GameObject pref = Random.value > 0.5f ? _greenMeleeMobPref : _greenRangedMobPref;
                 GameObject instMob = Instantiate(pref, _greenSpawnPoint[_greenLastIndex].position, Quaternion.identity);
@@ -301,7 +301,7 @@ public class GM : MonoBehaviour
             }
         }
 
-        if(Time.time / 360 >= 1 || _isGreenZoneOut) {
+        if(Time.timeSinceLevelLoad / 360 >= 1 || _isGreenZoneOut) {
             while(_yellowMobs.Count < _yellowMaxNum) {
                 GameObject pref = Random.value > 0.5f ? _yellowMeleeMobPref : _yellowRangedMobPref;
                 GameObject instMob = Instantiate(pref, _yellowSpawnPoint[_yellowLastIndex].position, Quaternion.identity);
@@ -315,7 +315,7 @@ public class GM : MonoBehaviour
     private void UpdateMonsterMax() {
         int index = 450;
         if(!_isYellowZoneOut) {
-            index = ((int)(Mathf.Min(Time.time, 450) / 30)) * 30;
+            index = ((int)(Mathf.Min(Time.timeSinceLevelLoad, 450) / 30)) * 30;
         }
 
         _blueMaxNum = MobSpawnData[index].blueMax;
@@ -351,7 +351,7 @@ public class GM : MonoBehaviour
     }
 
     private void PauseGame() { // 문제시 interface 패턴 사용
-        MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>(true); // 안쓰이는 기능 수정
+        MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);// FindObjectsOfType<MonoBehaviour>(true);
 
         List<MonoBehaviour> exceptChilds = new List<MonoBehaviour>();
         foreach(var child in exceptions) {
@@ -371,7 +371,7 @@ public class GM : MonoBehaviour
     }
 
     private void ResumeGame() {
-        MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>(true);
+        MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None); // FindObjectsOfType<MonoBehaviour>(true);
 
         foreach(var mb in allBehaviours) {
             if(mb == null) continue;

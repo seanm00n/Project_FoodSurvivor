@@ -156,8 +156,8 @@ public abstract class MonsterBase : MonoBehaviour
             if(_debuffList.Contains(Debuff.Slow)) resultSpeed /= 2;
             transform.position += direction * resultSpeed * Time.deltaTime;
         } else {
-            if((Time.time - _lastAttackTime) >= (1f / ability.AS)) {
-                _lastAttackTime = Time.time;
+            if((Time.timeSinceLevelLoad - _lastAttackTime) >= (1f / ability.AS)) {
+                _lastAttackTime = Time.timeSinceLevelLoad;
                 HandleAttack();
             }
         }

@@ -48,7 +48,7 @@ public class Nexus : MonoBehaviour
         ability = new Ability();
         ability.SetMaxHP(500f);
         ability.SetHP(500f);
-        ability.SetHP(50000f);//test
+        ability.SetHP(10000f);//test
         ability.SetMS(1f);
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -123,7 +123,7 @@ public class Nexus : MonoBehaviour
         I = null;
     }
 
-    public void SetState(State state) { // use?
+    public void SetState(State state) {
         foreach(var variable in new[] { "Walk", "Die" }) {
             _animator.SetBool(variable, false);
         }

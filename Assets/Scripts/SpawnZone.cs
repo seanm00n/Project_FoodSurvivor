@@ -9,6 +9,7 @@ public class SpawnZone : MonoBehaviour
     private bool _initialized = false;
 
     private void Start() {
+        //_initialized = false;
         StartCoroutine(InitDelay());
     }
 

@@ -7,7 +7,7 @@ public class MonsterProjBase : MonoBehaviour, IBattle
     private float _spawnTime;
 
     private void Awake() {
-        _spawnTime = Time.time;
+        _spawnTime = Time.timeSinceLevelLoad;
     }
     
     private void Update() {
@@ -16,7 +16,7 @@ public class MonsterProjBase : MonoBehaviour, IBattle
     }
 
     private void Countdown() {
-        if(Time.time - _spawnTime >= ability.lifeTime) {
+        if(Time.timeSinceLevelLoad - _spawnTime >= ability.lifeTime) {
             Destroy(gameObject);
         }
     }
