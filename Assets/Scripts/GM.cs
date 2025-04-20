@@ -133,7 +133,7 @@ public class GM : MonoBehaviour
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
         _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
 
-        Invoke(nameof(Tutorial), 0.2f);
+        Invoke(nameof(Tutorial), 1.0f);
     }
 
 

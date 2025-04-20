@@ -34,7 +34,5 @@ public class LobbyClick : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
         clickAudio.Play();
     }
   
-    public void OnGameStartButton() {
-        SceneManager.LoadScene("InGame");
-    }
+  
 }
