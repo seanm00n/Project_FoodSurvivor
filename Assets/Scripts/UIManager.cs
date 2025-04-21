@@ -66,6 +66,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private AudioClip _levelUpSound;
 
+    [SerializeField]
+    private Animator _transAnimator;
     #endregion
 
     #region Reference
@@ -310,5 +312,16 @@ public class UIManager : MonoBehaviour
         _audioSource.PlayOneShot(_buttonSound);
         GM.I.OnPauseButton();
         SceneManager.LoadScene("Lobby");
+    }
+
+    public void OnQuitButton() {
+        StartCoroutine(Transition());
+    }
+
+    private IEnumerator Transition() {
+        GM.I.ResumeGame();
+        _transAnimator.SetTrigger("Start");
+        yield return new WaitForSeconds(1f);
+        LoadLobbyScene();
     }
 }

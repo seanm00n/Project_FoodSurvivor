@@ -89305,7 +89305,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5506311970461092449, guid: c4e577a1f1ac2a949a5f3f43e256ecbb, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -89313,6 +89314,11 @@ PrefabInstance:
 --- !u!224 &920212837 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8478987445367754156, guid: c4e577a1f1ac2a949a5f3f43e256ecbb, type: 3}
+  m_PrefabInstance: {fileID: 920212836}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &920212838 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4949031868667296109, guid: c4e577a1f1ac2a949a5f3f43e256ecbb, type: 3}
   m_PrefabInstance: {fileID: 920212836}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &951640472
@@ -90940,7 +90946,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1481235819}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: LoadLobbyScene
+        m_MethodName: OnQuitButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -91273,6 +91279,7 @@ MonoBehaviour:
   _switchButton: {fileID: 651632469}
   _buttonSound: {fileID: 8300000, guid: 517ac48b6d9dceb4d8c2e7070af25c3b, type: 3}
   _levelUpSound: {fileID: 8300000, guid: 889d002ea11f1de4d98ea2508134c004, type: 3}
+  _transAnimator: {fileID: 920212838}
 --- !u!82 &1481235820
 AudioSource:
   m_ObjectHideFlags: 0

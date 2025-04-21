@@ -370,7 +370,7 @@ public class GM : MonoBehaviour
         _isGamePaused = true;
     }
 
-    private void ResumeGame() {
+    public void ResumeGame() {
         MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None); // FindObjectsOfType<MonoBehaviour>(true);
 
         foreach(var mb in allBehaviours) {
