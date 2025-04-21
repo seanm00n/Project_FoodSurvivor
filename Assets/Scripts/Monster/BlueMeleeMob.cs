@@ -12,4 +12,3 @@ public class BlueMeleeMob : MonsterBase {
         ability.SetExp(GM.I.MobData[(0, 0)].Exp);
     }
 }
-

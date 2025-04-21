@@ -13,7 +13,7 @@ public class Weapon : MonoBehaviour
     public Ability ability { get; private set; }
 
     public Dictionary<Skill, WeaponProjBase> instSkills { get; private set; }
-
+    
     #region SerializeField
 
     [SerializeField]
