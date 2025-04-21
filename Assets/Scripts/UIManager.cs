@@ -6,9 +6,7 @@ using System;
 using UnityEngine.UI;
 using AYellowpaper.SerializedCollections;
 using TMPro;
-using UnityEngine.SceneManagement;
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
 
 public class UIManager : MonoBehaviour
 {

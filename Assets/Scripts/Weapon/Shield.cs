@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Android;
 
 public class Shield : MonoBehaviour, IBattle {
     public Ability ability { get; private set; }
