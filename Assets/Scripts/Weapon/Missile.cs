@@ -46,7 +46,7 @@ public class Missile : MonoBehaviour, IBattle
     }
 
     private GameObject FindNearestMonster() {
-        IEnumerable<GameObject> allMonsters = GM.I.GetBlueMobs().Concat(GM.I.GetGreenMobs()).Concat(GM.I.GetYellowMobs());
+        IEnumerable<GameObject> allMonsters = GM.I.blueMobs.Concat(GM.I.greenMobs).Concat(GM.I.yellowMobs);
 
         GameObject nearest = null;
         float minDistSq = float.MaxValue;

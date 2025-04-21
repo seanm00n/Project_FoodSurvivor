@@ -213,9 +213,9 @@ public class Weapon : MonoBehaviour
         return _mainCamera.ScreenToWorldPoint(mouseScreenPosition);
     }
 
-    #region Switching
+    
 
-    public void OnSwitchButton() { // button click event 
+    public void SwitchingAction() {
         if(Time.timeSinceLevelLoad - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
             _lastSwitchTime = Time.timeSinceLevelLoad;
 
@@ -252,5 +252,5 @@ public class Weapon : MonoBehaviour
         return instSkills[Skill.Switching].GetAP() - (Time.timeSinceLevelLoad - _lastSwitchTime);
     }
 
-    #endregion
+    
 }

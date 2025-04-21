@@ -11,8 +11,6 @@ public class RainFire : WeaponProjBase {
 
     private AudioSource _audioSource;
 
-    private int _missileNum = 5;
-
     private float _missileDelay = 0.3f;
 
     private float _lastLaunch = 0f;
@@ -40,7 +38,7 @@ public class RainFire : WeaponProjBase {
     }
 
     IEnumerator Fire() {
-        for(int i = 0; i < _missileNum; ++i) {
+        for(int i = 0; i < (ability.Lv * 2); ++i) {
             _audioSource.PlayOneShot(_launchSound);
             GameObject instMissie = Instantiate(_missilePref, transform.position, Quaternion.identity);
             instMissie.GetComponent<Missile>().SetAbility(ability);

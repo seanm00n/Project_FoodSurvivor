@@ -4,12 +4,19 @@ using System.IO;
 using Random = UnityEngine.Random;
 using System.Linq;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GM : MonoBehaviour
 {
     public static GM I { get; private set; }
 
     public int killCount { get; private set; } = 0;
+
+    public HashSet<GameObject> blueMobs { get; private set; }
+
+    public HashSet<GameObject> greenMobs { get; private set; }
+
+    public HashSet<GameObject> yellowMobs { get; private set; }
 
     #region SerializeField
 
@@ -64,12 +71,6 @@ public class GM : MonoBehaviour
 
     #region Member variable
 
-    private HashSet<GameObject> _blueMobs;
-
-    private HashSet<GameObject> _greenMobs;
-
-    private HashSet<GameObject> _yellowMobs;
-
     private int _blueMaxNum = 0;
 
     private int _greenMaxNum = 0;
@@ -116,9 +117,9 @@ public class GM : MonoBehaviour
         SkillData = LoadSkilDataCSV();
         MobSpawnData = LoadMobSpawnDataCSV();
 
-        _blueMobs = new HashSet<GameObject>();
-        _greenMobs = new HashSet<GameObject>();
-        _yellowMobs = new HashSet<GameObject>();
+        blueMobs = new HashSet<GameObject>();
+        greenMobs = new HashSet<GameObject>();
+        yellowMobs = new HashSet<GameObject>();
     }
 
     private void Start() {
@@ -133,9 +134,8 @@ public class GM : MonoBehaviour
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
         _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
 
-        Invoke(nameof(Tutorial), 1.0f);
+        Invoke(nameof(DrawTutorialPanel), 1.0f);
     }
-
 
     private void Update() {
         UpdateMonsterMax();
@@ -282,30 +282,32 @@ public class GM : MonoBehaviour
 
     #endregion
 
+    #region Monster Control
+
     private void MonsterSpawn() {
-        while(_blueMobs.Count < _blueMaxNum) {
+        while(blueMobs.Count < _blueMaxNum) {
             GameObject pref = Random.value > 0.5f ? _blueMeleeMobPref : _blueRangedMobPref;
             GameObject instMob = Instantiate(pref, _blueSpawnPoint[_blueLastIndex].position, Quaternion.identity);
-            _blueMobs.Add(instMob);
+            blueMobs.Add(instMob);
             instMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
             _blueLastIndex = (_blueLastIndex + 1) % _blueSpawnPoint.Length;
         }
 
         if(Time.timeSinceLevelLoad / 240 >= 1 || _isBlueZoneOut) {
-            while(_greenMobs.Count < _greenMaxNum) {
+            while(greenMobs.Count < _greenMaxNum) {
                 GameObject pref = Random.value > 0.5f ? _greenMeleeMobPref : _greenRangedMobPref;
                 GameObject instMob = Instantiate(pref, _greenSpawnPoint[_greenLastIndex].position, Quaternion.identity);
-                _greenMobs.Add(instMob);
+                greenMobs.Add(instMob);
                 instMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
                 _greenLastIndex = (_greenLastIndex + 1) % _greenSpawnPoint.Length;
             }
         }
 
         if(Time.timeSinceLevelLoad / 360 >= 1 || _isGreenZoneOut) {
-            while(_yellowMobs.Count < _yellowMaxNum) {
+            while(yellowMobs.Count < _yellowMaxNum) {
                 GameObject pref = Random.value > 0.5f ? _yellowMeleeMobPref : _yellowRangedMobPref;
                 GameObject instMob = Instantiate(pref, _yellowSpawnPoint[_yellowLastIndex].position, Quaternion.identity);
-                _yellowMobs.Add(instMob);
+                yellowMobs.Add(instMob);
                 instMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
                 _yellowLastIndex = (_yellowLastIndex + 1) % _yellowSpawnPoint.Length;
             }
@@ -321,17 +323,6 @@ public class GM : MonoBehaviour
         _blueMaxNum = MobSpawnData[index].blueMax;
         _greenMaxNum = MobSpawnData[index].greenMax;
         _yellowMaxNum = MobSpawnData[index].yellowMax;
-    }
-
-    public void HandleMonsterDeath(MonsterBase mob) {
-        switch(mob.GetZone()) {
-            case Zone.Blue: _blueMobs.Remove(mob.gameObject); break;
-            case Zone.Green: _greenMobs.Remove(mob.gameObject); break;
-            case Zone.Yellow: _yellowMobs.Remove(mob.gameObject); break;
-            default: throw new NotSupportedException();
-        }
-        killCount++;
-        _uiManager.SetKillCountText(killCount);
     }
 
     public void SetZoneOut(Zone monsterZone) {
@@ -350,7 +341,13 @@ public class GM : MonoBehaviour
         }
     }
 
-    private void PauseGame() { // 문제시 interface 패턴 사용
+    #endregion
+
+    #region Game Control
+
+    public void PauseGame() { // 문제시 interface 패턴 사용
+        if(_isGamePaused) return; //
+
         MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);// FindObjectsOfType<MonoBehaviour>(true);
 
         List<MonoBehaviour> exceptChilds = new List<MonoBehaviour>();
@@ -371,6 +368,8 @@ public class GM : MonoBehaviour
     }
 
     public void ResumeGame() {
+        if(!_isGamePaused) return;
+
         MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None); // FindObjectsOfType<MonoBehaviour>(true);
 
         foreach(var mb in allBehaviours) {
@@ -382,27 +381,32 @@ public class GM : MonoBehaviour
         _isGamePaused = false;
     }
 
-    private void Tutorial() {
+    public void LoadLobby() {
+        SceneManager.LoadScene("Lobby");
+    }
+
+    private void DrawTutorialPanel() {
         PauseGame();
-        _uiManager.DrawTutorial();
+        _uiManager.DrawTutorialPanel();
     }
 
-    public void OnPauseButton() {
-        if(!_isGamePaused) {
-            PauseGame();
-        } else {
-            ResumeGame();
+    #endregion
+
+    #region Handler
+
+    public void HandleMonsterDeath(MonsterBase mob) {
+        switch(mob.GetZone()) {
+            case Zone.Blue: blueMobs.Remove(mob.gameObject); break;
+            case Zone.Green: greenMobs.Remove(mob.gameObject); break;
+            case Zone.Yellow: yellowMobs.Remove(mob.gameObject); break;
+            default: throw new NotSupportedException();
         }
-    }
-
-    public void OnSkillSelect(Skill skill) {
-        _weapon.SkillLevelUp(skill);
-        ResumeGame();
+        killCount++;
     }
 
     public void HandleWeaponLevelUp(Weapon weapon) {
         PauseGame();
-        _uiManager.DrawSelectUI();
+        _uiManager.DrawSelectPanel();
     }
 
     public void HandleNexusHit(Nexus instance) {
@@ -411,12 +415,8 @@ public class GM : MonoBehaviour
 
     public void HandleNexusDeath(Nexus instance) {
         PauseGame();
-        _uiManager.DrawGameOverUI();
+        _uiManager.DrawGameOverPanel();
     }
 
-    public HashSet<GameObject> GetBlueMobs() => _blueMobs;
-
-    public HashSet<GameObject> GetGreenMobs() => _greenMobs;
-
-    public HashSet<GameObject> GetYellowMobs() => _yellowMobs;
+    #endregion
 }

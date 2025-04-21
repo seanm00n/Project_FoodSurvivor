@@ -121,30 +121,26 @@ public class UIManager : MonoBehaviour
         SetSlider();
         SetLevelText();
         SetArrowVisible();
+        SetKillCountText();
     }
 
-    private void SetArrowVisible() {
-        Vector3 viewportPos = Camera.main.WorldToViewportPoint(_nexus.transform.position);
+    #region Set UI
 
-        bool isVisible =
-            viewportPos.z > 0f &&                       // 카메라 앞에 있으며
-            viewportPos.x > 0f && viewportPos.x < 1f && // 화면 좌우 안에 있으며
-            viewportPos.y > 0f && viewportPos.y < 1f;   // 화면 상하 안에 있음
-
-        Color color = Color.white;
-        color.a = isVisible ? 0f : 1f;
-
-        _arrowImage.color = color;
-        _childArrowImage.color = color;
+    private void SetPlayTimeText() {
+        float time = Time.timeSinceLevelLoad;
+        int minutes = Mathf.FloorToInt(time / 60);
+        int seconds = Mathf.FloorToInt(time % 60);
+        _playTimeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    private IEnumerator SwitchStart() {
-        yield return null;
-        AddSkillList(Skill.Switching);
-    }
+    private void SetSwitchCoolText() {
+        int cooltime = Mathf.FloorToInt(_weapon.GetSwitchLeft());
 
-    private void SetLevelText() {
-        _levelText.text = string.Format("Lv {0}", _weapon.ability.Lv.ToString());
+        if(cooltime > 0) {
+            _switchCoolText.text = cooltime.ToString();
+        } else {
+            _switchCoolText.text = "";
+        }
     }
 
     private void SetSlider() {
@@ -165,22 +161,97 @@ public class UIManager : MonoBehaviour
         sliders[SliderType.NexusHP].value = curNexusHP / curNexusMaxHP;
     }
 
-    private void SetPlayTimeText() {
-        float time = Time.timeSinceLevelLoad;
-        int minutes = Mathf.FloorToInt(time / 60);
-        int seconds = Mathf.FloorToInt(time % 60);
-        _playTimeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    private void SetLevelText() {
+        _levelText.text = string.Format("Lv {0}", _weapon.ability.Lv.ToString());
     }
 
-    private void SetSwitchCoolText() {
-        int cooltime = Mathf.FloorToInt(_weapon.GetSwitchLeft());
+    private void SetArrowVisible() {
+        Vector3 viewportPos = Camera.main.WorldToViewportPoint(_nexus.transform.position);
 
-        if(cooltime > 0) {
-            _switchCoolText.text = cooltime.ToString();
-        } else {
-            _switchCoolText.text = "";
-        }
+        bool isVisible =
+            viewportPos.z > 0f &&                       // 카메라 앞에 있으며
+            viewportPos.x > 0f && viewportPos.x < 1f && // 화면 좌우 안에 있으며
+            viewportPos.y > 0f && viewportPos.y < 1f;   // 화면 상하 안에 있음
+
+        Color color = Color.white;
+        color.a = isVisible ? 0f : 1f;
+
+        _arrowImage.color = color;
+        _childArrowImage.color = color;
     }
+
+    public void SetKillCountText() => _killCountText.text = GM.I.killCount.ToString();
+
+    #endregion
+
+    #region Draw UI
+
+    public void DrawSelectPanel() {
+        _audioSource.PlayOneShot(_levelUpSound); // 웨펀쪽으로 넘기기
+        CreateCard();
+        _skillSelectPanel.SetActive(true);
+    }
+
+    private void DrawPausePanel() => _pausePanel.SetActive(true);
+
+    public void DrawGameOverPanel() {
+        _gameOverPanel.SetActive(true);
+        _killResultText.text = _killCountText.text;
+        _timeResultText.text = _playTimeText.text;
+    }
+
+    public void DrawTutorialPanel() => _tutorialPanel.SetActive(true);
+
+    public void DrawNexusHitUI() {}
+
+    #endregion
+
+    #region Button interaction
+
+    public void OnSwitchButton() => _weapon.SwitchingAction();
+
+    public void OnPauseButton() {
+        _audioSource.PlayOneShot(_buttonSound);
+        DrawPausePanel(); 
+        GM.I.PauseGame();
+    }
+
+    public void OnCardButton(Skill skill) { // skill list box
+        _audioSource.PlayOneShot(_buttonSound);
+
+        AddSkillList(skill);
+        _weapon.SkillLevelUp(skill);
+
+        foreach(var card in _instCards) { Destroy(card); }
+        _instCards.Clear();
+
+        _skillSelectPanel.SetActive(false);
+        GM.I.ResumeGame();
+    }
+
+    public void OnResumeButton() {
+        _audioSource.PlayOneShot(_buttonSound);
+        _pausePanel.SetActive(false);
+        GM.I.ResumeGame();
+    }
+
+    public void OnQuitButton() {
+        _audioSource.PlayOneShot(_buttonSound);
+        StartCoroutine(PlayFadeIn());
+    }
+
+    public void OnConfirmButton() {
+        _audioSource.PlayOneShot(_buttonSound);
+        StartCoroutine(PlayFadeIn());
+    }
+
+    public void OnPlayButton() {
+        _audioSource.PlayOneShot(_buttonSound);
+        _tutorialPanel.SetActive(false);
+        GM.I.ResumeGame();
+    }
+
+    #endregion
 
     private void AddSkillList(Skill skill) {
         if(_weapon.instSkills[skill].ability.Lv == 0) {
@@ -201,10 +272,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void DrawSelectUI() {
-        _audioSource.PlayOneShot(_levelUpSound);
-        _skillSelectPanel.SetActive(true);
-        List<Skill> candidates = _options.Where(x => Weapon.I.instSkills[x].ability.Lv < 5)
+    private void CreateCard() {
+        List<Skill> candidates = _options
+            .Where(x => Weapon.I.instSkills[x].ability.Lv < 5)
             .OrderBy(x => Random.value).Take(3).ToList();
 
         int count = candidates.Count;
@@ -230,7 +300,7 @@ public class UIManager : MonoBehaviour
         for(int index = 0; index < count; ++index) {
             Skill skill = candidates[index];
             int skillLevel = Weapon.I.instSkills[skill].ability.Lv;
-            
+
             GameObject card = new GameObject("Card" + index);
 
             Image imgComp = card.AddComponent<Image>(); // image
@@ -242,7 +312,7 @@ public class UIManager : MonoBehaviour
             imgComp.sprite = sprite;
 
             Button buttonComp = card.AddComponent<Button>(); // button 
-            buttonComp.onClick.AddListener(() => OnSkillSelect(skill));
+            buttonComp.onClick.AddListener(() => OnCardButton(skill));
 
             card.transform.SetParent(_skillSelectPanel.transform, false); // priority
             card.transform.SetAsLastSibling();
@@ -263,65 +333,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OnSkillSelect(Skill skill) { // skill list box
-        AddSkillList(skill);
-        _audioSource.PlayOneShot(_buttonSound);
-        foreach(var card in _instCards) {
-            Destroy(card);
-        }
-        _instCards.Clear();
-
-        GM.I.OnSkillSelect(skill);
-        _skillSelectPanel.SetActive(false);
+    private IEnumerator SwitchStart() {
+        yield return null;
+        AddSkillList(Skill.Switching);
     }
 
-    public void OnResumeButton() {
-        _audioSource.PlayOneShot(_buttonSound);
-        _pausePanel.SetActive(false);
-    }
-
-    public void OnPlayButton() {
-        _audioSource.PlayOneShot(_buttonSound);
-        _tutorialPanel.SetActive(false);
-    }
-
-    public void DrawNexusHitUI() {
-
-    }
-
-    public void DrawPauseUI() {
-        _audioSource.PlayOneShot(_buttonSound);
-        _pausePanel.SetActive(true);
-    }
-
-    public void DrawGameOverUI() {
-        _gameOverPanel.SetActive(true);
-        _killResultText.text = _killCountText.text;
-        _timeResultText.text = _playTimeText.text;
-    }
-
-    public void DrawTutorial() {
-        _tutorialPanel.SetActive(true);
-    }
-
-    public void SetKillCountText(int value) {
-        _killCountText.text = value.ToString();
-    }
-
-    public void LoadLobbyScene() {
-        _audioSource.PlayOneShot(_buttonSound);
-        GM.I.OnPauseButton();
-        SceneManager.LoadScene("Lobby");
-    }
-
-    public void OnQuitButton() {
-        StartCoroutine(Transition());
-    }
-
-    private IEnumerator Transition() {
+    private IEnumerator PlayFadeIn() {
         GM.I.ResumeGame();
         _transAnimator.SetTrigger("Start");
         yield return new WaitForSeconds(1f);
-        LoadLobbyScene();
+        GM.I.LoadLobby();
     }
 }

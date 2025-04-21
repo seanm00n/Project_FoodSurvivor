@@ -5,6 +5,10 @@ public class SlowCircle : WeaponProjBase {
     protected override void LevelUp() {
         base.LevelUp();
         ability.SetAP(GM.I.SkillData[("SlowCircle", ability.Lv)]);
+        transform.localScale = new Vector3(
+            (float)(0.2 + (ability.Lv * 0.1)),
+            (float)(0.2 + (ability.Lv * 0.1)), 1f
+        );
     }
 
     protected override void Initialize() {
