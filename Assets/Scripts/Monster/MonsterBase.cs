@@ -65,13 +65,16 @@ public abstract class MonsterBase : MonoBehaviour
     private void Awake() {
         ability = new Ability();
         _debuffList = new HashSet<Debuff>();
-        _nexus = Nexus.I;
-        _nexusColl = _nexus?.GetComponent<BoxCollider2D>(); // 싱글턴 클래스라서 destroy되어도 Nexus.I는 남아있음
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        _effectSR = _effectObject.GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
         SetState(State.Moving);
+    }
+
+    private void Start() {
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
+        _nexusColl = _nexus?.GetComponent<BoxCollider2D>(); // 싱글턴 클래스라서 destroy되어도 Nexus.I는 남아있음
+        _effectSR = _effectObject.GetComponent<SpriteRenderer>();
         Initialize();
     }
 
@@ -82,6 +85,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision) { // 지속 데미지
         if(_state == State.Death) return;
+
         if(collision.CompareTag("PlayerProj") && _hitCoroutine == null) {
             _hitCoroutine = StartCoroutine(LateHit(collision.gameObject));
         }
@@ -89,6 +93,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision) {
         if(_state == State.Death) return;
+
         if(collision.CompareTag("PlayerProj")) {
             if(_hitCoroutine != null) {
                 StopCoroutine(_hitCoroutine);
@@ -193,6 +198,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     private void ResetState() {
         if(_state == State.Death) return;
+
         _state = State.Moving;
         SetState(State.Moving);
     }

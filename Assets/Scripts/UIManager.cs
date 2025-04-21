@@ -8,6 +8,7 @@ using AYellowpaper.SerializedCollections;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEditor.Experimental.GraphView;
 
 public class UIManager : MonoBehaviour
 {
@@ -335,7 +336,20 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator SwitchStart() {
         yield return null;
-        AddSkillList(Skill.Switching);
+        GameObject imgObject = new GameObject("Icon");
+
+        RectTransform rt = imgObject.AddComponent<RectTransform>();
+        rt.sizeDelta = new Vector2(150f, 150f);
+
+        Image imgComp = imgObject.AddComponent<Image>();
+        imgComp.sprite = _iconList[Skill.Switching];
+
+        imgObject.transform.SetParent(_skilBoxList[_iconBoxIndex].transform);
+        imgObject.transform.SetAsLastSibling();
+        imgObject.transform.localPosition = Vector3.zero;
+        imgObject.transform.localScale = Vector3.one;
+
+        _iconBoxIndex++;
     }
 
     private IEnumerator PlayFadeOut() {

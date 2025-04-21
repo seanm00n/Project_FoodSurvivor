@@ -70,16 +70,17 @@ public class Weapon : MonoBehaviour
 
         ability = new Ability();
         ability.SetLv(1);
-        ability.SetAP(GM.I.LevelData[ability.Lv].AP);
         ability.SetAS(1f);
         ability.SetExp(0f);
-        ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
 
-        SetCamera();
         instSkills = new Dictionary<Skill, WeaponProjBase>();
     }
 
     private void Start() {       
+        SetCamera();
+        ability.SetAP(GM.I.LevelData[ability.Lv].AP);
+        ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
+
         _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>(); // 초기화 시점 문제로 사용
         _audioSource = GetComponent<AudioSource>();
 

@@ -26,7 +26,6 @@ public class ProtectShield : WeaponProjBase {
     protected override void SkillAction() {}
 
     private void SetShieldActive(int index) {
-        Debug.Log("index"+index);
         for(int i = 0; i < _shields.Count; ++i) {
             if(i == index) {
                 _shields[i].gameObject.SetActive(true);
