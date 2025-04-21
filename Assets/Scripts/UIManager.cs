@@ -237,12 +237,12 @@ public class UIManager : MonoBehaviour
 
     public void OnQuitButton() {
         _audioSource.PlayOneShot(_buttonSound);
-        StartCoroutine(PlayFadeIn());
+        StartCoroutine(PlayFadeOut());
     }
 
     public void OnConfirmButton() {
         _audioSource.PlayOneShot(_buttonSound);
-        StartCoroutine(PlayFadeIn());
+        StartCoroutine(PlayFadeOut());
     }
 
     public void OnPlayButton() {
@@ -338,9 +338,9 @@ public class UIManager : MonoBehaviour
         AddSkillList(Skill.Switching);
     }
 
-    private IEnumerator PlayFadeIn() {
+    private IEnumerator PlayFadeOut() {
         GM.I.ResumeGame();
-        _transAnimator.SetTrigger("Start");
+        _transAnimator.SetTrigger("FadeOut");
         yield return new WaitForSeconds(1f);
         GM.I.LoadLobby();
     }
