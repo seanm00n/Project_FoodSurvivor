@@ -9,25 +9,28 @@ public class LevelLoader : MonoBehaviour
     public float transitionTime = 1f;
     public AudioSource clickAudio;
 
+    public void FadeIn()
+    {
+        transition.SetTrigger("FadeIn");
+    }
+    public void FadeOut()
+    {
+        transition.SetTrigger("FadeOut");
+    }
+
     public void OnGameStartButton()
     {
-            LoadNextLevel();
-            clickAudio.Play();
-    }
-
-    public void LoadNextLevel()
-    {
+        FadeOut();
         StartCoroutine(LoadLevel("InGame"));
     }
-    IEnumerator LoadLevel(string sceneName) 
-    {
-        //play animation
-        transition.SetTrigger("Start");
 
+    IEnumerator LoadLevel(string sceneName)
+    {
         //wait
         yield return new WaitForSeconds(transitionTime);
 
         //load scene
         SceneManager.LoadScene(sceneName);
     }
+ 
 }
