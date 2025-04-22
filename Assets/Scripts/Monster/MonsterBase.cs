@@ -12,57 +12,57 @@ public abstract class MonsterBase : MonoBehaviour
     #region SerializeField
 
     [SerializeField]
-    private GameObject _expPref;
+    protected GameObject _expPref;
 
     [SerializeField]
-    private GameObject projPref;
+    protected GameObject _projPref;
 
     [SerializeField]
-    private GameObject _effectObject;
+    protected GameObject _effectObject;
 
     [SerializeField]
-    private Zone _zone;
+    protected Zone _zone;
 
     [SerializeField]
-    private AudioClip _hitSound;
+    protected AudioClip _hitSound;
 
     #endregion
 
     #region Member Ref
 
-    private Nexus _nexus;
+    protected Nexus _nexus;
 
-    private BoxCollider2D _nexusColl;
+    protected BoxCollider2D _nexusColl;
 
-    private SpriteRenderer _spriteRenderer;
+    protected SpriteRenderer _spriteRenderer;
 
-    private Animator _animator;
+    protected Animator _animator;
 
-    private AudioSource _audioSource;
+    protected AudioSource _audioSource;
 
     #endregion
 
     #region Memver variable
 
-    private HashSet<Debuff> _debuffList;
+    protected HashSet<Debuff> _debuffList;
 
-    private float _lastAttackTime = 0f;
+    protected float _lastAttackTime = 0f;
 
-    private float _rangeOffset = 0.8f;
+    protected float _rangeOffset = 0.8f;
 
-    private State _state = State.Idle;
+    protected State _state = State.Idle;
 
-    private Coroutine _effectCoroutine;
+    protected Coroutine _effectCoroutine;
 
-    private Coroutine _hitCoroutine;
+    protected Coroutine _hitCoroutine;
 
-    private SpriteRenderer _effectSR;
+    protected SpriteRenderer _effectSR;
 
     #endregion
 
     protected abstract void Initialize();
 
-    private void Awake() {
+    protected void Awake() {
         ability = new Ability();
         _debuffList = new HashSet<Debuff>();
         _animator = GetComponent<Animator>();
@@ -70,7 +70,7 @@ public abstract class MonsterBase : MonoBehaviour
         SetState(State.Moving);
     }
 
-    private void Start() {
+    protected void Start() {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
         _nexusColl = _nexus?.GetComponent<BoxCollider2D>(); // 싱글턴 클래스라서 destroy되어도 Nexus.I는 남아있음
@@ -78,12 +78,12 @@ public abstract class MonsterBase : MonoBehaviour
         Initialize();
     }
 
-    private void Update() {
+    protected void Update() {
         Movement();
         Rotation();
     }
 
-    private void OnTriggerStay2D(Collider2D collision) { // 지속 데미지
+    protected void OnTriggerStay2D(Collider2D collision) { // 지속 데미지
         if(_state == State.Death) return;
 
         if(collision.CompareTag("PlayerProj") && _hitCoroutine == null) {
@@ -91,7 +91,7 @@ public abstract class MonsterBase : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision) {
+    protected void OnTriggerExit2D(Collider2D collision) {
         if(_state == State.Death) return;
 
         if(collision.CompareTag("PlayerProj")) {
@@ -104,13 +104,13 @@ public abstract class MonsterBase : MonoBehaviour
         }
     }
 
-    private IEnumerator LateHit(GameObject target) {
+    protected IEnumerator LateHit(GameObject target) {
         yield return new WaitForSeconds(1f);
         HandleHit(target);
         _hitCoroutine = null;
     }
 
-    private void HandleHit(GameObject target) {
+    protected void HandleHit(GameObject target) {
         _audioSource.PlayOneShot(_hitSound);
         IBattle battle = target.GetComponent<IBattle>();
         if(_effectCoroutine != null) StopCoroutine(_effectCoroutine);
@@ -122,28 +122,28 @@ public abstract class MonsterBase : MonoBehaviour
         }        
     }
 
-    private void CheckDeath() {
+    protected void CheckDeath() {
         if(ability.HP <= 0f) {
             OnMonsterDeath?.Invoke(this);
             HandleDeath();
         }
     }
-    
-    private void HandleDeath() {
+
+    protected void HandleDeath() {
         _state = State.Death;
         SetState(State.Death);
         GetComponent<BoxCollider2D>().enabled = false;
         StartCoroutine(DropAndDestroy(0.5f));
     }
 
-    private IEnumerator DropAndDestroy(float value) {
+    protected IEnumerator DropAndDestroy(float value) {
         yield return new WaitForSeconds(value);
         GameObject instExp = Instantiate(_expPref, transform.position, Quaternion.identity); //1초 뒤
         instExp.GetComponent<EXP>().SetExp(ability.Exp);
         Destroy(gameObject);
     }
 
-    private void Movement() {
+    protected void Movement() {
         if(_state == State.Death || _state == State.Attack) return;
 
         if(_nexus == null) {
@@ -168,7 +168,7 @@ public abstract class MonsterBase : MonoBehaviour
         }
     }
 
-    private void Rotation() { 
+    protected void Rotation() { 
         if(_state != State.Moving || _nexus == null) return;
 
         Vector3 direction = _nexus.transform.position - transform.position;
@@ -180,35 +180,33 @@ public abstract class MonsterBase : MonoBehaviour
         }
     }
 
-    private void HandleAttack() {
+    protected virtual void HandleAttack() {
         if(_state == State.Death) return;
         _state = State.Attack;
         _animator.SetTrigger("Attack");
 
-        float radius = GetComponent<BoxCollider2D>().size.x / 2f + 0.1f;
         Vector3 spawnDir = (_nexus.transform.position - transform.position).normalized;
         float angle = Mathf.Atan2(spawnDir.y, spawnDir.x) * Mathf.Rad2Deg;
 
-        GameObject instProj = Instantiate(projPref, transform.position, Quaternion.Euler(0, 0, angle)); // 적 방향으로
-        MonsterProjBase projBase = instProj.GetComponent<MonsterProjBase>();
+        GameObject instProj = Instantiate(_projPref, transform.position, Quaternion.Euler(0, 0, angle)); // 적 방향으로
+        instProj.GetComponent<MonsterProjBase>().SetAbility(ability);
 
-        projBase.SetAbility(ability);
         Invoke(nameof(ResetState), (1f / ability.AS)); // state init
     }
 
-    private void ResetState() {
+    protected void ResetState() {
         if(_state == State.Death) return;
 
         _state = State.Moving;
         SetState(State.Moving);
     }
 
-    private IEnumerator HitEffect() {
+    protected IEnumerator HitEffect() {
         _effectSR.sprite = _spriteRenderer.sprite;
         _effectObject.SetActive(true);
         yield return new WaitForSeconds(0.05f);
         _effectObject.SetActive(false);
-        _effectCoroutine = null;
+        //_effectCoroutine = null;
     }
 
     public void AddDebuff(Debuff debuff) {
@@ -233,7 +231,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     public Zone GetZone() => _zone;
 
-    private void OnDestroy() {
+    protected void OnDestroy() {
         StopAllCoroutines();
     }
 }
