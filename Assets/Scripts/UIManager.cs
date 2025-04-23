@@ -81,6 +81,9 @@ public class UIManager : MonoBehaviour
     private AudioClip _bossWarningSound;
 
     [SerializeField]
+    private GameObject _bossHPUI;
+
+    [SerializeField]
     private Animator _transAnimator;
     #endregion
 
@@ -166,7 +169,9 @@ public class UIManager : MonoBehaviour
         sliders[SliderType.WeaponEXP].value = curExp / maxExp;
 
         if(_isBossSpawn) {
-            Boss boss = GameObject.Find("Boss")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
+            Boss boss = GameObject.Find("Boss(Clone)")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
+            Debug.Log("Boss is?: " + boss);
+            Debug.Log("Boss HP: " + boss.ability.HP);
             if(boss != null) {
                 float curBossHP = boss.ability.HP;
                 float maxBossHP = boss.ability.MaxHP;
@@ -202,6 +207,11 @@ public class UIManager : MonoBehaviour
     }
 
     public void SetKillCountText() => _killCountText.text = GM.I.killCount.ToString();
+
+    public void SetBossHPUI() {
+        _bossHPUI.SetActive(true);
+        _isBossSpawn = true;
+    }
 
     #endregion
 
@@ -272,12 +282,14 @@ public class UIManager : MonoBehaviour
     public void OnQuitButton() {
         _audioSource.PlayOneShot(_buttonSound);
         _pausePanel.SetActive(false);
+        _weapon.gameObject.SetActive(false);
         StartCoroutine(PlayFadeOut());
     }
 
     public void OnConfirmButton() {
         _audioSource.PlayOneShot(_buttonSound);
         _gameOverPanel.SetActive(false);
+        _weapon.gameObject.SetActive(false);
         StartCoroutine(PlayFadeOut());
     }
 
@@ -290,6 +302,7 @@ public class UIManager : MonoBehaviour
     public void OnMainButton() {
         _audioSource.PlayOneShot(_buttonSound);
         _gameClearPanel.SetActive(false);
+        _weapon.gameObject.SetActive(false);
         StartCoroutine(PlayFadeOut());
     }
 
@@ -426,7 +439,4 @@ public class UIManager : MonoBehaviour
         img.color = color;
         _bossWarningAlert.SetActive(false);
     }
-
-    public void SetBossSpawnBool(bool value) => _isBossSpawn = value;
-
 }

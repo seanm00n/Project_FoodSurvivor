@@ -1,4 +1,5 @@
  using System;
+using System.Collections;
 using UnityEngine;
 
 public class Nexus : MonoBehaviour
@@ -47,7 +48,7 @@ public class Nexus : MonoBehaviour
 
         ability = new Ability();
         ability.SetMaxHP(500f);
-        ability.SetHP(500f);
+        ability.SetHP(1000f);
         //ability.SetHP(100000f);//test
         ability.SetMS(1.5f);
 
@@ -67,10 +68,12 @@ public class Nexus : MonoBehaviour
     }
 
     private void Movement() {
-        float distance = Vector2.Distance(_weapon.transform.position, transform.position);
-        if(distance > _moveOffset) {
-            Vector2 direction = (_weapon.transform.position - transform.position).normalized;
-            transform.position += (Vector3)direction * ability.MS * Time.deltaTime;
+        if(_weapon != null) {
+            float distance = Vector2.Distance(_weapon.transform.position, transform.position);
+            if(distance > _moveOffset) {
+                Vector2 direction = (_weapon.transform.position - transform.position).normalized;
+                transform.position += (Vector3)direction * ability.MS * Time.deltaTime;
+            }
         }
     }
 
@@ -109,18 +112,23 @@ public class Nexus : MonoBehaviour
 
     private void CheckDeath() {
         if(ability.HP <= 0f) {
-            OnNexusDeath?.Invoke(this);
             HandleDeath();
         }
     }
 
     private void HandleDeath() {
         SetState(State.Death);
-        Destroy(gameObject, 1f);
+        StartCoroutine(InvokeDeath());
+        Destroy(gameObject, 0.5f);
     }
 
     private void OnDestroy() {
         I = null;
+    }
+
+    private IEnumerator InvokeDeath() {
+        yield return new WaitForSeconds(0.5f);
+        OnNexusDeath?.Invoke(this);
     }
 
     public void SetState(State state) {

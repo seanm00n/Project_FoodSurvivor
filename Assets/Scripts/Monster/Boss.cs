@@ -42,6 +42,7 @@ public class Boss : MonsterBase {
         _state = State.Death;
         SetState(State.Death);
         GetComponent<BoxCollider2D>().enabled = false;
+        Destroy(gameObject, 0.5f);
     }
 
     protected override void HandleAttack() {

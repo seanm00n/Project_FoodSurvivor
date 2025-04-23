@@ -8,6 +8,10 @@ public class LevelLoader : MonoBehaviour
     public float transitionTime = 1f;
     public AudioSource clickAudio;
 
+    private void Start() {
+        FadeIn();
+    }
+
     public void FadeIn()
     {
         transition.SetTrigger("FadeIn");

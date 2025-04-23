@@ -140,7 +140,7 @@ public class GM : MonoBehaviour
             actionOnGet: (obj) => obj.SetActive(true),
             actionOnRelease: (obj) => obj.SetActive(false),
             actionOnDestroy: (obj) => Destroy(obj),
-            collectionCheck: true, // set true
+            collectionCheck: false, // set true
             defaultCapacity: _initSize,
             maxSize: _maxSize
         );
@@ -385,8 +385,8 @@ public class GM : MonoBehaviour
         blueMobs.Clear();
         greenMobs.Clear();
         yellowMobs.Clear();
-        
-        _uiManager.SetBossSpawnBool(true);
+
+        _uiManager.SetBossHPUI();
         GameObject instBoss = Instantiate(_bossPref, new Vector3(0, 4f, 0), Quaternion.identity);
         instBoss.GetComponent<Boss>().OnBossDeath += HandleBossDeath;
 

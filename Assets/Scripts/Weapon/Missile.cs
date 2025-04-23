@@ -31,12 +31,17 @@ public class Missile : MonoBehaviour, IBattle
     private void SearchTarget() {
         if(_target == null || !_target.activeInHierarchy) {
             _target = FindNearestMonster();
-            if(_target == null) return; // 여전히 타겟이 없다면 방향 유지
+            if(_target == null) {
+                _target = GameObject.Find("Boss(Clone)");
+                if(_target == null) {
+                    return; // 여전히 타겟이 없다면 방향 유지
+                }
+            }
         }
-
         // 방향 갱신
         _direction = (_target.transform.position - transform.position).normalized;
         _angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
+        
     }
 
     private void Movement() {

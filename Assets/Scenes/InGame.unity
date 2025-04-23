@@ -91721,6 +91721,7 @@ MonoBehaviour:
   _buttonSound: {fileID: 8300000, guid: 517ac48b6d9dceb4d8c2e7070af25c3b, type: 3}
   _levelUpSound: {fileID: 8300000, guid: 889d002ea11f1de4d98ea2508134c004, type: 3}
   _bossWarningSound: {fileID: 8300000, guid: 45e441351910ed94fb14d93a3c4ca1f9, type: 3}
+  _bossHPUI: {fileID: 579505427}
   _transAnimator: {fileID: 4984290361592668558}
 --- !u!82 &1481235820
 AudioSource:
