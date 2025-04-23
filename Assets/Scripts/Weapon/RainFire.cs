@@ -15,7 +15,7 @@ public class RainFire : WeaponProjBase {
 
     private float _lastLaunch = 0f;
 
-    private float _launchCool = 3f;
+    private float _launchCool = 4f;
 
     protected override void LevelUp() {
         base.LevelUp();

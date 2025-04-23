@@ -21,7 +21,7 @@ public class Shield : MonoBehaviour, IBattle {
     }
 
     private IEnumerator PushMob(Collider2D collision) {
-        float pushPower = 2f;
+        float pushPower = 1f;
 
         Vector2 pushDir = (collision.transform.position - transform.parent.position).normalized;
         collision.GetComponent<Rigidbody2D>().AddForce(pushDir * pushPower, ForceMode2D.Impulse);

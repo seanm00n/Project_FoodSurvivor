@@ -124,12 +124,12 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected void CheckDeath() {
         if(ability.HP <= 0f) {
-            OnMonsterDeath?.Invoke(this);
             HandleDeath();
         }
     }
 
-    protected void HandleDeath() {
+    protected virtual void HandleDeath() {
+        OnMonsterDeath?.Invoke(this);
         _state = State.Death;
         SetState(State.Death);
         GetComponent<BoxCollider2D>().enabled = false;

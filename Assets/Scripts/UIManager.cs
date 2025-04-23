@@ -36,7 +36,13 @@ public class UIManager : MonoBehaviour
     private GameObject _tutorialPanel;
 
     [SerializeField]
+    private GameObject _gameClearPanel;
+
+    [SerializeField]
     private GameObject _directionArrow;
+
+    [SerializeField]
+    private GameObject _bossWarningAlert;
 
     [SerializeField]
     private TextMeshProUGUI _killCountText;
@@ -57,6 +63,12 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI _levelText;
 
     [SerializeField]
+    private TextMeshProUGUI _killScoreText;
+
+    [SerializeField]
+    private TextMeshProUGUI _timeScoreText;
+
+    [SerializeField]
     private GameObject _switchButton;
 
     [SerializeField]
@@ -64,6 +76,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private AudioClip _levelUpSound;
+
+    [SerializeField]
+    private AudioClip _bossWarningSound;
 
     [SerializeField]
     private Animator _transAnimator;
@@ -89,6 +104,7 @@ public class UIManager : MonoBehaviour
 
     private int _iconBoxIndex = 0;
 
+    private bool _isBossSpawn = false;
 
     private void Awake() {
         if(I != null && I != this) {
@@ -112,6 +128,8 @@ public class UIManager : MonoBehaviour
         _gameOverPanel.SetActive(false);
 
         StartCoroutine(SwitchStart()); // level 1 start
+        Invoke(nameof(DrawTutorialPanel), 1.0f);
+        Invoke(nameof(DrawBossSpawnAlert), 355f);
     }
 
     private void Update() {
@@ -147,12 +165,14 @@ public class UIManager : MonoBehaviour
         float maxExp = GM.I.LevelData[_weapon.ability.Lv].reqEXP;
         sliders[SliderType.WeaponEXP].value = curExp / maxExp;
 
-        //Boss go = GameObject.FindGameObjectWithTag("Boss")?.GetComponent<Boss>();
-        //if(go != null) {
-        //    float curBossHP = go.ability.HP;
-        //    float maxBossHP = go.ability.MaxHP;
-        //    sliders[SliderType.BossHP].value = curBossHP / maxBossHP;
-        //}
+        if(_isBossSpawn) {
+            Boss boss = GameObject.FindGameObjectWithTag("Boss")?.GetComponent<Boss>();
+            if(boss != null) {
+                float curBossHP = boss.ability.HP;
+                float maxBossHP = boss.ability.MaxHP;
+                sliders[SliderType.BossHP].value = curBossHP / maxBossHP;
+            }
+        }
 
         float curNexusHP = _nexus.ability.HP;
         float curNexusMaxHP = _nexus.ability.MaxHP;
@@ -199,9 +219,22 @@ public class UIManager : MonoBehaviour
         _timeResultText.text = _playTimeText.text;
     }
 
-    public void DrawTutorialPanel() => _tutorialPanel.SetActive(true);
+    public void DrawTutorialPanel() { 
+        _tutorialPanel.SetActive(true);
+        GM.I.PauseGame();
+    } 
 
     public void DrawNexusHitUI() {}
+
+    private void DrawBossSpawnAlert() {        
+        StartCoroutine(BossWarningRoutine());
+    }
+
+    public void DrawClearPanel() {
+        _gameClearPanel.SetActive(true);
+        _killScoreText.text = _killCountText.text;
+        _timeScoreText.text = _playTimeText.text;
+    }
 
     #endregion
 
@@ -248,6 +281,11 @@ public class UIManager : MonoBehaviour
         _audioSource.PlayOneShot(_buttonSound);
         _tutorialPanel.SetActive(false);
         GM.I.ResumeGame();
+    }
+
+    public void OnMainButton() {
+        _audioSource.PlayOneShot(_buttonSound);
+        StartCoroutine(PlayFadeOut());
     }
 
     #endregion
@@ -356,4 +394,34 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         GM.I.LoadLobby();
     }
+
+    private IEnumerator BossWarningRoutine() {
+        _audioSource.PlayOneShot(_bossWarningSound);
+        _bossWarningAlert.SetActive(true);
+
+        Image img = _bossWarningAlert.GetComponent<Image>();
+        Color color = img.color;
+
+        float totalDuration = 3f;
+        float elapsed = 0f;
+        float fadeCycleDuration = 1f;
+
+        while(elapsed < totalDuration) {
+            float cycleTime = elapsed % fadeCycleDuration;
+            float alpha = Mathf.PingPong(cycleTime * 2f, 1f);
+
+            color.a = alpha;
+            img.color = color;
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        color.a = 0f;
+        img.color = color;
+        _bossWarningAlert.SetActive(false);
+    }
+
+    public void SetBossSpawnBool(bool value) => _isBossSpawn = value;
+
 }

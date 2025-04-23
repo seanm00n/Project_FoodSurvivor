@@ -1,12 +1,11 @@
+using System;
 using System.Collections;
 using Unity.Collections;
 using UnityEngine;
 
 public class Boss : MonsterBase
 {
-    private int _multiAttackStack = 0;
-
-    private int _rushAttackStack = 0;
+    public event Action OnBossDeath;
 
     [SerializeField]
     private GameObject _telegraphObject;
@@ -14,6 +13,8 @@ public class Boss : MonsterBase
     [SerializeField]
     private GameObject _multiProjPref;
 
+    private int _multiAttackStack = 0;
+    private int _rushAttackStack = 0;
     private SpriteRenderer _telegraphSR;
 
     protected override void Initialize() {
@@ -27,6 +28,13 @@ public class Boss : MonsterBase
         ability.SetExp(0);
 
         _telegraphSR = _telegraphObject.GetComponent<SpriteRenderer>();
+    }
+
+    protected override void HandleDeath() {
+        OnBossDeath?.Invoke();
+        _state = State.Death;
+        SetState(State.Death);
+        GetComponent<BoxCollider2D>().enabled = false;
     }
 
     protected override void HandleAttack() {

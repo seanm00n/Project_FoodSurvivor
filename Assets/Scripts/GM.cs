@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 using System.Linq;
 using System;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GM : MonoBehaviour
 {
@@ -49,6 +50,9 @@ public class GM : MonoBehaviour
 
     [SerializeField]
     private GameObject _yellowRangedMobPref;
+
+    [SerializeField]
+    private GameObject _bossPref;
 
     [SerializeField]
     private MonoBehaviour[] exceptions;
@@ -134,7 +138,7 @@ public class GM : MonoBehaviour
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
         _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
 
-        Invoke(nameof(DrawTutorialPanel), 1.0f);
+        Invoke(nameof(BossSpawn), 360);
     }
 
     private void Update() {
@@ -285,6 +289,8 @@ public class GM : MonoBehaviour
     #region Monster Control
 
     private void MonsterSpawn() {
+        if(Time.timeSinceLevelLoad >= 360) return;
+
         while(blueMobs.Count < _blueMaxNum) {
             GameObject pref = Random.value > 0.5f ? _blueMeleeMobPref : _blueRangedMobPref;
             GameObject instMob = Instantiate(pref, _blueSpawnPoint[_blueLastIndex].position, Quaternion.identity);
@@ -293,7 +299,7 @@ public class GM : MonoBehaviour
             _blueLastIndex = (_blueLastIndex + 1) % _blueSpawnPoint.Length;
         }
 
-        if(Time.timeSinceLevelLoad / 240 >= 1 || _isBlueZoneOut) {
+        if(Time.timeSinceLevelLoad / 120 >= 1 || _isBlueZoneOut) {
             while(greenMobs.Count < _greenMaxNum) {
                 GameObject pref = Random.value > 0.5f ? _greenMeleeMobPref : _greenRangedMobPref;
                 GameObject instMob = Instantiate(pref, _greenSpawnPoint[_greenLastIndex].position, Quaternion.identity);
@@ -303,7 +309,7 @@ public class GM : MonoBehaviour
             }
         }
 
-        if(Time.timeSinceLevelLoad / 360 >= 1 || _isGreenZoneOut) {
+        if(Time.timeSinceLevelLoad / 240 >= 1 || _isGreenZoneOut) {
             while(yellowMobs.Count < _yellowMaxNum) {
                 GameObject pref = Random.value > 0.5f ? _yellowMeleeMobPref : _yellowRangedMobPref;
                 GameObject instMob = Instantiate(pref, _yellowSpawnPoint[_yellowLastIndex].position, Quaternion.identity);
@@ -315,9 +321,11 @@ public class GM : MonoBehaviour
     }
 
     private void UpdateMonsterMax() {
-        int index = 450;
-        if(!_isYellowZoneOut) {
-            index = ((int)(Mathf.Min(Time.timeSinceLevelLoad, 450) / 30)) * 30;
+        if(Time.timeSinceLevelLoad >= 360) return;
+
+        int index = 330;
+        if(!_isYellowZoneOut) { 
+            index = ((int)(Mathf.Min(Time.timeSinceLevelLoad, 330) / 30)) * 30;
         }
 
         _blueMaxNum = MobSpawnData[index].blueMax;
@@ -341,6 +349,21 @@ public class GM : MonoBehaviour
         }
     }
 
+    private void BossSpawn() {
+        
+        IEnumerable<GameObject> allMonsters = blueMobs.Concat(greenMobs).Concat(yellowMobs);
+        foreach(var monster in allMonsters) {
+            Destroy(monster);
+        }
+
+        blueMobs.Clear();
+        greenMobs.Clear();
+        yellowMobs.Clear();
+        
+        _uiManager.SetBossSpawnBool(true);
+        GameObject instBoss = Instantiate(_bossPref, new Vector3(0,0,0), Quaternion.identity); // 스폰 위치는?
+        instBoss.GetComponent<Boss>().OnBossDeath += HandleBossDeath;
+    }
     #endregion
 
     #region Game Control
@@ -385,11 +408,6 @@ public class GM : MonoBehaviour
         SceneManager.LoadScene("Lobby");
     }
 
-    private void DrawTutorialPanel() {
-        PauseGame();
-        _uiManager.DrawTutorialPanel();
-    }
-
     #endregion
 
     #region Handler
@@ -416,6 +434,15 @@ public class GM : MonoBehaviour
     public void HandleNexusDeath(Nexus instance) {
         PauseGame();
         _uiManager.DrawGameOverPanel();
+    }
+
+    public void HandleBossDeath() {
+        Invoke(nameof(PauseGame), 1f);
+        Invoke(nameof(InvokeClearPanel), 1f);
+    }
+
+    private void InvokeClearPanel() {
+        _uiManager.DrawClearPanel();
     }
 
     #endregion
