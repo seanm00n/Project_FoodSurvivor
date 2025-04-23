@@ -22,9 +22,9 @@ public class ObjectPoolManager : MonoBehaviour
             maxSize: _maxSize
         );
 
-        for(int i = 0; i < 192; ++i) {
-            GameObject go = _bossProjPool.Get();     // 생성
-            _bossProjPool.Release(go);               // 풀에 되돌림 (비활성화됨)
+        for(int i = 0; i < 192; ++i) { // 초기화
+            GameObject go = _bossProjPool.Get();
+            _bossProjPool.Release(go);
         }
     }
 

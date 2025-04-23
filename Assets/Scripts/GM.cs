@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using UnityEngine.Pool;
 
 public class GM : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class GM : MonoBehaviour
     public HashSet<GameObject> greenMobs { get; private set; }
 
     public HashSet<GameObject> yellowMobs { get; private set; }
+
+    public ObjectPool<GameObject> bossProjPool { get; private set; }
 
     #region SerializeField
 
@@ -361,8 +364,10 @@ public class GM : MonoBehaviour
         yellowMobs.Clear();
         
         _uiManager.SetBossSpawnBool(true);
-        GameObject instBoss = Instantiate(_bossPref, new Vector3(0,0,0), Quaternion.identity); // 스폰 위치는?
+        GameObject instBoss = Instantiate(_bossPref, new Vector3(0, 4f, 0), Quaternion.identity);
         instBoss.GetComponent<Boss>().OnBossDeath += HandleBossDeath;
+
+        // 넥서스, 웨펀 위치 정렬하기
     }
     #endregion
 

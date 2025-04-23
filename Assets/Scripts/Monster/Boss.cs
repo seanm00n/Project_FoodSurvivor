@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Boss : MonsterBase
 {
@@ -20,6 +21,8 @@ public class Boss : MonsterBase
 
     private SpriteRenderer _telegraphSR;
 
+    private ObjectPool<GameObject> _projPool;
+
     protected override void Initialize() {
         ability.SetAP(50f); // (n, n)을 string으로 수정 가능
         ability.SetHP(5000f);
@@ -31,6 +34,7 @@ public class Boss : MonsterBase
         ability.SetExp(0);
 
         _telegraphSR = _telegraphObject.GetComponent<SpriteRenderer>();
+        _projPool = GM.I.bossProjPool;
     }
 
     protected override void HandleDeath() {
