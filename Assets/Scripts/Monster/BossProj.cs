@@ -4,7 +4,8 @@ public class BossProj : MonsterProjBase
 {
     protected override void Countdown() {
         if(Time.timeSinceLevelLoad - _spawnTime >= ability.lifeTime) {
-            _bossProjPool.Release(gameObject);
+            Debug.Log($"[BossProj] Released: {gameObject.name}");
+            _bossProjPool.Release(gameObject); // ÀÇ½É
         }
     }
 }

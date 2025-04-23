@@ -30,7 +30,7 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
         transform.position += direction * (ability.MS * 2) * (ability.AR > 0 ? 1f : 0f) * Time.deltaTime;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
+    private void OnTriggerEnter2D(Collider2D collision) { // ¼öÁ¤
         if(collision.CompareTag("Nexus")) {
             Destroy(gameObject);
         }

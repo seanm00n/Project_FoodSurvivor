@@ -203,6 +203,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected IEnumerator HitEffect() {
         _effectSR.sprite = _spriteRenderer.sprite;
+        _effectSR.flipX = _spriteRenderer.flipX;
         _effectObject.SetActive(true);
         yield return new WaitForSeconds(0.05f);
         _effectObject.SetActive(false);

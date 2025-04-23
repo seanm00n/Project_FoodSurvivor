@@ -139,19 +139,20 @@ public class GM : MonoBehaviour
             createFunc: () => Instantiate(_bossProjPref),
             actionOnGet: (obj) => obj.SetActive(true),
             actionOnRelease: (obj) => obj.SetActive(false),
-            actionOnDestroy: (obj) => Destroy(_bossProjPref),
+            actionOnDestroy: (obj) => Destroy(obj),
             collectionCheck: true, // set true
             defaultCapacity: _initSize,
             maxSize: _maxSize
-            );
+        );
 
+    }
+
+    private void Start() {
         for(int i = 0; i < 192; ++i) { // ÃÊ±âÈ­
             GameObject obj = bossProjPool.Get();
             bossProjPool.Release(obj);
         }
-    }
 
-    private void Start() {
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>();
         _weapon.OnWeaponLevelUp += HandleWeaponLevelUp;
 

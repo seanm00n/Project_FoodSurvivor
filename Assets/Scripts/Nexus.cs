@@ -49,7 +49,7 @@ public class Nexus : MonoBehaviour
         ability.SetMaxHP(500f);
         ability.SetHP(500f);
         ability.SetHP(100000f);//test
-        ability.SetMS(1f);
+        ability.SetMS(1.5f);
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
