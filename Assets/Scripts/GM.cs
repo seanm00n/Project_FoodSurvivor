@@ -164,7 +164,7 @@ public class GM : MonoBehaviour
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
         _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
 
-        Invoke(nameof(BossSpawn), 5f); // 수정 - 360f
+        Invoke(nameof(BossSpawn), 360f); // 수정 - 360f
     }
 
     private void Update() {
@@ -315,7 +315,7 @@ public class GM : MonoBehaviour
     #region Monster Control
 
     private void MonsterSpawn() {
-        if(Time.timeSinceLevelLoad >= 1f) return; // 수정 - 355f
+        if(Time.timeSinceLevelLoad >= 355f) return; // 수정 - 355f
 
         while(blueMobs.Count < _blueMaxNum) {
             GameObject pref = Random.value > 0.5f ? _blueMeleeMobPref : _blueRangedMobPref;
@@ -377,7 +377,7 @@ public class GM : MonoBehaviour
 
     private void BossSpawn() {
         
-        IEnumerable<GameObject> allMonsters = blueMobs.Concat(greenMobs).Concat(yellowMobs).ToList(); // 동기화 불가능
+        IEnumerable<GameObject> allMonsters = blueMobs.Concat(greenMobs).Concat(yellowMobs).ToList();
         foreach(var monster in allMonsters) {
             Destroy(monster);
         }
@@ -402,7 +402,7 @@ public class GM : MonoBehaviour
     public void PauseGame() { // 문제시 interface 패턴 사용
         if(_isGamePaused) return; //
 
-        MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);// FindObjectsOfType<MonoBehaviour>(true);
+        MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
 
         List<MonoBehaviour> exceptChilds = new List<MonoBehaviour>();
         foreach(var child in exceptions) {
