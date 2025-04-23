@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2152303847994885638}
   - component: {fileID: -1561808935107621195}
-  - component: {fileID: 240239624983886301}
   - component: {fileID: 115805547121247702}
   - component: {fileID: 5807750841216312458}
+  - component: {fileID: 3635150798311749610}
   m_Layer: 8
   m_Name: YellowRangedProj
   m_TagString: MonsterProj
@@ -62,18 +62,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &240239624983886301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4554319367707034832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 147afc5082cfc6d4abc5245a226992c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &115805547121247702
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -165,3 +153,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3635150798311749610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4554319367707034832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e9fa522f6ee6247a513638353a73d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

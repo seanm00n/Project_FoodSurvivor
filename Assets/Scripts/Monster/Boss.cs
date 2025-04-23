@@ -12,16 +12,13 @@ public class Boss : MonsterBase
     [SerializeField]
     private GameObject _telegraphObject;
 
-    [SerializeField]
-    private GameObject _multiProjPref;
-
     private int _multiAttackStack = 0;
 
     private int _rushAttackStack = 0;
 
     private SpriteRenderer _telegraphSR;
 
-    private ObjectPool<GameObject> _projPool;
+    private ObjectPool<GameObject> _multiProjPool;
 
     protected override void Initialize() {
         ability.SetAP(50f); // (n, n)을 string으로 수정 가능
@@ -34,7 +31,7 @@ public class Boss : MonsterBase
         ability.SetExp(0);
 
         _telegraphSR = _telegraphObject.GetComponent<SpriteRenderer>();
-        _projPool = GM.I.bossProjPool;
+        _multiProjPool = GM.I.bossProjPool;
     }
 
     protected override void HandleDeath() {
@@ -82,10 +79,14 @@ public class Boss : MonsterBase
 
         for(int i = 0; i < 8; ++i) {
             for(int index = 0; index < 24; ++index) {
-                GameObject instProj = Instantiate(_multiProjPref, transform.position, Quaternion.Euler(0, 0, index * 15)); // 적 방향으로
+                GameObject instProj = _multiProjPool.Get(); //Instantiate(_multiProjPref, transform.position, Quaternion.Euler(0, 0, index * 15)); 
+
                 Ability newAbility = ability.Clone();
                 newAbility.SetAR(1f);
                 newAbility.SetLifeTime(2f);
+
+                instProj.transform.position = transform.position;
+                instProj.transform.rotation = Quaternion.Euler(0f, 0f, index * 15);
                 instProj.GetComponent<MonsterProjBase>().SetAbility(newAbility);
             }
             yield return new WaitForSeconds(0.125f);
@@ -119,6 +120,7 @@ public class Boss : MonsterBase
             transform.position = Vector3.Lerp(start, end, t);
             yield return null;
         }
+        
         transform.position = end;
         _telegraphObject.SetActive(false);
         ResetState();

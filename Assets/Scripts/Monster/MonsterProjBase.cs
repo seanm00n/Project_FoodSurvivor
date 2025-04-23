@@ -1,23 +1,27 @@
 using UnityEngine;
+using UnityEngine.Pool;
 
-public class MonsterProjBase : MonoBehaviour, IBattle
+public abstract class MonsterProjBase : MonoBehaviour, IBattle
 {
     public Ability ability { get; private set; }
 
-    private float _spawnTime;
+    protected ObjectPool<GameObject> _bossProjPool;
+    
+    protected float _spawnTime;
 
     private void Awake() {
         _spawnTime = Time.timeSinceLevelLoad;
+        _bossProjPool = GM.I.bossProjPool;
     }
-    
+
     private void Update() {
         Countdown();
         Movement();
     }
 
-    private void Countdown() {
+    protected virtual void Countdown() {
         if(Time.timeSinceLevelLoad - _spawnTime >= ability.lifeTime) {
-            Destroy(gameObject);
+            Destroy(gameObject); // ¼öÁ¤
         }
     }
 

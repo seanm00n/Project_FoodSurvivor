@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2152303847994885638}
   - component: {fileID: 6544057107510090826}
   - component: {fileID: -1561808935107621195}
-  - component: {fileID: 240239624983886301}
   - component: {fileID: 1237382108741006551}
+  - component: {fileID: 7322099666797404655}
   m_Layer: 8
   m_Name: BossMultiProj
   m_TagString: MonsterProj
@@ -117,18 +117,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &240239624983886301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4554319367707034832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 147afc5082cfc6d4abc5245a226992c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &1237382108741006551
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -165,3 +153,15 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.010685325}
   m_Radius: 0.57068527
+--- !u!114 &7322099666797404655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4554319367707034832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3f7a0a2dd078be43a457b44a14eb1ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

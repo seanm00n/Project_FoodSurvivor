@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class BossProj : MonoBehaviour
+public class BossProj : MonsterProjBase
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    protected override void Countdown() {
+        if(Time.timeSinceLevelLoad - _spawnTime >= ability.lifeTime) {
+            _bossProjPool.Release(gameObject);
+        }
     }
 }

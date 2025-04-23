@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2152303847994885638}
   - component: {fileID: -1561808935107621195}
-  - component: {fileID: 4487307180125002971}
   - component: {fileID: 2644471418604121310}
+  - component: {fileID: 2150413613389139981}
   m_Layer: 8
   m_Name: YellowMeleeProj
   m_TagString: MonsterProj
@@ -61,18 +61,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &4487307180125002971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4554319367707034832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 147afc5082cfc6d4abc5245a226992c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &2644471418604121310
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -109,3 +97,15 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &2150413613389139981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4554319367707034832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e9fa522f6ee6247a513638353a73d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

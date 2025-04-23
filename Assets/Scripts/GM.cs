@@ -58,6 +58,9 @@ public class GM : MonoBehaviour
     private GameObject _bossPref;
 
     [SerializeField]
+    private GameObject _bossProjPref;
+
+    [SerializeField]
     private MonoBehaviour[] exceptions;
 
     #endregion
@@ -98,6 +101,10 @@ public class GM : MonoBehaviour
 
     private bool _isGamePaused = false;
 
+    private int _initSize = 192;
+
+    private int _maxSize = 384;
+
     #endregion
 
     #region CSV Data
@@ -127,6 +134,21 @@ public class GM : MonoBehaviour
         blueMobs = new HashSet<GameObject>();
         greenMobs = new HashSet<GameObject>();
         yellowMobs = new HashSet<GameObject>();
+
+        bossProjPool = new ObjectPool<GameObject>(
+            createFunc: () => Instantiate(_bossProjPref),
+            actionOnGet: (obj) => obj.SetActive(true),
+            actionOnRelease: (obj) => obj.SetActive(false),
+            actionOnDestroy: (obj) => Destroy(_bossProjPref),
+            collectionCheck: false,
+            defaultCapacity: _initSize,
+            maxSize: _maxSize
+            );
+
+        for(int i = 0; i < 192; ++i) { // 초기화
+            GameObject obj = bossProjPool.Get();
+            bossProjPool.Release(obj);
+        }
     }
 
     private void Start() {
@@ -367,7 +389,10 @@ public class GM : MonoBehaviour
         GameObject instBoss = Instantiate(_bossPref, new Vector3(0, 4f, 0), Quaternion.identity);
         instBoss.GetComponent<Boss>().OnBossDeath += HandleBossDeath;
 
-        // 넥서스, 웨펀 위치 정렬하기
+        _weapon.transform.position = new Vector3(0, 0, 0);
+        _nexus.transform.position = new Vector3(0, -4, 0);
+        StartCoroutine(_weapon.SmoothCameraTransition(_weapon.transform.position, 0.3f));
+        
     }
     #endregion
 

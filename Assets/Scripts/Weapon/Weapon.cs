@@ -230,7 +230,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private IEnumerator SmoothCameraTransition(Vector3 targetPos, float duration) {
+    public IEnumerator SmoothCameraTransition(Vector3 targetPos, float duration) {
         Vector3 startPos = _mainCamera.transform.position;
         float elapsedTime = 0f;
 
