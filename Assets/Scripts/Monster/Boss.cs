@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Boss : MonsterBase
@@ -14,7 +15,9 @@ public class Boss : MonsterBase
     private GameObject _multiProjPref;
 
     private int _multiAttackStack = 0;
+
     private int _rushAttackStack = 0;
+
     private SpriteRenderer _telegraphSR;
 
     protected override void Initialize() {
@@ -38,7 +41,7 @@ public class Boss : MonsterBase
     }
 
     protected override void HandleAttack() {
-        if(_state == State.Death) return;
+        if(_state == State.Death || _state == State.Attack) return;
 
         if(_multiAttackStack >= 5) {
             _multiAttackStack = 0;
@@ -71,13 +74,12 @@ public class Boss : MonsterBase
         _animator.SetTrigger("Multi");
         _telegraphSR.sprite = _spriteRenderer.sprite;
         _telegraphObject.SetActive(true);
-        Invoke(nameof(ResetState), 2f); // state init
         yield return new WaitForSeconds(1f);
 
         for(int i = 0; i < 8; ++i) {
             for(int index = 0; index < 24; ++index) {
                 GameObject instProj = Instantiate(_multiProjPref, transform.position, Quaternion.Euler(0, 0, index * 15)); // 적 방향으로
-                Ability newAbility = ability;
+                Ability newAbility = ability.Clone();
                 newAbility.SetAR(1f);
                 newAbility.SetLifeTime(2f);
                 instProj.GetComponent<MonsterProjBase>().SetAbility(newAbility);
@@ -85,6 +87,7 @@ public class Boss : MonsterBase
             yield return new WaitForSeconds(0.125f);
         }
         _telegraphObject.SetActive(false);
+        ResetState();
     }
 
     private IEnumerator RushAttack() { // 돌진 공격
@@ -92,11 +95,10 @@ public class Boss : MonsterBase
         _animator.SetTrigger("Rush"); // idle and turn red
         _telegraphSR.sprite = _spriteRenderer.sprite;
         _telegraphObject.SetActive(true);
-        Invoke(nameof(ResetState), 2f); // state init
         yield return new WaitForSeconds(1f);
         
-        GameObject instProj = Instantiate(_projPref);
-        Ability newAbility = ability;
+        GameObject instProj = Instantiate(_projPref, transform);
+        Ability newAbility = ability.Clone();
         newAbility.SetLifeTime(1f);
         instProj.GetComponent<MonsterProjBase>().SetAbility(newAbility);
         
@@ -115,5 +117,6 @@ public class Boss : MonsterBase
         }
         transform.position = end;
         _telegraphObject.SetActive(false);
+        ResetState();
     }
 }

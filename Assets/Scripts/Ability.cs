@@ -1,4 +1,6 @@
+
 public class Ability {
+
     public float AP { get; private set; }
 
     public float AS { get; private set; } // attack per second
@@ -38,4 +40,19 @@ public class Ability {
     public void SetExp(float value) => Exp = value;
 
     public void SetReqEXP(float value) => reqExp = value;
+
+    public Ability Clone() {
+        return new Ability {
+            AP = this.AP,
+            AS = this.AS,
+            AR = this.AR,
+            HP = this.HP,
+            MaxHP = this.MaxHP,
+            MS = this.MS,
+            lifeTime = this.lifeTime,
+            Lv = this.Lv,
+            Exp = this.Exp,
+            reqExp = this.reqExp
+        };
+    }
 }
