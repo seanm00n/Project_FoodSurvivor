@@ -30,6 +30,6 @@ public class EXP : MonoBehaviour
             if(distSqr <= _rangeSqr) _isInRange = true;
         }
 
-        if(_isInRange) transform.position = Vector3.Lerp(transform.position, _nexus.position, _moveSpeed * Time.deltaTime);
+        if(_isInRange && _nexus != null) transform.position = Vector3.Lerp(transform.position, _nexus.position, _moveSpeed * Time.deltaTime);
     }
 }

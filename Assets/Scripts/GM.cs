@@ -140,7 +140,7 @@ public class GM : MonoBehaviour
             actionOnGet: (obj) => obj.SetActive(true),
             actionOnRelease: (obj) => obj.SetActive(false),
             actionOnDestroy: (obj) => Destroy(_bossProjPref),
-            collectionCheck: false,
+            collectionCheck: true, // set true
             defaultCapacity: _initSize,
             maxSize: _maxSize
             );
@@ -163,12 +163,12 @@ public class GM : MonoBehaviour
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
         _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
 
-        Invoke(nameof(BossSpawn), 360);
+        Invoke(nameof(BossSpawn), 5f); // 수정 - 360f
     }
 
     private void Update() {
         UpdateMonsterMax();
-        MonsterSpawn(); 
+        MonsterSpawn();
     }
 
     #region CSV Load
@@ -314,7 +314,7 @@ public class GM : MonoBehaviour
     #region Monster Control
 
     private void MonsterSpawn() {
-        if(Time.timeSinceLevelLoad >= 360) return;
+        if(Time.timeSinceLevelLoad >= 1f) return; // 수정 - 355f
 
         while(blueMobs.Count < _blueMaxNum) {
             GameObject pref = Random.value > 0.5f ? _blueMeleeMobPref : _blueRangedMobPref;
@@ -346,7 +346,7 @@ public class GM : MonoBehaviour
     }
 
     private void UpdateMonsterMax() {
-        if(Time.timeSinceLevelLoad >= 360) return;
+        if(Time.timeSinceLevelLoad >= 355) return;
 
         int index = 330;
         if(!_isYellowZoneOut) { 
@@ -376,7 +376,7 @@ public class GM : MonoBehaviour
 
     private void BossSpawn() {
         
-        IEnumerable<GameObject> allMonsters = blueMobs.Concat(greenMobs).Concat(yellowMobs);
+        IEnumerable<GameObject> allMonsters = blueMobs.Concat(greenMobs).Concat(yellowMobs).ToList(); // 동기화 불가능
         foreach(var monster in allMonsters) {
             Destroy(monster);
         }

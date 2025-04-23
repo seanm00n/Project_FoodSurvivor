@@ -416,7 +416,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Controller
+  m_Name: BossController
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Action
@@ -456,7 +456,7 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: Walk
-    m_Type: 9
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -635,19 +635,19 @@ AnimatorStateMachine:
     m_Position: {x: 210, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3188460960225426455}
-    m_Position: {x: 390, y: 280, z: 0}
+    m_Position: {x: 500, y: 220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -136569306282141652}
-    m_Position: {x: 390, y: 470, z: 0}
+    m_Position: {x: 430, y: 440, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6890476799338602228}
-    m_Position: {x: 390, y: 340, z: 0}
+    m_Position: {x: 540, y: 300, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3824332756743340848}
-    m_Position: {x: 390, y: 400, z: 0}
+    m_Position: {x: 490, y: 370, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2085155800285660825}
-    m_Position: {x: 390, y: 220, z: 0}
+    m_Position: {x: 450, y: 130, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 3270068045963234324}
@@ -659,7 +659,7 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 140, y: 340, z: 0}
+  m_AnyStatePosition: {x: 100, y: 350, z: 0}
   m_EntryPosition: {x: 20, y: 140, z: 0}
   m_ExitPosition: {x: -70, y: 330, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}

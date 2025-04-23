@@ -12,16 +12,14 @@ public class Boss : MonsterBase
     [SerializeField]
     private GameObject _telegraphObject;
 
-    private int _multiAttackStack = 0;
-
-    private int _rushAttackStack = 0;
+    private int _attackStack = 1;
 
     private SpriteRenderer _telegraphSR;
 
     private ObjectPool<GameObject> _multiProjPool;
 
     protected override void Initialize() {
-        ability.SetAP(50f); // (n, n)을 string으로 수정 가능
+        ability.SetAP(50f);
         ability.SetHP(5000f);
         ability.SetMaxHP(5000f);
         ability.SetAS(0.5f); // attack per second
@@ -30,6 +28,7 @@ public class Boss : MonsterBase
         ability.SetLifeTime(1.5f); // proj lifetime
         ability.SetExp(0);
 
+        _telegraphObject.SetActive(false);
         _telegraphSR = _telegraphObject.GetComponent<SpriteRenderer>();
         _multiProjPool = GM.I.bossProjPool;
     }
@@ -44,17 +43,9 @@ public class Boss : MonsterBase
     protected override void HandleAttack() {
         if(_state == State.Death || _state == State.Attack) return;
 
-        if(_multiAttackStack >= 5) {
-            _multiAttackStack = 0;
-            StartCoroutine(MultiAttack());
-            ability.SetAR(0f);
-            return;
-        }
-
-        if(_rushAttackStack >= 9) {
-            _rushAttackStack = 0;
-            RushAttack();
-            ability.SetAR(0f);
+        if(_attackStack % 5 == 0) {
+            IEnumerator selectCoroutine = (UnityEngine.Random.value >= 0.5f) ? RushAttack() : MultiAttack();
+            StartCoroutine(selectCoroutine);
             return;
         }
 
@@ -63,17 +54,22 @@ public class Boss : MonsterBase
 
     private void NormalAttack() { // 근접 공격
         base.HandleAttack();
-        _multiAttackStack++;
-        _rushAttackStack++;
-        if(_multiAttackStack >= 5 || _rushAttackStack >= 9) {
+        _attackStack++;
+        if(_attackStack % 5 == 0) {
             ability.SetAR(3f);
         }
     }
 
     private IEnumerator MultiAttack() { // 여러발 공격
+        Debug.Log("Multi Attack");
         _state = State.Attack;
         _animator.SetTrigger("Multi");
         _telegraphSR.sprite = _spriteRenderer.sprite;
+        if(_spriteRenderer.flipX) {
+            _telegraphSR.flipX = true;
+        } else {
+            _telegraphSR.flipX = false;
+        }
         _telegraphObject.SetActive(true);
         yield return new WaitForSeconds(1f);
 
@@ -82,7 +78,6 @@ public class Boss : MonsterBase
                 GameObject instProj = _multiProjPool.Get(); //Instantiate(_multiProjPref, transform.position, Quaternion.Euler(0, 0, index * 15)); 
 
                 Ability newAbility = ability.Clone();
-                newAbility.SetAR(1f);
                 newAbility.SetLifeTime(2f);
 
                 instProj.transform.position = transform.position;
@@ -92,13 +87,21 @@ public class Boss : MonsterBase
             yield return new WaitForSeconds(0.125f);
         }
         _telegraphObject.SetActive(false);
+        _attackStack++;
+        ability.SetAR(0f);
         ResetState();
     }
 
     private IEnumerator RushAttack() { // 돌진 공격
+        Debug.Log("Rush Attack");
         _state = State.Attack;
         _animator.SetTrigger("Rush"); // idle and turn red
         _telegraphSR.sprite = _spriteRenderer.sprite;
+        if(_spriteRenderer.flipX) {
+            _telegraphSR.flipX = true;
+        } else {
+            _telegraphSR.flipX = false;
+        }
         _telegraphObject.SetActive(true);
         yield return new WaitForSeconds(1f);
         
@@ -123,6 +126,8 @@ public class Boss : MonsterBase
         
         transform.position = end;
         _telegraphObject.SetActive(false);
+        _attackStack++;
+        ability.SetAR(0f);
         ResetState();
     }
 }

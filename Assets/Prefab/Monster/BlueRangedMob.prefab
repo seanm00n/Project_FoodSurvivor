@@ -115,8 +115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CategoryHash: 0.009161512
-  m_labelHash: 0.00000040954276
+  m_CategoryHash: 9.365925e-16
+  m_labelHash: 4.1652613e-36
   m_SpriteKey: 0
   m_SpriteHash: 407529195
 --- !u!1 &2719193669114627214
@@ -330,7 +330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _expPref: {fileID: 2485280721376784820, guid: 6d864ffa63671594896754eeff5aea80, type: 3}
-  projPref: {fileID: 4554319367707034832, guid: fd8b96a8a5f24f1449ea85b0a650ce3b, type: 3}
+  _projPref: {fileID: 4554319367707034832, guid: fd8b96a8a5f24f1449ea85b0a650ce3b, type: 3}
   _effectObject: {fileID: 2719193669114627214}
   _zone: 0
   _hitSound: {fileID: 8300000, guid: af660d5c8a115db45b7e25df6592757a, type: 3}

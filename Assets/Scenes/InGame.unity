@@ -1026,7 +1026,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1481235819}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: OnConfirmButton
+        m_MethodName: OnMainButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1131,7 +1131,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3386662907296297370, guid: 1973eb4c2ae5a394a8f90b81dc8906fb, type: 3}
+  m_Sprite: {fileID: -2521409195606705084, guid: 1973eb4c2ae5a394a8f90b81dc8906fb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -89580,79 +89580,6 @@ RectTransform:
   m_AnchoredPosition: {x: -240, y: 0}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1001 &1072217902
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5081661513527043848, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -2978808618200810919, guid: 55e07b8d5df04212aec986b3c7a6455b, type: 3}
-    - target: {fileID: 5081661513527043854, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_labelHash
-      value: 1.2985474e-36
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661513527043854, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_SpriteHash
-      value: 567518536
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661513527043854, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_CategoryHash
-      value: 9.932601e-39
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358038, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_Name
-      value: Boss
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081661515232358039, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
 --- !u!1 &1075819405
 GameObject:
   m_ObjectHideFlags: 0
@@ -90384,7 +90311,8 @@ MonoBehaviour:
   _greenRangedMobPref: {fileID: 7614071129163002635, guid: 2d614c0206034804e9ec5d2befcb2bd0, type: 3}
   _yellowMeleeMobPref: {fileID: 7614071129163002635, guid: 878e822e894e68649af45a22df410a59, type: 3}
   _yellowRangedMobPref: {fileID: 7614071129163002635, guid: 1b640da2595dfd8408022e1a51f80981, type: 3}
-  _bossPref: {fileID: 0}
+  _bossPref: {fileID: 5081661515232358038, guid: f0ff9d3f2b8403f4e8c1844e649b746d, type: 3}
+  _bossProjPref: {fileID: 4554319367707034832, guid: 2126dcc8f67814143b52a7f460e1f95b, type: 3}
   exceptions:
   - {fileID: 1257053422}
   - {fileID: 1481235816}
@@ -91778,21 +91706,21 @@ MonoBehaviour:
   _pausePanel: {fileID: 244667929}
   _gameOverPanel: {fileID: 1605649853}
   _tutorialPanel: {fileID: 1188276860}
-  _gameClearPanel: {fileID: 0}
+  _gameClearPanel: {fileID: 1482752021}
   _directionArrow: {fileID: 1866861884}
-  _bossWarningAlert: {fileID: 0}
+  _bossWarningAlert: {fileID: 1346277826}
   _killCountText: {fileID: 1954131216}
   _playTimeText: {fileID: 1775951172}
   _switchCoolText: {fileID: 16855605}
   _killResultText: {fileID: 719989113}
   _timeResultText: {fileID: 1334921297}
   _levelText: {fileID: 1528198344}
-  _killScoreText: {fileID: 0}
-  _timeScoreText: {fileID: 0}
+  _killScoreText: {fileID: 1358108836}
+  _timeScoreText: {fileID: 1078036127}
   _switchButton: {fileID: 651632469}
   _buttonSound: {fileID: 8300000, guid: 517ac48b6d9dceb4d8c2e7070af25c3b, type: 3}
   _levelUpSound: {fileID: 8300000, guid: 889d002ea11f1de4d98ea2508134c004, type: 3}
-  _bossWarningSound: {fileID: 0}
+  _bossWarningSound: {fileID: 8300000, guid: 45e441351910ed94fb14d93a3c4ca1f9, type: 3}
   _transAnimator: {fileID: 4984290361592668558}
 --- !u!82 &1481235820
 AudioSource:
@@ -91908,7 +91836,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1482752022
 RectTransform:
   m_ObjectHideFlags: 0
@@ -94410,4 +94338,3 @@ SceneRoots:
   - {fileID: 1540382037}
   - {fileID: 1843823675}
   - {fileID: 1308126954}
-  - {fileID: 1072217902}

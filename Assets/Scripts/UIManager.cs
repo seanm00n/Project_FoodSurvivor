@@ -166,7 +166,7 @@ public class UIManager : MonoBehaviour
         sliders[SliderType.WeaponEXP].value = curExp / maxExp;
 
         if(_isBossSpawn) {
-            Boss boss = GameObject.FindGameObjectWithTag("Boss")?.GetComponent<Boss>();
+            Boss boss = GameObject.Find("Boss")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
             if(boss != null) {
                 float curBossHP = boss.ability.HP;
                 float maxBossHP = boss.ability.MaxHP;
@@ -185,18 +185,20 @@ public class UIManager : MonoBehaviour
     }
 
     private void SetArrowVisible() {
-        Vector3 viewportPos = Camera.main.WorldToViewportPoint(_nexus.transform.position);
+        if(_nexus != null) {
+            Vector3 viewportPos = Camera.main.WorldToViewportPoint(_nexus.transform.position);
 
-        bool isVisible =
-            viewportPos.z > 0f &&                       // 카메라 앞에 있으며
-            viewportPos.x > 0f && viewportPos.x < 1f && // 화면 좌우 안에 있으며
-            viewportPos.y > 0f && viewportPos.y < 1f;   // 화면 상하 안에 있음
+            bool isVisible =
+                viewportPos.z > 0f &&                       // 카메라 앞에 있으며
+                viewportPos.x > 0f && viewportPos.x < 1f && // 화면 좌우 안에 있으며
+                viewportPos.y > 0f && viewportPos.y < 1f;   // 화면 상하 안에 있음
 
-        Color color = Color.white;
-        color.a = isVisible ? 0f : 1f;
+            Color color = Color.white;
+            color.a = isVisible ? 0f : 1f;
 
-        _arrowImage.color = color;
-        _childArrowImage.color = color;
+            _arrowImage.color = color;
+            _childArrowImage.color = color;
+        }
     }
 
     public void SetKillCountText() => _killCountText.text = GM.I.killCount.ToString();
@@ -269,11 +271,13 @@ public class UIManager : MonoBehaviour
 
     public void OnQuitButton() {
         _audioSource.PlayOneShot(_buttonSound);
+        _pausePanel.SetActive(false);
         StartCoroutine(PlayFadeOut());
     }
 
     public void OnConfirmButton() {
         _audioSource.PlayOneShot(_buttonSound);
+        _gameOverPanel.SetActive(false);
         StartCoroutine(PlayFadeOut());
     }
 
@@ -285,6 +289,7 @@ public class UIManager : MonoBehaviour
 
     public void OnMainButton() {
         _audioSource.PlayOneShot(_buttonSound);
+        _gameClearPanel.SetActive(false);
         StartCoroutine(PlayFadeOut());
     }
 

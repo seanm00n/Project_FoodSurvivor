@@ -72,7 +72,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected void Start() {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
+        _nexus = GameObject.FindGameObjectWithTag("Nexus")?.GetComponent<Nexus>();
         _nexusColl = _nexus?.GetComponent<BoxCollider2D>(); // 싱글턴 클래스라서 destroy되어도 Nexus.I는 남아있음
         _effectSR = _effectObject.GetComponent<SpriteRenderer>();
         Initialize();
@@ -217,8 +217,8 @@ public abstract class MonsterBase : MonoBehaviour
         _debuffList.Remove(debuff); // return bool
     }
     
-    public void SetState(State state) { // use?
-        foreach(var variable in new[] { "Idle", "Ready", "Walk", "Run", "Jump", "Die" }) {
+    public void SetState(State state) { // 없는 값 수정
+        foreach(var variable in new[] { "Idle", "Walk", "Die" }) {
             _animator.SetBool(variable, false);
         }
 

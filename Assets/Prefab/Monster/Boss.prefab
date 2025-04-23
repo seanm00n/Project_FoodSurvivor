@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4820018124299094489}
   - component: {fileID: 6287074967437831503}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 5081661513527043848}
   - component: {fileID: 5081661513527043855}
   - component: {fileID: 5081661513527043854}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,9 +220,9 @@ GameObject:
   - component: {fileID: 1071175755889643271}
   - component: {fileID: 1720999434304096688}
   - component: {fileID: -7712401307886363122}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -255,7 +255,7 @@ Animator:
   m_GameObject: {fileID: 5081661515232358038}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 065c5fb5e94c4130b013e82a4573a32a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 81bf5e16a332adf4299e3715898ba1a5, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -353,12 +353,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _expPref: {fileID: 1000780801139214134, guid: 4abce083d808e8c4fa6575b56e99f0e5, type: 3}
-  _projPref: {fileID: 0}
+  _projPref: {fileID: 4554319367707034832, guid: e2955d86d6357ee47ade268d9953772f, type: 3}
   _effectObject: {fileID: 4084430502542030731}
   _zone: 2
   _hitSound: {fileID: 8300000, guid: af660d5c8a115db45b7e25df6592757a, type: 3}
   _telegraphObject: {fileID: 8096069840974819902}
-  _multiProjPref: {fileID: 4554319367707034832, guid: 2126dcc8f67814143b52a7f460e1f95b, type: 3}
 --- !u!82 &-7712401307886363122
 AudioSource:
   m_ObjectHideFlags: 0
@@ -466,7 +465,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8911939533644365355}
   - component: {fileID: 1851795921220423124}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Telegraph
   m_TagString: Untagged
   m_Icon: {fileID: 0}

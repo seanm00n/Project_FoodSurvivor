@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _expPref: {fileID: 3883606933231349002, guid: 2553adc898ac128469ade6b5c43372fe, type: 3}
-  projPref: {fileID: 4554319367707034832, guid: f489cd6324df39548988df88ae6e34f8, type: 3}
+  _projPref: {fileID: 4554319367707034832, guid: f489cd6324df39548988df88ae6e34f8, type: 3}
   _effectObject: {fileID: 544404382904006053}
   _zone: 1
   _hitSound: {fileID: 8300000, guid: af660d5c8a115db45b7e25df6592757a, type: 3}
