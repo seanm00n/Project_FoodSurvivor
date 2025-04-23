@@ -145,13 +145,13 @@ public class GM : MonoBehaviour
             maxSize: _maxSize
         );
 
-    }
-
-    private void Start() {
         for(int i = 0; i < 192; ++i) { // ÃÊ±âÈ­
             GameObject obj = bossProjPool.Get();
             bossProjPool.Release(obj);
         }
+    }
+
+    private void Start() {
 
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>();
         _weapon.OnWeaponLevelUp += HandleWeaponLevelUp;

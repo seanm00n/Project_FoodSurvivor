@@ -40,4 +40,6 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
 
     public void SetAbility(Ability ability) => this.ability = ability;
 
+    public void InitSpawnTime() => _spawnTime = Time.timeSinceLevelLoad;
+
 }

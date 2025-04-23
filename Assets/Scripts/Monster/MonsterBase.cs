@@ -151,6 +151,12 @@ public abstract class MonsterBase : MonoBehaviour
             return;
         }
 
+        if(this is Boss boss) {
+            if(Time.timeSinceLevelLoad - boss.lastSkillUse >= boss.skillDuration) {
+                ability.SetAR(3f);
+            }
+        }
+
         float distance = Vector3.Distance(_nexus.transform.position, transform.position);
 
         if(distance > ability.AR + _rangeOffset) { //_nexusColl.size.x + 
@@ -207,7 +213,6 @@ public abstract class MonsterBase : MonoBehaviour
         _effectObject.SetActive(true);
         yield return new WaitForSeconds(0.05f);
         _effectObject.SetActive(false);
-        //_effectCoroutine = null;
     }
 
     public void AddDebuff(Debuff debuff) {

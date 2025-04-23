@@ -5,31 +5,33 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class Boss : MonsterBase
-{
+public class Boss : MonsterBase {
     public event Action OnBossDeath;
+
+    public float lastSkillUse { get; private set; }
+
+    public float skillDuration { get; private set; } = 10f;
 
     [SerializeField]
     private GameObject _telegraphObject;
-
-    private int _attackStack = 1;
 
     private SpriteRenderer _telegraphSR;
 
     private ObjectPool<GameObject> _multiProjPool;
 
+
     protected override void Initialize() {
         ability.SetAP(50f);
-        ability.SetHP(5000f);
-        ability.SetMaxHP(5000f);
+        ability.SetHP(10000f);
+        ability.SetMaxHP(10000f);
         ability.SetAS(0.5f); // attack per second
         ability.SetAR(0f); // attack range
-        ability.SetMS(1f); // move speed
+        ability.SetMS(1.25f); // move speed
         ability.SetLifeTime(1.5f); // proj lifetime
         ability.SetExp(0);
 
-        _rangeOffset = 1.6f;
-
+        _rangeOffset = 2f;
+        lastSkillUse = Time.timeSinceLevelLoad;
         _telegraphObject.SetActive(false);
         _telegraphSR = _telegraphObject.GetComponent<SpriteRenderer>();
         _multiProjPool = GM.I.bossProjPool;
@@ -45,9 +47,9 @@ public class Boss : MonsterBase
     protected override void HandleAttack() {
         if(_state == State.Death || _state == State.Attack) return;
 
-        if(_attackStack % 5 == 0) {
-            //IEnumerator selectCoroutine = (UnityEngine.Random.value >= 0.5f) ? RushAttack() : MultiAttack();
-            IEnumerator selectCoroutine = MultiAttack();
+        if(Time.timeSinceLevelLoad - lastSkillUse >= skillDuration) { // 시간제로 변경
+            lastSkillUse = Time.timeSinceLevelLoad;
+            IEnumerator selectCoroutine = (UnityEngine.Random.value >= 0.5f) ? RushAttack() : MultiAttack();
             StartCoroutine(selectCoroutine);
             return;
         }
@@ -56,11 +58,7 @@ public class Boss : MonsterBase
     }
 
     private void NormalAttack() { // 근접 공격
-        base.HandleAttack();
-        _attackStack++;
-        if(_attackStack % 5 == 0) {
-            ability.SetAR(3f);
-        }
+        base.HandleAttack(); 
     }
 
     private IEnumerator MultiAttack() { // 여러발 공격
@@ -73,19 +71,23 @@ public class Boss : MonsterBase
 
         for(int i = 0; i < 8; ++i) {
             for(int index = 0; index < 24; ++index) {
-                GameObject instProj = _multiProjPool.Get();
-                Debug.Log($"[MultiAttack] {instProj.name} active = {instProj.activeSelf}");
                 Ability newAbility = ability.Clone();
                 newAbility.SetLifeTime(3f);
                 newAbility.SetAR(3f);
+                newAbility.SetAP(10f);
+
+                GameObject instProj = _multiProjPool.Get();
                 instProj.transform.position = transform.position;
-                instProj.transform.rotation = Quaternion.Euler(0f, 0f, index * 15);
-                instProj.GetComponent<MonsterProjBase>().SetAbility(newAbility);
+                instProj.transform.rotation = Quaternion.Euler(0f, 0f, (index * 15) + (i * 5));
+
+                MonsterProjBase instProjBase = instProj.GetComponent<MonsterProjBase>();
+                instProjBase.SetAbility(newAbility);
+                instProjBase.InitSpawnTime();
             }
             yield return new WaitForSeconds(0.125f);
         }
         _telegraphObject.SetActive(false);
-        _attackStack++;
+        lastSkillUse++;
         ability.SetAR(0f);
         ResetState();
     }
@@ -102,6 +104,7 @@ public class Boss : MonsterBase
         Ability newAbility = ability.Clone();
         newAbility.SetLifeTime(1f);
         newAbility.SetAR(3f);
+        newAbility.SetAP(100f);
         instProj.GetComponent<MonsterProjBase>().SetAbility(newAbility);
         
         float dist = 6f;
@@ -120,7 +123,7 @@ public class Boss : MonsterBase
         
         transform.position = end;
         _telegraphObject.SetActive(false);
-        _attackStack++;
+        lastSkillUse++;
         ability.SetAR(0f);
         ResetState();
     }
