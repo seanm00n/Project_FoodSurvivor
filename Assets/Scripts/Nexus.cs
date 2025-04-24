@@ -47,7 +47,7 @@ public class Nexus : MonoBehaviour
 
 
         ability = new Ability();
-        ability.SetMaxHP(500f);
+        ability.SetMaxHP(1000f);
         ability.SetHP(1000f);
         //ability.SetHP(100000f);//test
         ability.SetMS(1.5f);
@@ -119,7 +119,6 @@ public class Nexus : MonoBehaviour
     private void HandleDeath() {
         SetState(State.Death);
         StartCoroutine(InvokeDeath());
-        Destroy(gameObject, 0.5f);
     }
 
     private void OnDestroy() {
@@ -129,6 +128,7 @@ public class Nexus : MonoBehaviour
     private IEnumerator InvokeDeath() {
         yield return new WaitForSeconds(0.5f);
         OnNexusDeath?.Invoke(this);
+        Destroy(gameObject);
     }
 
     public void SetState(State state) {

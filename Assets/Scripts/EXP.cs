@@ -24,7 +24,7 @@ public class EXP : MonoBehaviour
 
     private void Update() {
         _timer += Time.deltaTime;
-        if(_timer > _duration) {
+        if(_timer > _duration && _nexus  != null) {
             _timer = 0f;
             float distSqr = (_nexus.position - transform.position).sqrMagnitude;
             if(distSqr <= _rangeSqr) _isInRange = true;
