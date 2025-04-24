@@ -14,8 +14,9 @@ public class WeaponBody : WeaponProjBase {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("EXP")) {
-            _weapon.HandleExpGet(collision.GetComponent<EXP>().exp);
-            Destroy(collision.gameObject);
+            EXP collExp = collision.GetComponent<EXP>();
+            _weapon.HandleExpGet(collExp.exp);
+            GM.I.mobExpPool[collExp.poolKey].Release(collision.gameObject);
         }
     }
 }

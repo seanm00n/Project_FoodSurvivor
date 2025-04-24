@@ -15,7 +15,7 @@ public class ProtectShield : WeaponProjBase {
         base.Initialize();
         _shields = new List<Shield>();
         _shields.AddRange(GetComponentsInChildren<Shield>(true));
-        foreach (var shield in _shields) {
+        foreach (var shield in _shields.ToArray()) {
             shield.SetAbility(ability);
             shield.gameObject.SetActive(false);
         }

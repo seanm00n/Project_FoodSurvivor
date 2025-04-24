@@ -170,8 +170,6 @@ public class UIManager : MonoBehaviour
 
         if(_isBossSpawn) {
             Boss boss = GameObject.Find("Boss(Clone)")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
-            Debug.Log("Boss is?: " + boss);
-            Debug.Log("Boss HP: " + boss.ability.HP);
             if(boss != null) {
                 float curBossHP = boss.ability.HP;
                 float maxBossHP = boss.ability.MaxHP;
@@ -266,7 +264,7 @@ public class UIManager : MonoBehaviour
         AddSkillList(skill);
         _weapon.SkillLevelUp(skill);
 
-        foreach(var card in _instCards) { Destroy(card); }
+        foreach(var card in _instCards.ToArray()) { Destroy(card); }
         _instCards.Clear();
 
         _skillSelectPanel.SetActive(false);

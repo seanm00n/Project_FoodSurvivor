@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public class Missile : MonoBehaviour, IBattle
@@ -51,12 +50,10 @@ public class Missile : MonoBehaviour, IBattle
     }
 
     private GameObject FindNearestMonster() {
-        IEnumerable<GameObject> allMonsters = GM.I.blueMobs.Concat(GM.I.greenMobs).Concat(GM.I.yellowMobs);
-
         GameObject nearest = null;
         float minDistSq = float.MaxValue;
 
-        foreach(GameObject monster in allMonsters) {
+        foreach(GameObject monster in GM.I.spawnedMobs.ToArray()) {
             if(monster == null) continue;
 
             float distSq = (monster.transform.position - transform.position).sqrMagnitude;

@@ -1,13 +1,23 @@
 public class GreenMeleeMob : MonsterBase
 {
-    protected override void Initialize() {
-        ability.SetAP(GM.I.MobData[(1, 0)].AP);
-        ability.SetHP(GM.I.MobData[(1, 0)].HP);
-        ability.SetMaxHP(GM.I.MobData[(1, 0)].HP);
+    public override string poolKey { get; protected set; } = "GreenMelee";
+
+    public override void Initialize() {
+        base.Initialize();
+        ability.SetAP(GM.I.MobData["GreenMelee"].AP);
+        ability.SetHP(GM.I.MobData["GreenMelee"].HP);
+        ability.SetMaxHP(GM.I.MobData["GreenMelee"].HP);
         ability.SetAS(0.3f);
         ability.SetAR(0f);
         ability.SetMS(1.25f);
         ability.SetLifeTime(0.2f);
-        ability.SetExp(GM.I.MobData[(1, 0)].Exp);
+        ability.SetExp(GM.I.MobData["GreenMelee"].Exp);
+        _rangeOffset = 0.8f;
+    }
+
+    protected override void OnEnable() {
+        base.OnEnable();
+        GM.I.OnBossSpawn += HandleSelfRelease;
+        GM.I.spawnedMobs.Add(gameObject);
     }
 }

@@ -1,17 +1,15 @@
 using UnityEngine;
-using UnityEngine.Pool;
 
 public abstract class MonsterProjBase : MonoBehaviour, IBattle
 {
     public Ability ability { get; private set; }
 
-    protected ObjectPool<GameObject> _bossProjPool;
+    public string poolKey { get; private set; }
     
     protected float _spawnTime;
 
-    private void Awake() {
+    private void OnEnable() {
         _spawnTime = Time.timeSinceLevelLoad;
-        _bossProjPool = GM.I.bossProjPool;
     }
 
     private void Update() {
@@ -21,7 +19,7 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
 
     protected virtual void Countdown() {
         if(Time.timeSinceLevelLoad - _spawnTime >= ability.lifeTime) {
-            Destroy(gameObject); // 수정
+            GM.I.monProjPool[poolKey].Release(gameObject);
         }
     }
 
@@ -30,16 +28,16 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
         transform.position += direction * (ability.MS * 2) * (ability.AR > 0 ? 1f : 0f) * Time.deltaTime;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) { // 수정
+    private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("Nexus")) {
-            Destroy(gameObject);
+            GM.I.monProjPool[poolKey].Release(gameObject);
         }
     }
 
     public float GetAP() => ability.AP;
 
-    public void SetAbility(Ability ability) => this.ability = ability;
+    public void SetAbility(Ability value) => ability = value;
 
-    public void InitSpawnTime() => _spawnTime = Time.timeSinceLevelLoad;
+    public void SetPoolKey(string value) => poolKey = value;
 
 }

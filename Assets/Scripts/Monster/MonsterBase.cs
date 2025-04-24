@@ -5,17 +5,13 @@ using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour
 {
-    public event Action<MonsterBase> OnMonsterDeath;
+    public event Action<string, GameObject> OnMonsterDeath;
 
     public Ability ability { get; protected set; }
 
+    public abstract string poolKey { get; protected set; }
+
     #region SerializeField
-
-    [SerializeField]
-    protected GameObject _expPref;
-
-    [SerializeField]
-    protected GameObject _projPref;
 
     [SerializeField]
     protected GameObject _effectObject;
@@ -34,6 +30,8 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected BoxCollider2D _nexusColl;
 
+    protected BoxCollider2D _boxColl;
+
     protected SpriteRenderer _spriteRenderer;
 
     protected Animator _animator;
@@ -46,11 +44,11 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected HashSet<Debuff> _debuffList;
 
-    protected float _lastAttackTime = 0f;
+    protected float _lastAttackTime;
 
-    protected float _rangeOffset = 0.8f;
+    protected float _rangeOffset;
 
-    protected State _state = State.Idle;
+    protected State _state;
 
     protected Coroutine _effectCoroutine;
 
@@ -60,25 +58,37 @@ public abstract class MonsterBase : MonoBehaviour
 
     #endregion
 
-    protected abstract void Initialize();
-
-    protected void Awake() {
+    public virtual void Initialize() { // 한번만 하면 되는 공통적인 것들
         ability = new Ability();
-        _debuffList = new HashSet<Debuff>();
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
-        SetState(State.Moving);
-    }
-
-    protected void Start() {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _nexus = GameObject.FindGameObjectWithTag("Nexus")?.GetComponent<Nexus>();
-        _nexusColl = _nexus?.GetComponent<BoxCollider2D>(); // 싱글턴 클래스라서 destroy되어도 Nexus.I는 남아있음
+        _nexusColl = _nexus?.GetComponent<BoxCollider2D>();
+        _boxColl = GetComponent<BoxCollider2D>();
         _effectSR = _effectObject.GetComponent<SpriteRenderer>();
-        Initialize();
     }
 
-    protected void Update() {
+    protected virtual void OnEnable() { // 매번 초기화 필요한것들
+        ability.SetHP(GM.I.MobData[poolKey].HP);
+        _debuffList = new HashSet<Debuff>();
+        SetState(State.Moving);
+        _boxColl.enabled = true;
+        _lastAttackTime = 0f;
+        _state = State.Idle;
+    }
+
+    protected virtual void OnDisable() {
+        StopAllCoroutines();
+        GM.I.OnBossSpawn -= HandleSelfRelease;
+        GM.I.spawnedMobs.Remove(gameObject);
+    }
+
+    protected void HandleSelfRelease() {
+        GM.I.monPool[poolKey].Release(gameObject);
+    }
+
+    private void Update() {
         Movement();
         Rotation();
     }
@@ -113,8 +123,6 @@ public abstract class MonsterBase : MonoBehaviour
     protected void HandleHit(GameObject target) {
         _audioSource.PlayOneShot(_hitSound);
         IBattle battle = target.GetComponent<IBattle>();
-        if(_effectCoroutine != null) StopCoroutine(_effectCoroutine);
-        _effectCoroutine = StartCoroutine(HitEffect());
         
         if(battle != null) {
             ability.SetHP(ability.HP - battle.GetAP());
@@ -122,25 +130,38 @@ public abstract class MonsterBase : MonoBehaviour
         }        
     }
 
+    protected IEnumerator HitEffect() {
+        _effectSR.sprite = _spriteRenderer.sprite;
+        _effectSR.flipX = _spriteRenderer.flipX;
+        _effectObject.SetActive(true);
+        yield return new WaitForSeconds(0.05f);
+        _effectObject.SetActive(false);
+    }
+
     protected void CheckDeath() {
         if(ability.HP <= 0f) {
             HandleDeath();
+            return;
         }
+
+        if(_effectCoroutine != null) {
+            StopCoroutine(_effectCoroutine);
+        }
+        _effectCoroutine = StartCoroutine(HitEffect());
     }
 
     protected virtual void HandleDeath() {
-        OnMonsterDeath?.Invoke(this);
         _state = State.Death;
         SetState(State.Death);
-        GetComponent<BoxCollider2D>().enabled = false;
-        StartCoroutine(DropAndDestroy(0.5f));
+        _boxColl.enabled = false;
+        StartCoroutine(DropAndRelease());
     }
 
-    protected IEnumerator DropAndDestroy(float value) {
-        yield return new WaitForSeconds(value);
-        GameObject instExp = Instantiate(_expPref, transform.position, Quaternion.identity); //1초 뒤
-        instExp.GetComponent<EXP>().SetExp(ability.Exp);
-        Destroy(gameObject);
+    protected IEnumerator DropAndRelease() {
+        yield return new WaitForSeconds(0.5f);
+        GameObject spawnedExp = GM.I.mobExpPool[_zone].Get();
+        spawnedExp.transform.position = transform.position;
+        OnMonsterDeath.Invoke(poolKey, gameObject);
     }
 
     protected void Movement() {
@@ -194,8 +215,10 @@ public abstract class MonsterBase : MonoBehaviour
         Vector3 spawnDir = (_nexus.transform.position - transform.position).normalized;
         float angle = Mathf.Atan2(spawnDir.y, spawnDir.x) * Mathf.Rad2Deg;
 
-        GameObject instProj = Instantiate(_projPref, transform.position, Quaternion.Euler(0, 0, angle)); // 적 방향으로
-        instProj.GetComponent<MonsterProjBase>().SetAbility(ability);
+        string poolKeyCopy = poolKey;
+        if(poolKey == "Boss") poolKeyCopy = "BossMelee";
+        GameObject spawnProj = GM.I.monProjPool[poolKeyCopy].Get();
+        spawnProj.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0, 0, angle));
 
         Invoke(nameof(ResetState), (1f / ability.AS)); // state init
     }
@@ -207,13 +230,6 @@ public abstract class MonsterBase : MonoBehaviour
         SetState(State.Moving);
     }
 
-    protected IEnumerator HitEffect() {
-        _effectSR.sprite = _spriteRenderer.sprite;
-        _effectSR.flipX = _spriteRenderer.flipX;
-        _effectObject.SetActive(true);
-        yield return new WaitForSeconds(0.05f);
-        _effectObject.SetActive(false);
-    }
 
     public void AddDebuff(Debuff debuff) {
         _debuffList.Add(debuff); // return bool
@@ -223,7 +239,7 @@ public abstract class MonsterBase : MonoBehaviour
         _debuffList.Remove(debuff); // return bool
     }
     
-    public void SetState(State state) { // 없는 값 수정
+    public void SetState(State state) {
         foreach(var variable in new[] { "Idle", "Walk", "Die" }) {
             _animator.SetBool(variable, false);
         }
@@ -235,9 +251,5 @@ public abstract class MonsterBase : MonoBehaviour
         }
     }
 
-    public Zone GetZone() => _zone;
-
-    protected void OnDestroy() {
-        StopAllCoroutines();
-    }
+    public Zone GetZone() => _zone; // 필요?
 }

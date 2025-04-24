@@ -4,19 +4,27 @@ public class EXP : MonoBehaviour
 {
     public float exp { get; private set; }
 
-    public void SetExp(float value) => exp = value;
+    public Zone poolKey { get; private set; }
 
     private Transform _nexus;
 
-    private float _timer = 0f;
+    private float _timer;
 
-    private float _duration = 1f;
+    private float _duration;
 
-    private float _rangeSqr = 25f;
+    private float _rangeSqr;
 
-    private float _moveSpeed = 5f;
+    private float _moveSpeed;
 
-    private bool _isInRange = false;
+    private bool _isInRange;
+
+    private void OnEnable() {
+        _timer = 0f;
+        _duration = 1f;
+        _rangeSqr = 25f;
+        _moveSpeed = 5f;
+        _isInRange = false;
+    }
 
     private void Start() {
         _nexus = GameObject.FindWithTag("Nexus")?.transform;
@@ -30,6 +38,11 @@ public class EXP : MonoBehaviour
             if(distSqr <= _rangeSqr) _isInRange = true;
         }
 
-        if(_isInRange && _nexus != null) transform.position = Vector3.Lerp(transform.position, _nexus.position, _moveSpeed * Time.deltaTime);
+        if(_isInRange && _nexus != null) 
+            transform.position = Vector3.Lerp(transform.position, _nexus.position, _moveSpeed * Time.deltaTime);
     }
+
+    public void SetExp(float value) => exp = value;
+
+    public void SetPoolKey(Zone value) => poolKey = value;
 }

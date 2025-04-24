@@ -5,22 +5,27 @@ using Random = UnityEngine.Random;
 using System.Linq;
 using System;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 using UnityEngine.Pool;
 
 public class GM : MonoBehaviour
 {
     public static GM I { get; private set; }
 
+    public event Action OnBossSpawn;
+
+    public HashSet<GameObject> spawnedMobs { get; private set; }
+
     public int killCount { get; private set; } = 0;
 
-    public HashSet<GameObject> blueMobs { get; private set; }
+    #region Object Pool
 
-    public HashSet<GameObject> greenMobs { get; private set; }
+    public Dictionary<string, ObjectPool<GameObject>> monPool { get; private set; }
 
-    public HashSet<GameObject> yellowMobs { get; private set; }
+    public Dictionary<string, ObjectPool<GameObject>> monProjPool { get; private set; }
 
-    public ObjectPool<GameObject> bossProjPool { get; private set; }
+    public Dictionary<Zone, ObjectPool<GameObject>> mobExpPool { get; private set; }
+
+    #endregion
 
     #region SerializeField
 
@@ -58,7 +63,37 @@ public class GM : MonoBehaviour
     private GameObject _bossPref;
 
     [SerializeField]
-    private GameObject _bossProjPref;
+    private GameObject _blueMeleeProjPref;
+
+    [SerializeField]
+    private GameObject _blueRangedProjPref;
+
+    [SerializeField]
+    private GameObject _greenMeleeProjPref;
+
+    [SerializeField]
+    private GameObject _greenRangedProjPref;
+
+    [SerializeField]
+    private GameObject _yellowMeleeProjPref;
+
+    [SerializeField]
+    private GameObject _yellowRangedProjPref;
+
+    [SerializeField]
+    private GameObject _bossMeleeProjPref;
+
+    [SerializeField]
+    private GameObject _bossRangedProjPref;
+
+    [SerializeField]
+    private GameObject _blueExpPref;
+
+    [SerializeField]
+    private GameObject _greenExpPref;
+
+    [SerializeField]
+    private GameObject _yellowExpPref;
 
     [SerializeField]
     private MonoBehaviour[] exceptions;
@@ -101,17 +136,13 @@ public class GM : MonoBehaviour
 
     private bool _isGamePaused = false;
 
-    private int _initSize = 192;
-
-    private int _maxSize = 384;
-
     #endregion
 
     #region CSV Data
 
     public Dictionary<int, LvCol> LevelData { get; private set; }
 
-    public Dictionary<(int, int), MobCol> MobData { get; private set; }
+    public Dictionary<string, MobCol> MobData { get; private set; }
 
     public Dictionary<(string, int), float> SkillData { get; private set; }
 
@@ -131,28 +162,35 @@ public class GM : MonoBehaviour
         SkillData = LoadSkilDataCSV();
         MobSpawnData = LoadMobSpawnDataCSV();
 
-        blueMobs = new HashSet<GameObject>();
-        greenMobs = new HashSet<GameObject>();
-        yellowMobs = new HashSet<GameObject>();
+        spawnedMobs = new HashSet<GameObject>();
 
-        bossProjPool = new ObjectPool<GameObject>(
-            createFunc: () => Instantiate(_bossProjPref),
-            actionOnGet: (obj) => obj.SetActive(true),
-            actionOnRelease: (obj) => obj.SetActive(false),
-            actionOnDestroy: (obj) => Destroy(obj),
-            collectionCheck: false, // set true
-            defaultCapacity: _initSize,
-            maxSize: _maxSize
-        );
+        monPool = new Dictionary<string, ObjectPool<GameObject>>();
+        InitMonPool(_blueMeleeMobPref, 28, "BlueMelee");
+        InitMonPool(_blueRangedMobPref, 28, "BlueRanged");
+        InitMonPool(_greenMeleeMobPref, 26, "GreenMelee");
+        InitMonPool(_greenRangedMobPref, 26, "GreenRanged");
+        InitMonPool(_yellowMeleeMobPref, 16, "YellowMelee");
+        InitMonPool(_yellowRangedMobPref, 16, "YellowRanged");
+        InitMonPool(_bossPref, 1, "Boss");
 
-        for(int i = 0; i < 192; ++i) { // 초기화
-            GameObject obj = bossProjPool.Get();
-            bossProjPool.Release(obj);
-        }
+        monProjPool = new Dictionary<string, ObjectPool<GameObject>>();
+        InitMonProjPool(_blueMeleeMobPref, _blueMeleeProjPref, 28, "BlueMelee");
+        InitMonProjPool(_blueRangedMobPref, _blueRangedProjPref, 28, "BlueRanged");
+        InitMonProjPool(_greenMeleeMobPref, _greenMeleeProjPref, 26, "GreenMelee");
+        InitMonProjPool(_greenRangedMobPref, _greenRangedProjPref, 26, "GreenRanged");
+        InitMonProjPool(_yellowMeleeMobPref, _yellowMeleeProjPref, 16, "YellowMelee");
+        InitMonProjPool(_yellowRangedMobPref, _yellowRangedProjPref, 16, "YellowRanged");
+        InitMonProjPool(_bossPref, _bossMeleeProjPref, 1, "BossMelee");
+        InitMonProjPool(_bossPref, _bossRangedProjPref, 192, "BossRanged");
+        InitMonProjPool(_bossPref, _bossMeleeProjPref, 1, "BossRush");
+
+        mobExpPool = new Dictionary<Zone, ObjectPool<GameObject>>();
+        InitMobExpPool(_blueMeleeMobPref, _blueExpPref, 56, Zone.Blue);
+        InitMobExpPool(_greenMeleeMobPref, _greenExpPref, 52, Zone.Green);
+        InitMobExpPool(_yellowMeleeMobPref, _yellowExpPref, 32, Zone.Yellow);
     }
 
     private void Start() {
-
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>();
         _weapon.OnWeaponLevelUp += HandleWeaponLevelUp;
 
@@ -171,6 +209,122 @@ public class GM : MonoBehaviour
         UpdateMonsterMax();
         MonsterSpawn();
     }
+
+    #region Pool Init
+
+    private void InitMonPool(GameObject pref, int capacity, string poolkey) {
+        var pool = new ObjectPool<GameObject>(
+            createFunc: () => {
+                var obj = Instantiate(pref); // 풀에 저장할때만 초기화해 최적화
+                obj.GetComponent<MonsterBase>().Initialize(); // abstract를 awake에서 실행하면 위험하므로 외부에서 실행
+                return obj;
+            },
+            actionOnGet: (obj) => obj.SetActive(true),
+            actionOnRelease: (obj) => obj.SetActive(false),
+            actionOnDestroy: (obj) => Destroy(obj),
+            collectionCheck: false,
+            defaultCapacity: capacity,
+            maxSize: capacity * 2
+        );
+
+        List<GameObject> preloaded = new List<GameObject>();
+
+        for(int i = 0; i < capacity; ++i) {
+            GameObject obj = pool.Get();
+            preloaded.Add(obj);
+        }
+
+        foreach(var obj in preloaded) {
+            pool.Release(obj);
+        }
+
+        monPool[poolkey] = pool;
+    }
+
+    private void InitMonProjPool(GameObject basepref, GameObject projpref, int capacity, string poolkey) {
+        var instBase = Instantiate(basepref);
+        var initBase = instBase.GetComponent<MonsterBase>();
+        initBase.Initialize();
+        Ability baseAbility = initBase.ability.Clone();
+        Destroy(instBase);
+        
+        var pool = new ObjectPool<GameObject>(
+            createFunc: () => {
+                var obj = Instantiate(projpref);
+                var newAbility = baseAbility.Clone();
+                if(poolkey == "BossRanged") {
+                    newAbility.SetLifeTime(3f);
+                    newAbility.SetAR(3f);
+                    newAbility.SetAP(10f);
+                }else if(poolkey == "BossRush") {
+                    newAbility.SetLifeTime(1f);
+                    newAbility.SetAR(3f);
+                    newAbility.SetAP(100f);
+                }
+                obj.GetComponent<MonsterProjBase>().SetAbility(newAbility);
+                obj.GetComponent<MonsterProjBase>().SetPoolKey(poolkey);
+                return obj;
+            },
+            actionOnGet: (obj) => obj.SetActive(true),
+            actionOnRelease: (obj) => obj.SetActive(false),
+            actionOnDestroy: (obj) => Destroy(obj),
+            collectionCheck: false,
+            defaultCapacity: capacity,
+            maxSize: capacity * 2
+        );
+
+        List<GameObject> preloaded = new List<GameObject>();
+
+        for(int i = 0; i < capacity; ++i) {
+            GameObject obj = pool.Get();
+            preloaded.Add(obj);
+        }
+
+        foreach(var obj in preloaded) {
+            pool.Release(obj);
+        }
+
+        monProjPool[poolkey] = pool;
+    }
+    
+    private void InitMobExpPool(GameObject basepref, GameObject pref, int capacity, Zone zone) {
+        var instBase = Instantiate(basepref);
+        var initBase = instBase.GetComponent<MonsterBase>();
+        initBase.Initialize();
+        Ability baseAbility = initBase.ability.Clone();
+        Destroy(instBase);
+
+        var pool = new ObjectPool<GameObject>(
+            createFunc: () => {
+                var obj = Instantiate(pref);
+                Ability newAbility = baseAbility.Clone();
+                obj.GetComponent<EXP>().SetExp(newAbility.Exp);
+                obj.GetComponent<EXP>().SetPoolKey(zone);
+                return obj;
+            },
+            actionOnGet: (obj) => obj.SetActive(true),
+            actionOnRelease: (obj) => obj.SetActive(false),
+            actionOnDestroy: (obj) => Destroy(obj),
+            collectionCheck: false,
+            defaultCapacity: capacity,
+            maxSize: capacity * 2
+        );
+
+        List<GameObject> preloaded = new List<GameObject>();
+
+        for(int i = 0; i < capacity; ++i) {
+            GameObject obj = pool.Get();
+            preloaded.Add(obj);
+        }
+
+        foreach(var obj in preloaded) {
+            pool.Release(obj);
+        }
+
+        mobExpPool[zone] = pool;
+    }
+
+    #endregion
 
     #region CSV Load
 
@@ -208,7 +362,7 @@ public class GM : MonoBehaviour
         return result;
     }
 
-    private Dictionary<(int, int), MobCol> LoadMobDataCSV() {
+    private Dictionary<string, MobCol> LoadMobDataCSV() {
         TextAsset csvFile = Resources.Load<TextAsset>("MobData");
         if(csvFile == null) {
             Debug.Log("Cannot find csv data");
@@ -219,7 +373,7 @@ public class GM : MonoBehaviour
             Debug.Log("Cannot read csv data");
         }
 
-        var result = new Dictionary<(int, int), MobCol>();
+        var result = new Dictionary<string, MobCol>();
         bool isFirstLine = true;
 
         while(reader.Peek() > -1) {
@@ -231,12 +385,12 @@ public class GM : MonoBehaviour
             }
 
             string[] values = line.Split(",");
-            if(values.Length != 5) {
+            if(values.Length != 4) {
                 Debug.Log("Data not fure");
                 continue;
             }
-            MobCol mobCol = new MobCol(float.Parse(values[2]), float.Parse(values[3]), float.Parse(values[4]));
-            result.Add((int.Parse(values[0]), int.Parse(values[1])), mobCol);
+            MobCol mobCol = new MobCol(float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+            result.Add(values[0], mobCol);
         }
 
         return result;
@@ -317,32 +471,24 @@ public class GM : MonoBehaviour
     private void MonsterSpawn() {
         if(Time.timeSinceLevelLoad >= 355f) return; // 수정 - 355f
 
-        while(blueMobs.Count < _blueMaxNum) {
-            GameObject pref = Random.value > 0.5f ? _blueMeleeMobPref : _blueRangedMobPref;
-            GameObject instMob = Instantiate(pref, _blueSpawnPoint[_blueLastIndex].position, Quaternion.identity);
-            blueMobs.Add(instMob);
-            instMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
-            _blueLastIndex = (_blueLastIndex + 1) % _blueSpawnPoint.Length;
-        }
+        MonsterSpawner("BlueMelee", "BlueRanged", _blueMaxNum, _blueSpawnPoint, ref _blueLastIndex);
 
         if(Time.timeSinceLevelLoad / 120 >= 1 || _isBlueZoneOut) {
-            while(greenMobs.Count < _greenMaxNum) {
-                GameObject pref = Random.value > 0.5f ? _greenMeleeMobPref : _greenRangedMobPref;
-                GameObject instMob = Instantiate(pref, _greenSpawnPoint[_greenLastIndex].position, Quaternion.identity);
-                greenMobs.Add(instMob);
-                instMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
-                _greenLastIndex = (_greenLastIndex + 1) % _greenSpawnPoint.Length;
-            }
+            MonsterSpawner("GreenMelee", "GreenRanged", _greenMaxNum, _greenSpawnPoint, ref _greenLastIndex);
         }
 
         if(Time.timeSinceLevelLoad / 240 >= 1 || _isGreenZoneOut) {
-            while(yellowMobs.Count < _yellowMaxNum) {
-                GameObject pref = Random.value > 0.5f ? _yellowMeleeMobPref : _yellowRangedMobPref;
-                GameObject instMob = Instantiate(pref, _yellowSpawnPoint[_yellowLastIndex].position, Quaternion.identity);
-                yellowMobs.Add(instMob);
-                instMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
-                _yellowLastIndex = (_yellowLastIndex + 1) % _yellowSpawnPoint.Length;
-            }
+            MonsterSpawner("YellowMelee", "YellowRanged", _yellowMaxNum, _yellowSpawnPoint, ref _yellowLastIndex);
+        }
+    }
+
+    private void MonsterSpawner(string poolkey1, string poolkey2, int maxnum, Transform[] spawnpoints, ref int lastindex) {
+        while(monPool[poolkey1].CountActive + monPool[poolkey2].CountActive < maxnum) {
+            string mobType = Random.value > 0.5f ? poolkey1 : poolkey2;
+            GameObject spawnedMob = monPool[mobType].Get();
+            spawnedMob.transform.SetPositionAndRotation(spawnpoints[lastindex].position, Quaternion.identity);
+            spawnedMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
+            lastindex = (lastindex + 1) % spawnpoints.Length;
         }
     }
 
@@ -376,25 +522,19 @@ public class GM : MonoBehaviour
     }
 
     private void BossSpawn() {
-        
-        IEnumerable<GameObject> allMonsters = blueMobs.Concat(greenMobs).Concat(yellowMobs).ToList();
-        foreach(var monster in allMonsters) {
-            Destroy(monster);
-        }
-
-        blueMobs.Clear();
-        greenMobs.Clear();
-        yellowMobs.Clear();
-
+        OnBossSpawn.Invoke(); // 전부 self release
         _uiManager.SetBossHPUI();
-        GameObject instBoss = Instantiate(_bossPref, new Vector3(0, 4f, 0), Quaternion.identity);
-        instBoss.GetComponent<Boss>().OnBossDeath += HandleBossDeath;
+
+        GameObject spawnedBoss = monPool["Boss"].Get();
+        spawnedBoss.transform.position = new Vector3(0, 4, 0);
+        spawnedBoss.transform.rotation = Quaternion.identity;
+        spawnedBoss.GetComponent<Boss>().OnBossDeath += HandleBossDeath; // InitMonPool에서 임시로 생성하므로 여기서 바인딩
 
         _weapon.transform.position = new Vector3(0, 0, 0);
         _nexus.transform.position = new Vector3(0, -4, 0);
         StartCoroutine(_weapon.SmoothCameraTransition(_weapon.transform.position, 0.3f));
-        
     }
+
     #endregion
 
     #region Game Control
@@ -443,13 +583,9 @@ public class GM : MonoBehaviour
 
     #region Handler
 
-    public void HandleMonsterDeath(MonsterBase mob) {
-        switch(mob.GetZone()) {
-            case Zone.Blue: blueMobs.Remove(mob.gameObject); break;
-            case Zone.Green: greenMobs.Remove(mob.gameObject); break;
-            case Zone.Yellow: yellowMobs.Remove(mob.gameObject); break;
-            default: throw new NotSupportedException();
-        }
+    public void HandleMonsterDeath(string poolkey, GameObject mob) {
+        mob.GetComponent<MonsterBase>().OnMonsterDeath -= HandleMonsterDeath;
+        monPool[poolkey].Release(mob);
         killCount++;
     }
 
@@ -467,9 +603,10 @@ public class GM : MonoBehaviour
         _uiManager.DrawGameOverPanel();
     }
 
-    public void HandleBossDeath() {
+    public void HandleBossDeath(Boss boss) {
         Invoke(nameof(PauseGame), 1f);
         Invoke(nameof(InvokeClearPanel), 1f);
+        boss.OnBossDeath -= HandleBossDeath;
     }
 
     private void InvokeClearPanel() {

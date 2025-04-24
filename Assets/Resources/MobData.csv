@@ -1,7 +1,8 @@
-﻿blue=0 green=1 yellow=2,melee=0 ranged=1,hp,ap,exp
-0,0,15,15,1
-0,1,10,10,1
-1,0,40,20,4
-1,1,30,15,4
-2,0,100,30,20
-2,1,60,20,20
+﻿name,hp,ap,exp
+BlueMelee,15,15,1
+BlueRanged,10,10,1
+GreenMelee,40,20,4
+GreenRanged,30,15,4
+YellowMelee,100,30,20
+YellowRanged,60,20,20
+Boss,10000,50,0

@@ -49,7 +49,7 @@ public class Nexus : MonoBehaviour
         ability = new Ability();
         ability.SetMaxHP(1000f);
         ability.SetHP(1000f);
-        //ability.SetHP(100000f);//test
+        //ability.SetMaxHP(100000f); ability.SetHP(100000f); // for test
         ability.SetMS(1.5f);
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -97,8 +97,9 @@ public class Nexus : MonoBehaviour
         }
 
         if(collision.CompareTag("EXP")) {
-            _weapon.HandleExpGet(collision.GetComponent<EXP>().exp);
-            Destroy(collision.gameObject);
+            EXP collExp = collision.GetComponent<EXP>();
+            _weapon.HandleExpGet(collExp.exp);
+            GM.I.mobExpPool[collExp.poolKey].Release(collision.gameObject);
         }
     }
 

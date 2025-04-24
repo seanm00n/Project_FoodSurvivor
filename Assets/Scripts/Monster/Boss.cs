@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
-using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class Boss : MonsterBase {
-    public event Action OnBossDeath;
+
+    public event Action<Boss> OnBossDeath;
 
     public float lastSkillUse { get; private set; }
 
@@ -17,10 +15,10 @@ public class Boss : MonsterBase {
 
     private SpriteRenderer _telegraphSR;
 
-    private ObjectPool<GameObject> _multiProjPool;
+    public override string poolKey { get; protected set; } = "Boss";
 
-
-    protected override void Initialize() {
+    public override void Initialize() {
+        base.Initialize();
         ability.SetAP(50f);
         ability.SetHP(10000f);
         ability.SetMaxHP(10000f);
@@ -29,16 +27,22 @@ public class Boss : MonsterBase {
         ability.SetMS(1.25f); // move speed
         ability.SetLifeTime(1.5f); // proj lifetime
         ability.SetExp(0);
-
         _rangeOffset = 2f;
-        lastSkillUse = Time.timeSinceLevelLoad;
-        _telegraphObject.SetActive(false);
         _telegraphSR = _telegraphObject.GetComponent<SpriteRenderer>();
-        _multiProjPool = GM.I.bossProjPool;
     }
 
-    protected override void HandleDeath() {
-        OnBossDeath?.Invoke();
+    protected override void OnEnable() {
+        base.OnEnable();
+        lastSkillUse = Time.timeSinceLevelLoad;
+        _telegraphObject.SetActive(false);
+    }
+
+    protected override void OnDisable() {
+        StopAllCoroutines();
+    }
+
+    protected override void HandleDeath() { // ¼öÁ¤
+        OnBossDeath.Invoke(this);
         _state = State.Death;
         SetState(State.Death);
         GetComponent<BoxCollider2D>().enabled = false;
@@ -72,18 +76,9 @@ public class Boss : MonsterBase {
 
         for(int i = 0; i < 8; ++i) {
             for(int index = 0; index < 24; ++index) {
-                Ability newAbility = ability.Clone();
-                newAbility.SetLifeTime(3f);
-                newAbility.SetAR(3f);
-                newAbility.SetAP(10f);
-
-                GameObject instProj = _multiProjPool.Get();
-                instProj.transform.position = transform.position;
-                instProj.transform.rotation = Quaternion.Euler(0f, 0f, (index * 15) + (i * 5));
-
-                MonsterProjBase instProjBase = instProj.GetComponent<MonsterProjBase>();
-                instProjBase.SetAbility(newAbility);
-                instProjBase.InitSpawnTime();
+                GameObject spawnedProj = GM.I.monProjPool["BossRanged"].Get();
+                spawnedProj.transform.position = transform.position;
+                spawnedProj.transform.rotation = Quaternion.Euler(0f, 0f, (index * 15) + (i * 5));
             }
             yield return new WaitForSeconds(0.125f);
         }
@@ -100,13 +95,9 @@ public class Boss : MonsterBase {
         _telegraphSR.flipX = _spriteRenderer.flipX;
         _telegraphObject.SetActive(true);
         yield return new WaitForSeconds(1f);
-        
-        GameObject instProj = Instantiate(_projPref, transform);
-        Ability newAbility = ability.Clone();
-        newAbility.SetLifeTime(1f);
-        newAbility.SetAR(3f);
-        newAbility.SetAP(100f);
-        instProj.GetComponent<MonsterProjBase>().SetAbility(newAbility);
+
+        GameObject spawnedProj = GM.I.monProjPool["BossRush"].Get();
+        spawnedProj.transform.SetParent(transform, false);
         
         float dist = 6f;
         float duration = 1f;
