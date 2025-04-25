@@ -131,6 +131,7 @@ public class Nexus : MonoBehaviour
         _isDeath = true;
         _animator.SetTrigger("Die");
         _animator.SetBool("Walk", false);
+        StopAllCoroutines();
         StartCoroutine(DestroyNexus(_animator.GetCurrentAnimatorStateInfo(0).length));
     }
 

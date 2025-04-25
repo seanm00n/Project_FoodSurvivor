@@ -179,7 +179,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 4723107735738678597, guid: f33ded1711724dcd86d42be9eae82a85, type: 3}
+  m_Sprite: {fileID: -2978808618200810919, guid: f33ded1711724dcd86d42be9eae82a85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -202,10 +202,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CategoryHash: 0.009161512
+  m_CategoryHash: 4.7221487e-14
   m_labelHash: 0.00000040954276
   m_SpriteKey: 0
-  m_SpriteHash: 288431053
+  m_SpriteHash: 567518536
 --- !u!1 &7614071129163002635
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +305,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.029554963, y: 0.529303}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}

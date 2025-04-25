@@ -6,8 +6,6 @@ using System.Linq;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.Pool;
-using System.Collections;
-using UnityEditor;
 
 public class GM : MonoBehaviour
 {
