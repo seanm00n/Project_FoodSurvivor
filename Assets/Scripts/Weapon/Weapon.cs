@@ -13,7 +13,9 @@ public class Weapon : MonoBehaviour
     public Ability ability { get; private set; }
 
     public Dictionary<Skill, WeaponProjBase> instSkills { get; private set; }
-    
+
+    public bool touchEnable { get; private set; } = true;
+
     #region SerializeField
 
     [SerializeField]
@@ -43,20 +45,21 @@ public class Weapon : MonoBehaviour
 
     private Camera _mainCamera;
 
+    private CameraMovement _cameraComp;
+
     private Nexus _nexus;
 
     private AudioSource _audioSource;
 
     #endregion
 
-    #region Member variable
+    #region Member var
 
     private bool _isSelected = false;
 
     private float _lastSwitchTime = -60f;
 
     private int _weaponMaxLv = 30;
-
 
     #endregion
 
@@ -76,8 +79,10 @@ public class Weapon : MonoBehaviour
         instSkills = new Dictionary<Skill, WeaponProjBase>();
     }
 
-    private void Start() {       
-        SetCamera();
+    private void Start() {
+        _mainCamera = Camera.main;
+        _cameraComp = _mainCamera.GetComponent<CameraMovement>();
+
         ability.SetAP(GM.I.LevelData[ability.Lv].AP);
         ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
 
@@ -149,13 +154,6 @@ public class Weapon : MonoBehaviour
         instSkills[skill].OnLevelUp();
     }
 
-    private void SetCamera() {
-        _mainCamera = Camera.main;
-        if(_mainCamera == null) {
-            Debug.Log("no main camear detected");
-        }
-    }
-
     public bool IsPointerOverUIObject() {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
 #if UNITY_ANDROID
@@ -170,6 +168,8 @@ public class Weapon : MonoBehaviour
     }
 
     private void HandleMouseInput() {
+        if(!touchEnable) return;
+
         if(Input.GetMouseButtonDown(0) && !IsPointerOverUIObject()) {
             _isSelected = true;
         }else if(Input.GetMouseButtonUp(0)) {
@@ -183,6 +183,8 @@ public class Weapon : MonoBehaviour
     }
 
     private void HandleTouchInput() {
+        if(!touchEnable) return;
+
         if(Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
 
@@ -214,44 +216,41 @@ public class Weapon : MonoBehaviour
         return _mainCamera.ScreenToWorldPoint(mouseScreenPosition);
     }
 
-    
-
-    public void SwitchingAction() {
+    public void HandleSwitching() {
         if(Time.timeSinceLevelLoad - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
             _lastSwitchTime = Time.timeSinceLevelLoad;
-
             _audioSource.PlayOneShot(_switchingSound);
-
-            Vector3 tmpPos = transform.position;
-            transform.position = _nexus.transform.position;
-            _nexus.transform.position = tmpPos;
-
-            StartCoroutine(SmoothCameraTransition(transform.position, 0.3f));
+            StartCoroutine(SwitchingLerp(0.3f));
         }
     }
 
-    public IEnumerator SmoothCameraTransition(Vector3 targetPos, float duration) {
-        Vector3 startPos = _mainCamera.transform.position;
-        float elapsedTime = 0f;
+    private IEnumerator SwitchingLerp(float duration) {
+        touchEnable = false;
+        Vector3 weaponPos = transform.position;
+        Vector3 nexusPos = _nexus.transform.position;
 
-        while(elapsedTime < duration) {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / duration;
+        float elapsed = 0f;
 
-            // Lerp를 사용하되, z 값은 기존 값을 유지
-            _mainCamera.transform.position = new Vector3(
-                Mathf.Lerp(startPos.x, targetPos.x, t),
-                Mathf.Lerp(startPos.y, targetPos.y, t),
-                startPos.z // z 값은 변하지 않음
-            );
+        while(elapsed < duration) {
+            float t = elapsed / duration;
 
-            yield return null; // 한 프레임 대기
+            transform.position = Vector3.Lerp(weaponPos, nexusPos, t);
+            _nexus.transform.position = Vector3.Lerp(nexusPos, weaponPos, t);
+
+            elapsed += Time.deltaTime;
+            yield return null;
         }
+
+        transform.position = nexusPos;
+        _nexus.transform.position = weaponPos;
+        touchEnable = true;
+
+        StartCoroutine(_cameraComp.SmoothCameraTransition(transform.position, 0.2f));
     }
 
-    public float GetSwitchLeft() { // UI 확인용
+    public float GetSwitchCool() { // UI 확인용
         return instSkills[Skill.Switching].GetAP() - (Time.timeSinceLevelLoad - _lastSwitchTime);
     }
 
-    
+    public void SetTouchEnable(bool value) => touchEnable = value;
 }

@@ -1,8 +1,8 @@
 ﻿name,hp,ap,exp
 BlueMelee,15,15,1
-BlueRanged,10,10,1
+BlueRanged,10,5,1
 GreenMelee,40,20,4
-GreenRanged,30,15,4
+GreenRanged,30,10,4
 YellowMelee,100,30,20
-YellowRanged,60,20,20
+YellowRanged,60,15,20
 Boss,10000,50,0

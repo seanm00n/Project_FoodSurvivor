@@ -8,6 +8,8 @@ public class Nexus : MonoBehaviour
 
     public event Action<Nexus> OnNexusDeath;
 
+    public event Action OnGameOver;
+
     public event Action<Nexus> OnNexusHit;
 
     public Ability ability { get; private set; }
@@ -25,16 +27,19 @@ public class Nexus : MonoBehaviour
 
     private AudioSource _audioSource;
 
+    private BoxCollider2D _coll;
+
     #endregion
 
-    #region Member variable
+    #region Member var
 
     private float _moveOffset = 1f;
 
-    float _duration = 1f; // 주기
+    private float _duration = 1f; // 주기
 
-    float _elapsedTime = 0f; // 경과 시간
+    private float _elapsedTime = 0f; // 경과 시간
 
+    private bool _isDeath = false;
 
     #endregion
 
@@ -45,26 +50,29 @@ public class Nexus : MonoBehaviour
         }
         I = this;
 
-
         ability = new Ability();
         ability.SetMaxHP(1000f);
         ability.SetHP(1000f);
+        //ability.SetMaxHP(1); ability.SetHP(1); // for test
         //ability.SetMaxHP(100000f); ability.SetHP(100000f); // for test
         ability.SetMS(1.5f);
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
+        _coll = GetComponent<BoxCollider2D>();
     }
 
     private void Start() {
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>(); // 초기화 시점 문제로 사용
         _audioSource = GetComponent<AudioSource>();
-        SetState(State.Moving);
+        _animator.SetBool("Walk", true);
     }
 
     private void Update() {
-        Movement();
-        Rotation();
+        if(!_isDeath) { 
+            Movement();
+            Rotation();
+        }
     }
 
     private void Movement() {
@@ -118,29 +126,21 @@ public class Nexus : MonoBehaviour
     }
 
     private void HandleDeath() {
-        SetState(State.Death);
-        StartCoroutine(InvokeDeath());
+        OnNexusDeath?.Invoke(this);
+        _coll.enabled = false;
+        _isDeath = true;
+        _animator.SetTrigger("Die");
+        _animator.SetBool("Walk", false);
+        StartCoroutine(DestroyNexus(_animator.GetCurrentAnimatorStateInfo(0).length));
+    }
+
+    private IEnumerator DestroyNexus(float value) {
+        yield return new WaitForSeconds(value);
+        OnGameOver.Invoke();
+        Destroy(gameObject);
     }
 
     private void OnDestroy() {
         I = null;
-    }
-
-    private IEnumerator InvokeDeath() {
-        yield return new WaitForSeconds(0.5f);
-        OnNexusDeath?.Invoke(this);
-        Destroy(gameObject);
-    }
-
-    public void SetState(State state) {
-        foreach(var variable in new[] { "Walk", "Die" }) {
-            _animator.SetBool(variable, false);
-        }
-
-        switch(state) {
-            case State.Moving: _animator.SetBool("Walk", true); break;
-            case State.Death: _animator.SetBool("Die", true); break;
-            default: throw new NotSupportedException();
-        }
     }
 }

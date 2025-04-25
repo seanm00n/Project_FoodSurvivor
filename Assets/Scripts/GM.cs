@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.Pool;
+using System.Collections;
 
 public class GM : MonoBehaviour
 {
@@ -112,9 +113,11 @@ public class GM : MonoBehaviour
 
     private Transform[] _yellowSpawnPoint;
 
+    private CameraMovement _cameraComp;
+
     #endregion
 
-    #region Member variable
+    #region Member var
 
     private int _blueMaxNum = 0;
 
@@ -197,10 +200,13 @@ public class GM : MonoBehaviour
         _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
         _nexus.OnNexusHit += HandleNexusHit;
         _nexus.OnNexusDeath += HandleNexusDeath;
+        _nexus.OnGameOver += HandleGameOver;
 
         _blueSpawnPoint = _blueZone.GetComponentsInChildren<Transform>().Where(t => t != _blueZone.transform).ToArray();
         _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
         _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
+
+        _cameraComp = Camera.main.GetComponent<CameraMovement>();
 
         Invoke(nameof(BossSpawn), 360f); // 수정 - 360f
     }
@@ -528,11 +534,13 @@ public class GM : MonoBehaviour
         GameObject spawnedBoss = monPool["Boss"].Get();
         spawnedBoss.transform.position = new Vector3(0, 4, 0);
         spawnedBoss.transform.rotation = Quaternion.identity;
-        spawnedBoss.GetComponent<Boss>().OnBossDeath += HandleBossDeath; // InitMonPool에서 임시로 생성하므로 여기서 바인딩
+        Boss bossComp = spawnedBoss.GetComponent<Boss>();
+        bossComp.OnBossDeath += HandleBossDeath; // InitMonPool에서 임시로 생성하므로 여기서 바인딩
+        bossComp.OnGameClear += HandleGameClear;
 
         _weapon.transform.position = new Vector3(0, 0, 0);
         _nexus.transform.position = new Vector3(0, -4, 0);
-        StartCoroutine(_weapon.SmoothCameraTransition(_weapon.transform.position, 0.3f));
+        StartCoroutine(_cameraComp.SmoothCameraTransition(_weapon.transform.position, 0.3f));
     }
 
     #endregion
@@ -599,17 +607,32 @@ public class GM : MonoBehaviour
     }
 
     public void HandleNexusDeath(Nexus instance) {
+        _weapon.SetTouchEnable(false);
+
+        Vector3 nexusPos = _nexus.transform.position;
+        nexusPos.z = _cameraComp.transform.position.z;
+        _cameraComp.gameObject.transform.position = nexusPos;
+
+        Time.timeScale = 0.25f;
+    }
+
+    public void HandleGameOver() {
         PauseGame();
         _uiManager.DrawGameOverPanel();
     }
 
     public void HandleBossDeath(Boss boss) {
-        Invoke(nameof(PauseGame), 1f);
-        Invoke(nameof(InvokeClearPanel), 1f);
-        boss.OnBossDeath -= HandleBossDeath;
+        _weapon.SetTouchEnable(false);
+
+        Vector3 bossPos = boss.transform.position;
+        bossPos.z = _cameraComp.transform.position.z;
+        _cameraComp.gameObject.transform.position = bossPos;
+
+        Time.timeScale = 0.25f;
     }
 
-    private void InvokeClearPanel() {
+    public void HandleGameClear() {
+        PauseGame();
         _uiManager.DrawClearPanel();
     }
 

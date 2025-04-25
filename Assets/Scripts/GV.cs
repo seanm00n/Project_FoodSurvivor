@@ -1,6 +1,6 @@
 
 public enum State {
-    Idle, Attack, Moving, Death
+    Attack, Moving, Death
 }
 
 public enum Debuff {

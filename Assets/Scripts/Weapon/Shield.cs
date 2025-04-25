@@ -12,7 +12,8 @@ public class Shield : MonoBehaviour, IBattle {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("MonsterProj")) {
-            Destroy(collision.gameObject);
+            MonsterProjBase collBase = collision.GetComponent<MonsterProjBase>();
+            GM.I.monProjPool[collBase.poolKey].Release(collision.gameObject);
         }
 
         if(collision.CompareTag("Monster")) {

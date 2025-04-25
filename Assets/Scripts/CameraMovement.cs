@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -33,8 +34,7 @@ public class CameraMovement : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        
-        if(_player == null) return;
+        if(_player == null || !_player.touchEnable) return;
 
         Vector3 targetPos = new Vector3(_player.transform.position.x, _player.transform.position.y, transform.position.z);
         float distance = Vector2.Distance(_player.transform.position, transform.position);
@@ -47,5 +47,25 @@ public class CameraMovement : MonoBehaviour
 
             transform.position = Vector3.SmoothDamp(transform.position, clampPos, ref _velocity, _smoothTime);
         }
+    }
+
+    public IEnumerator SmoothCameraTransition(Vector3 targetPos, float duration) {
+        Vector3 startPos = transform.position;
+        float elapsedTime = 0f;
+
+        while(elapsedTime < duration) {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+
+            transform.position = new Vector3(
+                Mathf.Lerp(startPos.x, targetPos.x, t),
+                Mathf.Lerp(startPos.y, targetPos.y, t),
+                startPos.z // z 값은 변하지 않음
+            );
+
+            yield return null;
+        }
+
+        transform.position = new Vector3(targetPos.x, targetPos.y, transform.position.z);
     }
 }

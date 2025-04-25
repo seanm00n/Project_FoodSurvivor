@@ -154,7 +154,7 @@ public class UIManager : MonoBehaviour
     }
 
     private void SetSwitchCoolText() {
-        int cooltime = Mathf.FloorToInt(_weapon.GetSwitchLeft());
+        int cooltime = Mathf.FloorToInt(_weapon.GetSwitchCool());
 
         if(cooltime > 0) {
             _switchCoolText.text = cooltime.ToString();
@@ -250,7 +250,7 @@ public class UIManager : MonoBehaviour
 
     #region Button interaction
 
-    public void OnSwitchButton() => _weapon.SwitchingAction();
+    public void OnSwitchButton() => _weapon.HandleSwitching();
 
     public void OnPauseButton() {
         _audioSource.PlayOneShot(_buttonSound);
@@ -274,20 +274,21 @@ public class UIManager : MonoBehaviour
     public void OnResumeButton() {
         _audioSource.PlayOneShot(_buttonSound);
         _pausePanel.SetActive(false);
+        _weapon.SetTouchEnable(true);
         GM.I.ResumeGame();
     }
 
     public void OnQuitButton() {
         _audioSource.PlayOneShot(_buttonSound);
         _pausePanel.SetActive(false);
-        _weapon.gameObject.SetActive(false);
+        _weapon.SetTouchEnable(false);
         StartCoroutine(PlayFadeOut());
     }
 
     public void OnConfirmButton() {
         _audioSource.PlayOneShot(_buttonSound);
         _gameOverPanel.SetActive(false);
-        _weapon.gameObject.SetActive(false);
+        _weapon.SetTouchEnable(false);
         StartCoroutine(PlayFadeOut());
     }
 
@@ -300,7 +301,7 @@ public class UIManager : MonoBehaviour
     public void OnMainButton() {
         _audioSource.PlayOneShot(_buttonSound);
         _gameClearPanel.SetActive(false);
-        _weapon.gameObject.SetActive(false);
+        _weapon.SetTouchEnable(false);
         StartCoroutine(PlayFadeOut());
     }
 

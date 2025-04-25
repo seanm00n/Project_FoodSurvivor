@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour
@@ -70,12 +71,12 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     protected virtual void OnEnable() { // 매번 초기화 필요한것들
-        ability.SetHP(GM.I.MobData[poolKey].HP);
+        if(ability != null) { ability.SetHP(ability.MaxHP); } else { Debug.Log("anility Not Initialized"); }
         _debuffList = new HashSet<Debuff>();
-        SetState(State.Moving);
+        _animator.SetBool("Walk", true);
+        _state = State.Moving;
         _boxColl.enabled = true;
         _lastAttackTime = 0f;
-        _state = State.Idle;
     }
 
     protected virtual void OnDisable() {
@@ -152,13 +153,14 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected virtual void HandleDeath() {
         _state = State.Death;
-        SetState(State.Death);
         _boxColl.enabled = false;
-        StartCoroutine(DropAndRelease());
+        _animator.SetTrigger("Die");
+        _animator.SetBool("Walk", false);
+        StartCoroutine(DropAndRelease(_animator.GetCurrentAnimatorStateInfo(0).length));
     }
 
-    protected IEnumerator DropAndRelease() {
-        yield return new WaitForSeconds(0.5f);
+    protected IEnumerator DropAndRelease(float value) {
+        yield return new WaitForSeconds(value);
         GameObject spawnedExp = GM.I.mobExpPool[_zone].Get();
         spawnedExp.transform.position = transform.position;
         OnMonsterDeath.Invoke(poolKey, gameObject);
@@ -168,8 +170,8 @@ public abstract class MonsterBase : MonoBehaviour
         if(_state == State.Death || _state == State.Attack) return;
 
         if(_nexus == null) {
-            _state = State.Idle;
-            return;
+            _nexus = Nexus.I;
+            if(_nexus == null) return;
         }
 
         if(this is Boss boss) {
@@ -180,9 +182,8 @@ public abstract class MonsterBase : MonoBehaviour
 
         float distance = Vector3.Distance(_nexus.transform.position, transform.position);
 
-        if(distance > ability.AR + _rangeOffset) { //_nexusColl.size.x + 
+        if(distance > ability.AR + _rangeOffset) {
             _state = State.Moving;
-            SetState(State.Moving);
             Vector3 direction = (_nexus.transform.position - transform.position).normalized;
             float resultSpeed = ability.MS;
             if(_debuffList.Contains(Debuff.Slow)) resultSpeed /= 2;
@@ -209,6 +210,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected virtual void HandleAttack() {
         if(_state == State.Death) return;
+
         _state = State.Attack;
         _animator.SetTrigger("Attack");
 
@@ -225,9 +227,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected void ResetState() {
         if(_state == State.Death) return;
-
         _state = State.Moving;
-        SetState(State.Moving);
     }
 
 
@@ -237,18 +237,6 @@ public abstract class MonsterBase : MonoBehaviour
 
     public void RemoveDebuff(Debuff debuff) {
         _debuffList.Remove(debuff); // return bool
-    }
-    
-    public void SetState(State state) {
-        foreach(var variable in new[] { "Idle", "Walk", "Die" }) {
-            _animator.SetBool(variable, false);
-        }
-
-        switch(state) {
-            case State.Moving: _animator.SetBool("Walk", true); break;
-            case State.Death: _animator.SetBool("Die", true); break;
-            default: throw new NotSupportedException();
-        }
     }
 
     public Zone GetZone() => _zone; // 필요?

@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
+using UnityEditor.Playables;
 using UnityEngine;
 
 public class Boss : MonsterBase {
 
     public event Action<Boss> OnBossDeath;
+
+    public event Action OnGameClear;
 
     public float lastSkillUse { get; private set; }
 
@@ -22,6 +25,7 @@ public class Boss : MonsterBase {
         ability.SetAP(50f);
         ability.SetHP(10000f);
         ability.SetMaxHP(10000f);
+        //ability.SetHP(1f); ability.SetMaxHP(1f); //for test
         ability.SetAS(0.5f); // attack per second
         ability.SetAR(0f); // attack range
         ability.SetMS(1.25f); // move speed
@@ -44,9 +48,16 @@ public class Boss : MonsterBase {
     protected override void HandleDeath() { // ¼öÁ¤
         OnBossDeath.Invoke(this);
         _state = State.Death;
-        SetState(State.Death);
-        GetComponent<BoxCollider2D>().enabled = false;
-        Destroy(gameObject, 0.5f);
+        _boxColl.enabled = false;
+        _animator.SetTrigger("Die");
+        _animator.SetBool("Walk", false);
+        StartCoroutine(DestroyBoss(_animator.GetCurrentAnimatorStateInfo(0).length));
+    }
+
+    private IEnumerator DestroyBoss(float value) {
+        yield return new WaitForSeconds(value);
+        OnGameClear.Invoke();
+        Destroy(gameObject);
     }
 
     protected override void HandleAttack() {
