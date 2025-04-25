@@ -7,6 +7,7 @@ using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.Pool;
 using System.Collections;
+using UnityEditor;
 
 public class GM : MonoBehaviour
 {
@@ -222,7 +223,6 @@ public class GM : MonoBehaviour
         var pool = new ObjectPool<GameObject>(
             createFunc: () => {
                 var obj = Instantiate(pref); // 풀에 저장할때만 초기화해 최적화
-                obj.GetComponent<MonsterBase>().Initialize(); // abstract를 awake에서 실행하면 위험하므로 외부에서 실행
                 return obj;
             },
             actionOnGet: (obj) => obj.SetActive(true),
@@ -249,25 +249,22 @@ public class GM : MonoBehaviour
 
     private void InitMonProjPool(GameObject basepref, GameObject projpref, int capacity, string poolkey) {
         var instBase = Instantiate(basepref);
-        var initBase = instBase.GetComponent<MonsterBase>();
-        initBase.Initialize();
-        Ability baseAbility = initBase.ability.Clone();
+        Ability baseAbility = instBase.GetComponent<MonsterBase>().ability.Clone();
         Destroy(instBase);
-        
+        // MonData에 몬스터의 모든 abiliy속성이 있지 않아서 직접 가져옴
         var pool = new ObjectPool<GameObject>(
             createFunc: () => {
                 var obj = Instantiate(projpref);
-                var newAbility = baseAbility.Clone();
                 if(poolkey == "BossRanged") {
-                    newAbility.SetLifeTime(3f);
-                    newAbility.SetAR(3f);
-                    newAbility.SetAP(10f);
+                    baseAbility.SetLifeTime(3f);
+                    baseAbility.SetAR(3f);
+                    baseAbility.SetAP(10f);
                 }else if(poolkey == "BossRush") {
-                    newAbility.SetLifeTime(1f);
-                    newAbility.SetAR(3f);
-                    newAbility.SetAP(100f);
+                    baseAbility.SetLifeTime(1f);
+                    baseAbility.SetAR(3f);
+                    baseAbility.SetAP(100f);
                 }
-                obj.GetComponent<MonsterProjBase>().SetAbility(newAbility);
+                obj.GetComponent<MonsterProjBase>().SetAbility(baseAbility);
                 obj.GetComponent<MonsterProjBase>().SetPoolKey(poolkey);
                 return obj;
             },
@@ -295,16 +292,13 @@ public class GM : MonoBehaviour
     
     private void InitMobExpPool(GameObject basepref, GameObject pref, int capacity, Zone zone) {
         var instBase = Instantiate(basepref);
-        var initBase = instBase.GetComponent<MonsterBase>();
-        initBase.Initialize();
-        Ability baseAbility = initBase.ability.Clone();
+        Ability baseAbility = instBase.GetComponent<MonsterBase>().ability.Clone();
         Destroy(instBase);
 
         var pool = new ObjectPool<GameObject>(
             createFunc: () => {
                 var obj = Instantiate(pref);
-                Ability newAbility = baseAbility.Clone();
-                obj.GetComponent<EXP>().SetExp(newAbility.Exp);
+                obj.GetComponent<EXP>().SetExp(baseAbility.Exp);
                 obj.GetComponent<EXP>().SetPoolKey(zone);
                 return obj;
             },

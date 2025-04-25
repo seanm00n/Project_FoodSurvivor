@@ -51,6 +51,7 @@ public class Boss : MonsterBase {
         _boxColl.enabled = false;
         _animator.SetTrigger("Die");
         _animator.SetBool("Walk", false);
+        StopAllCoroutines();
         StartCoroutine(DestroyBoss(_animator.GetCurrentAnimatorStateInfo(0).length));
     }
 

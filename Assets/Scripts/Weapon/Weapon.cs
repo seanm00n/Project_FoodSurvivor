@@ -252,5 +252,10 @@ public class Weapon : MonoBehaviour
         return instSkills[Skill.Switching].GetAP() - (Time.timeSinceLevelLoad - _lastSwitchTime);
     }
 
-    public void SetTouchEnable(bool value) => touchEnable = value;
+    public void SetTouchEnable(bool value) {
+        touchEnable = value;
+        if(!value) {
+            _isSelected = false;
+        }
+    }
 }

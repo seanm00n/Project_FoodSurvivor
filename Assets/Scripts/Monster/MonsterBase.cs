@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using UnityEngine;
 
@@ -39,6 +40,8 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected AudioSource _audioSource;
 
+    protected bool _initialized = false;
+
     #endregion
 
     #region Memver variable
@@ -68,10 +71,12 @@ public abstract class MonsterBase : MonoBehaviour
         _nexusColl = _nexus?.GetComponent<BoxCollider2D>();
         _boxColl = GetComponent<BoxCollider2D>();
         _effectSR = _effectObject.GetComponent<SpriteRenderer>();
+        _initialized = true;
     }
 
     protected virtual void OnEnable() { // 매번 초기화 필요한것들
-        if(ability != null) { ability.SetHP(ability.MaxHP); } else { Debug.Log("anility Not Initialized"); }
+        if(!_initialized) Initialize();
+        ability.SetHP(ability.MaxHP);
         _debuffList = new HashSet<Debuff>();
         _animator.SetBool("Walk", true);
         _state = State.Moving;
@@ -148,6 +153,7 @@ public abstract class MonsterBase : MonoBehaviour
         if(_effectCoroutine != null) {
             StopCoroutine(_effectCoroutine);
         }
+
         _effectCoroutine = StartCoroutine(HitEffect());
     }
 
@@ -156,6 +162,7 @@ public abstract class MonsterBase : MonoBehaviour
         _boxColl.enabled = false;
         _animator.SetTrigger("Die");
         _animator.SetBool("Walk", false);
+        StopAllCoroutines();
         StartCoroutine(DropAndRelease(_animator.GetCurrentAnimatorStateInfo(0).length));
     }
 

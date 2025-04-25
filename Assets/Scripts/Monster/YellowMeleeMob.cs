@@ -12,7 +12,7 @@ public class YellowMeleeMob : MonsterBase
         ability.SetMS(1.25f);
         ability.SetLifeTime(0.2f);
         ability.SetExp(GM.I.MobData["YellowMelee"].Exp);
-        _rangeOffset = 0.8f;
+        _rangeOffset = 0.5f;
     }
 
     protected override void OnEnable() {
