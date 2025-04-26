@@ -76,6 +76,7 @@ public abstract class MonsterBase : MonoBehaviour
         if(!_initialized) Initialize();
         ability.SetHP(ability.MaxHP);
         _debuffList = new HashSet<Debuff>();
+        _effectObject.SetActive(false);
         _animator.SetBool("Walk", true);
         _state = State.Moving;
         _boxColl.enabled = true;
@@ -140,6 +141,7 @@ public abstract class MonsterBase : MonoBehaviour
         _effectObject.SetActive(true);
         yield return new WaitForSeconds(0.05f);
         _effectObject.SetActive(false);
+        _effectCoroutine = null;
     }
 
     protected void CheckDeath() {
@@ -148,9 +150,7 @@ public abstract class MonsterBase : MonoBehaviour
             return;
         }
 
-        if(_effectCoroutine != null) {
-            StopCoroutine(_effectCoroutine);
-        }
+        if(_effectCoroutine != null) StopCoroutine(_effectCoroutine);
 
         _effectCoroutine = StartCoroutine(HitEffect());
     }
@@ -160,6 +160,7 @@ public abstract class MonsterBase : MonoBehaviour
         _boxColl.enabled = false;
         _animator.SetTrigger("Die");
         _animator.SetBool("Walk", false);
+        _effectObject.SetActive(false);
         StopAllCoroutines();
         StartCoroutine(DropAndRelease(_animator.GetCurrentAnimatorStateInfo(0).length));
     }

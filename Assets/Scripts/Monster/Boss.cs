@@ -45,11 +45,11 @@ public class Boss : MonsterBase {
     }
 
     protected override void HandleDeath() { // ¼öÁ¤
-        OnBossDeath.Invoke(this);
         _state = State.Death;
         _boxColl.enabled = false;
         _animator.SetTrigger("Die");
         _animator.SetBool("Walk", false);
+        OnBossDeath.Invoke(this);
         StopAllCoroutines();
         StartCoroutine(DestroyBoss(_animator.GetCurrentAnimatorStateInfo(0).length));
     }

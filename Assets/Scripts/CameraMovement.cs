@@ -9,7 +9,7 @@ public class CameraMovement : MonoBehaviour
 
     private Weapon _player;
 
-    private float cameraOffset = 2f; // 화면 이동 거리
+    //private float cameraOffset = 2f; // 화면 이동 거리
 
     private float _smoothTime = 0.2f; // 0.3f
 
@@ -24,8 +24,9 @@ public class CameraMovement : MonoBehaviour
 
         Camera mainCam = Camera.main;
         halfHeight = mainCam.orthographicSize;
+        Debug.Log("Height: " + halfHeight);
         halfWidth = halfHeight * mainCam.aspect;
-
+        Debug.Log("Width: " + halfWidth);
         Bounds bounds = _tilemap.localBounds;
         minX = bounds.min.x + halfWidth;
         maxX = bounds.max.x - halfWidth;
@@ -37,9 +38,9 @@ public class CameraMovement : MonoBehaviour
         if(_player == null || !_player.touchEnable) return;
 
         Vector3 targetPos = new Vector3(_player.transform.position.x, _player.transform.position.y, transform.position.z);
-        float distance = Vector2.Distance(_player.transform.position, transform.position);
+        //float distance = Vector2.Distance(_player.transform.position, transform.position);
 
-        if(distance >= cameraOffset) {
+        if(IsPlayerBeyond()) { //distance >= cameraOffset
 
             float clampX = Mathf.Clamp(targetPos.x, minX, maxX);
             float clampY = Mathf.Clamp(targetPos.y, minY, maxY);
@@ -67,5 +68,14 @@ public class CameraMovement : MonoBehaviour
         }
 
         transform.position = new Vector3(targetPos.x, targetPos.y, transform.position.z);
+    }
+
+    private bool IsPlayerBeyond() {
+        Vector3 viewportPos = Camera.main.WorldToViewportPoint(_player.transform.position);
+
+        float offsetX = Mathf.Abs(viewportPos.x - 0.5f);
+        float offsetY = Mathf.Abs(viewportPos.y - 0.5f);
+
+        return (offsetX > 0.45f) || (offsetY > 0.45f);
     }
 }

@@ -100,6 +100,8 @@ public class Nexus : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
+        if(_isDeath) return;
+
         if(collision.CompareTag("MonsterProj")) {
             HandleHit(collision.gameObject);
         }
@@ -126,11 +128,11 @@ public class Nexus : MonoBehaviour
     }
 
     private void HandleDeath() {
-        OnNexusDeath?.Invoke(this);
         _coll.enabled = false;
         _isDeath = true;
         _animator.SetTrigger("Die");
         _animator.SetBool("Walk", false);
+        OnNexusDeath?.Invoke(this);
         StopAllCoroutines();
         StartCoroutine(DestroyNexus(_animator.GetCurrentAnimatorStateInfo(0).length));
     }
