@@ -76,6 +76,6 @@ public class CameraMovement : MonoBehaviour
         float offsetX = Mathf.Abs(viewportPos.x - 0.5f);
         float offsetY = Mathf.Abs(viewportPos.y - 0.5f);
 
-        return (offsetX > 0.45f) || (offsetY > 0.45f);
+        return (offsetX > 0.35f) || (offsetY > 0.3f);
     }
 }
