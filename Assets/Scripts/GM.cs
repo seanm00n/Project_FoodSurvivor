@@ -182,9 +182,9 @@ public class GM : MonoBehaviour
         InitMonProjPool(_greenRangedMobPref, _greenRangedProjPref, 26, "GreenRanged");
         InitMonProjPool(_yellowMeleeMobPref, _yellowMeleeProjPref, 16, "YellowMelee");
         InitMonProjPool(_yellowRangedMobPref, _yellowRangedProjPref, 16, "YellowRanged");
-        InitMonProjPool(_bossPref, _bossMeleeProjPref, 1, "BossMelee");
+        InitMonProjPool(_bossPref, _bossMeleeProjPref, 2, "BossMelee");
         InitMonProjPool(_bossPref, _bossRangedProjPref, 192, "BossRanged");
-        InitMonProjPool(_bossPref, _bossMeleeProjPref, 1, "BossRush");
+        InitMonProjPool(_bossPref, _bossMeleeProjPref, 2, "BossRush");
 
         mobExpPool = new Dictionary<Zone, ObjectPool<GameObject>>();
         InitMobExpPool(_blueMeleeMobPref, _blueExpPref, 56, Zone.Blue);
@@ -223,8 +223,20 @@ public class GM : MonoBehaviour
                 var obj = Instantiate(pref); // 풀에 저장할때만 초기화해 최적화
                 return obj;
             },
-            actionOnGet: (obj) => obj.SetActive(true),
-            actionOnRelease: (obj) => obj.SetActive(false),
+            actionOnGet: (obj) => {
+                if(obj == null) {
+                    Debug.LogWarning("[InitMonPool] Tried to get a destroyed object!");
+                    return;
+                }
+                obj.SetActive(true);
+            },
+            actionOnRelease: (obj) => {
+                if(obj == null) {
+                    Debug.LogWarning("[InitMonPool] Tried to release a destroyed object!");
+                    return;
+                }
+                obj.SetActive(false);
+            },
             actionOnDestroy: (obj) => Destroy(obj),
             collectionCheck: false,
             defaultCapacity: capacity,
@@ -266,8 +278,20 @@ public class GM : MonoBehaviour
                 obj.GetComponent<MonsterProjBase>().SetPoolKey(poolkey);
                 return obj;
             },
-            actionOnGet: (obj) => obj.SetActive(true),
-            actionOnRelease: (obj) => obj.SetActive(false),
+            actionOnGet: (obj) => {
+                if(obj == null) {
+                    Debug.LogWarning("[InitMonProjPool] Tried to get a destroyed object!");
+                    return;
+                }
+                obj.SetActive(true);
+            },
+            actionOnRelease: (obj) => {
+                if(obj == null) {
+                    Debug.LogWarning("[InitMonProjPool] Tried to release a destroyed object!");
+                    return;
+                }
+                obj.SetActive(false);
+            },
             actionOnDestroy: (obj) => Destroy(obj),
             collectionCheck: false,
             defaultCapacity: capacity,
@@ -300,8 +324,20 @@ public class GM : MonoBehaviour
                 obj.GetComponent<EXP>().SetPoolKey(zone);
                 return obj;
             },
-            actionOnGet: (obj) => obj.SetActive(true),
-            actionOnRelease: (obj) => obj.SetActive(false),
+            actionOnGet: (obj) => {
+                if(obj == null) {
+                    Debug.LogWarning("[InitMobExpPool] Tried to get a destroyed object!");
+                    return;
+                }
+                obj.SetActive(true);
+            },
+            actionOnRelease: (obj) => {
+                if(obj == null) {
+                    Debug.LogWarning("[InitMobExpPool] Tried to release a destroyed object!");
+                    return;
+                }
+                obj.SetActive(false);
+            },
             actionOnDestroy: (obj) => Destroy(obj),
             collectionCheck: false,
             defaultCapacity: capacity,

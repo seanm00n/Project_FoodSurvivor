@@ -109,7 +109,7 @@ public class Boss : MonsterBase {
 
         GameObject spawnedProj = GM.I.monProjPool["BossRush"].Get();
         spawnedProj.transform.SetParent(transform, false);
-        
+
         float dist = 6f;
         float duration = 1f;
         float elapsed = 0f;

@@ -226,7 +226,9 @@ public abstract class MonsterBase : MonoBehaviour
         string poolKeyCopy = poolKey;
         if(poolKey == "Boss") poolKeyCopy = "BossMelee";
         GameObject spawnProj = GM.I.monProjPool[poolKeyCopy].Get();
-        spawnProj.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0, 0, angle));
+
+        if(spawnProj == null) Debug.Log("monsterbase proj is null");
+        else spawnProj.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0, 0, angle));
 
         Invoke(nameof(ResetState), (1f / ability.AS)); // state init
     }

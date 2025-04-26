@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class MonsterProjBase : MonoBehaviour, IBattle
@@ -8,8 +9,22 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
     
     protected float _spawnTime;
 
+    protected CircleCollider2D _coll;
+
+    private Coroutine _collCoroutine;
+
     private void OnEnable() {
+        if(_coll == null) _coll = GetComponent<CircleCollider2D>();
+        _coll.enabled = false;
+        _collCoroutine = StartCoroutine(ColliderDelay(0.1f)); // 딜레이로 참조 문제 해결
         _spawnTime = Time.timeSinceLevelLoad;
+    }
+
+    private void OnDisable() {
+        if(_collCoroutine != null) {
+            StopCoroutine(_collCoroutine);
+            _collCoroutine = null;
+        }
     }
 
     private void Update() {
@@ -32,6 +47,11 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
         if(collision.CompareTag("Nexus")) {
             GM.I.monProjPool[poolKey].Release(gameObject);
         }
+    }
+
+    private IEnumerator ColliderDelay(float value) {
+        yield return new WaitForSeconds(value);
+        if(_coll != null) _coll.enabled = true;
     }
 
     public float GetAP() => ability.AP;

@@ -24,9 +24,9 @@ public class CameraMovement : MonoBehaviour
 
         Camera mainCam = Camera.main;
         halfHeight = mainCam.orthographicSize;
-        Debug.Log("Height: " + halfHeight);
+        
         halfWidth = halfHeight * mainCam.aspect;
-        Debug.Log("Width: " + halfWidth);
+        
         Bounds bounds = _tilemap.localBounds;
         minX = bounds.min.x + halfWidth;
         maxX = bounds.max.x - halfWidth;

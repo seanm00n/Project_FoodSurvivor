@@ -11,12 +11,14 @@ public class Shield : MonoBehaviour, IBattle {
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if(collision.CompareTag("MonsterProj")) {
+        if(collision.CompareTag("MonsterProj")) { // 근접은 못막게
+            if(collision.name.Contains("Melee")) return;
             MonsterProjBase collBase = collision.GetComponent<MonsterProjBase>();
             GM.I.monProjPool[collBase.poolKey].Release(collision.gameObject);
         }
 
         if(collision.CompareTag("Monster")) {
+            if(collision.name == "Boss(Clone)") return;
             StartCoroutine(PushMob(collision));
         }
     }
