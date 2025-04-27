@@ -40,7 +40,7 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
 
     private void Movement() {
         Vector3 direction = transform.right.normalized;
-        transform.position += direction * (ability.MS * 2) * (ability.AR > 0 ? 1f : 0f) * Time.deltaTime;
+        transform.position += direction * (ability.MS * 1.5f) * (ability.AR > 0 ? 1f : 0f) * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

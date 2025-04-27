@@ -92,7 +92,7 @@ public class Weapon : MonoBehaviour
         WeaponProjBase instRainFire = Instantiate(_rainFirePref, _nexus.transform).GetComponent<WeaponProjBase>();
         instSkills.Add(Skill.RainFire, instRainFire);
 
-        WeaponProjBase instSlowCircle = Instantiate(_slowCirclePref, _nexus.transform).GetComponent<WeaponProjBase>();
+        WeaponProjBase instSlowCircle = Instantiate(_slowCirclePref, _nexus.transform.position, Quaternion.identity).GetComponent<WeaponProjBase>(); // 분리
         instSkills.Add(Skill.SlowCircle, instSlowCircle);
 
         WeaponProjBase instProtectShield = Instantiate(_protectShieldPref, _nexus.transform).GetComponent<WeaponProjBase>();
