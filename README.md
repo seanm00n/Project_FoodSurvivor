@@ -34,6 +34,6 @@ Contact: deccj97@gmail.com
 
 ## 🙌 제작자
 
-- 기획: **Manjun Han**
+- 기획: **Manjun Han**, *Minseok Seo*
 - 개발: **CheonHyeok Moon**
 - 팀명: **Team Funity**
