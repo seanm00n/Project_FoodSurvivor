@@ -5,6 +5,7 @@ This is a fully offline game with no ads, login, or server communication.
 Please note: This policy may be updated if advertising features are added in the future.
 
 Contact: deccj97@gmail.com
+
 **DragNSlash Survivor**는 Unity 6으로 개발된 2D 모바일 뱀서라이크 게임입니다.  
 플레이어는 다양한 스킬과 무기를 조합하여 끝없이 몰려오는 적을 처치하고, 최후의 보스와 전투에서 승리하는 것을 목표로 합니다.
 
