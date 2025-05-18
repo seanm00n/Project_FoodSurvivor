@@ -1,7 +1,7 @@
 <div align="center">
-  
-# 🎮 [Drag&Slash Survivor] (수정중)
-
+🎮 [Drag&Slash Survivor] (수정중)
+| ![title](https://github.com/user-attachments/assets/7fbd24c5-ba5a-4aa7-84e6-9f405562dbfd) |
+|:--:|
 </div>
 
 ## 📌 목차  
