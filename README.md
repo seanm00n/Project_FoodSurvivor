@@ -1,5 +1,5 @@
 <div align="center">
-<h2>🎮Drag&Slash Survivor</h2>
+<h2>🎮Drag&Slash Survivor(수정중)</h2>
 <img src="https://github.com/user-attachments/assets/7fbd24c5-ba5a-4aa7-84e6-9f405562dbfd" width="600"/>
 </div>
 
