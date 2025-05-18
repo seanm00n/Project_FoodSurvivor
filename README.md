@@ -1,6 +1,9 @@
 <div align="center">
-| ![title](https://github.com/user-attachments/assets/7fbd24c5-ba5a-4aa7-84e6-9f405562dbfd) |
-|:--:|
+
+<h2>🎮 Drag&Slash Survivor</h2>
+
+<img src="https://github.com/user-attachments/assets/7fbd24c5-ba5a-4aa7-84e6-9f405562dbfd" width="600"/>
+
 </div>
 ## 📌 목차  
 - [개요](#개요)  
