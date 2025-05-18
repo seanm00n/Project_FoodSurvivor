@@ -32,6 +32,7 @@ This is a fully offline game with no ads, login, or server communication.
 
 Please note: This policy may be updated if advertising features are added in the future.  
 Contact: deccj97@gmail.com  
+
 ---
 <a name="게임-특징"></a>
 ## ⭐ 게임 특징
@@ -58,8 +59,8 @@ Contact: deccj97@gmail.com
 ---
 <a name="사용-기술-스택"></a>
 ## 🛠️ 사용 기술 스택
-- **Unity Enginge**: SerializedDictionary, Object Pooling, CSV R/W, Animator등 활용
-- **C#**: 전투 시스템, UI 로직, 몬스터 AI, 스킬 처리
+- **Unity Enginge**: Animator, Scene 관리, UI 시스템 등
+- **C#**: SerializedDictionary 구현, Object Pooling, CSV Read/Write, 전투 시스템, UI 로직, 몬스터 AI, 스킬 처리 등
 - **Git**: 협업 버전 관리
 - **Photoshop**: UI 디자인
 ---
