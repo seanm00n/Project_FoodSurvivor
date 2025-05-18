@@ -1,5 +1,5 @@
-|:--:|
 | ![title](https://github.com/user-attachments/assets/7fbd24c5-ba5a-4aa7-84e6-9f405562dbfd) |
+|:--:|
 
 ## 📌 목차  
 - [개요](#개요)  
