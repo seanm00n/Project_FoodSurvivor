@@ -80,7 +80,7 @@ Contact: deccj97@gmail.com
 <a name="사용-기술-스택"></a>
 ## 🛠️ 사용 기술 스택
 
-- **Unity Enginge**: Animator, Scene 관리, UI 시스템 등
+- **Unity Engine**: Animator, Scene 관리, UI 시스템 등
 - **C#**: SerializedDictionary 구현, Object Pooling, CSV Read/Write, 전투 시스템, UI 로직, 몬스터 AI, 스킬 처리 등
 - **Git**: 협업 버전 관리
 - **Photoshop**: UI 디자인
