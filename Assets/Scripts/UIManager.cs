@@ -336,18 +336,18 @@ public class UIManager : MonoBehaviour
         Vector2[] offsets = null;
         if(count == 3) {
             offsets = new Vector2[] {
-                new Vector2(50f, 970f),   // 哭率
-                new Vector2(510f, 510f),  // 啊款单
-                new Vector2(970f, 50f)    // 坷弗率
+                new Vector2(150f, 2150f),   // 哭率
+                new Vector2(1150f, 1150f),  // 啊款单
+                new Vector2(2150f, 150f)    // 坷弗率
             };
         } else if(count == 2) {
             offsets = new Vector2[] {
-                new Vector2(200f, 820f),  // 哭率
-                new Vector2(820f, 200f)   // 坷弗率
+                new Vector2(600f, 1700f),  // 哭率
+                new Vector2(1700f, 600f)   // 坷弗率
             };
         } else {
             offsets = new Vector2[] {
-                new Vector2(510f, 510f)   // 啊款单
+                new Vector2(1150f, 1150f)   // 啊款单
             };
         }
 
@@ -376,9 +376,9 @@ public class UIManager : MonoBehaviour
             rectComp.anchorMin = new Vector2(0f, 0.5f);
             rectComp.anchorMax = new Vector2(1f, 0.5f);
             rectComp.pivot = new Vector2(0.5f, 0.5f);
-            rectComp.anchoredPosition = new Vector2(0f, -330f);
-            rectComp.sizeDelta = new Vector2(0f, 980f);
-            if(offsets != null && index < offsets.Length) { //
+            rectComp.anchoredPosition = new Vector2(0f, -200);
+            rectComp.sizeDelta = new Vector2(0f, 750);
+            if(offsets != null && index < offsets.Length) {
                 rectComp.offsetMin = new Vector2(offsets[index].x, rectComp.offsetMin.y);
                 rectComp.offsetMax = new Vector2(-offsets[index].y, rectComp.offsetMax.y);
             }
