@@ -59,7 +59,7 @@ public class Weapon : MonoBehaviour
 
     //private float _lastSwitchTime = -60f;
 
-    private int _weaponMaxLv = 30;
+    private int _weaponMaxLv = 7;
 
     #endregion
 
