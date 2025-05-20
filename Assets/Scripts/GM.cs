@@ -568,7 +568,7 @@ public class GM : MonoBehaviour
 
         _weapon.transform.position = new Vector3(0, 0, 0);
         _nexus.transform.position = new Vector3(0, -4, 0);
-        StartCoroutine(_cameraComp.SmoothCameraTransition(_weapon.transform.position, 0.3f));
+        StartCoroutine(_cameraComp.SmoothCameraTransition(new Vector3(2, 0, 0), 0.6f));
     }
 
     #endregion
