@@ -560,7 +560,7 @@ public class GM : MonoBehaviour
         //_uiManager.SetBossHPUI();
 
         GameObject spawnedBoss = monPool["Boss"].Get();
-        spawnedBoss.transform.position = new Vector3(0, 4, 0);
+        spawnedBoss.transform.position = new Vector3(20, 0, 0);
         spawnedBoss.transform.rotation = Quaternion.identity;
         Boss bossComp = spawnedBoss.GetComponent<Boss>();
         bossComp.OnBossDeath += HandleBossDeath; // InitMonPool에서 임시로 생성하므로 여기서 바인딩
@@ -568,7 +568,7 @@ public class GM : MonoBehaviour
 
         _weapon.transform.position = new Vector3(0, 0, 0);
         _nexus.transform.position = new Vector3(0, -4, 0);
-        StartCoroutine(_cameraComp.SmoothCameraTransition(new Vector3(2, 0, 0), 0.6f));
+        StartCoroutine(_cameraComp.SmoothCameraTransition(new Vector3(6, 0, 0), 0.6f));
     }
 
     #endregion
