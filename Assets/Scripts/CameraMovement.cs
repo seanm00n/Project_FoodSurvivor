@@ -35,6 +35,10 @@ public class CameraMovement : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        FixedMovement();
+    }
+
+    private void FixedMovement() {
         if(_player == null || !_player.touchEnable) return;
 
         Vector3 targetPos = new Vector3(_player.transform.position.x, _player.transform.position.y, transform.position.z);

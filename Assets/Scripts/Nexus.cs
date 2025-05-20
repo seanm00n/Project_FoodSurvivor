@@ -66,12 +66,20 @@ public class Nexus : MonoBehaviour
         _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>(); // 초기화 시점 문제로 사용
         _audioSource = GetComponent<AudioSource>();
         _animator.SetBool("Walk", true);
+        StartCoroutine(Anchor(1.0f));
     }
 
     private void Update() {
         if(!_isDeath) { 
-            Movement();
+            //Movement();
             Rotation();
+        }
+    }
+
+    private IEnumerator Anchor(float value) {
+        while(!_isDeath) {
+            transform.position = new Vector2(0, 0);
+            yield return new WaitForSeconds(value);
         }
     }
 

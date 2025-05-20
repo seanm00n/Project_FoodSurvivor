@@ -220,7 +220,7 @@ public class Weapon : MonoBehaviour
         if(Time.timeSinceLevelLoad - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
             _lastSwitchTime = Time.timeSinceLevelLoad;
             _audioSource.PlayOneShot(_switchingSound);
-            StartCoroutine(SwitchingLerp(0.3f));
+            //FStartCoroutine(SwitchingLerp(0.3f));
         }
     }
 
@@ -245,7 +245,7 @@ public class Weapon : MonoBehaviour
         _nexus.transform.position = weaponPos;
         touchEnable = true;
 
-        StartCoroutine(_cameraComp.SmoothCameraTransition(transform.position, 0.2f));
+        //StartCoroutine(_cameraComp.SmoothCameraTransition(transform.position, 0.2f));
     }
 
     public float GetSwitchCool() { // UI 확인용
