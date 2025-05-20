@@ -33,7 +33,7 @@ public class ThunderBolt : WeaponProjBase, IBattle {
                 _elapsed += Time.deltaTime;
             }
 
-            if(_elapsed >= ability.AP) {
+            if(_elapsed >= _attackDuration) {
                 _elapsed = 0f;
                 StartCoroutine(SpawnThunder(0.2f));
             }

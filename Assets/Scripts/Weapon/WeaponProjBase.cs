@@ -25,5 +25,7 @@ public abstract class WeaponProjBase : MonoBehaviour, IBattle
 
     private void Start() => Initialize(); // Awake() 같은 초기화 타이밍에서 virtual 함수를 호출하면 위험
 
-    private void Update() => SkillAction();
+    private void Update() {
+        if(Nexus.I != null) SkillAction();
+    } 
 }

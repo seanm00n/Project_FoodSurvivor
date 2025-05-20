@@ -5,19 +5,18 @@ public class Thunder : MonoBehaviour, IBattle
 {
     public Ability ability { get; private set; }
 
-    private void Start() {
-        StartCoroutine(BeforeDestroy(1.1f));
-    }
+    private Animator _animator;
 
-    private void Update() {
-        // 애니메이션 재생 필요?
+    private void Start() {
+        _animator = GetComponent<Animator>();
+        float animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
+        StartCoroutine(BeforeDestroy(animLength));
     }
 
     private IEnumerator BeforeDestroy(float value) {
         yield return new WaitForSeconds(value);
-        // 멀리 이동시켜버리기
-        transform.position = new Vector3(0, 20, 0);
-        yield return new WaitForSeconds(0.1f);
+        transform.position = new Vector3(0, 20, 0); // 멀리 이동시켜버리기
+        yield return new WaitForSeconds(0.02f);
         Destroy(gameObject);
     }
     public void SetAbility(Ability value) => ability = value;

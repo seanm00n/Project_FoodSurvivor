@@ -152,8 +152,14 @@ public abstract class MonsterBase : MonoBehaviour
             return;
         }
 
-        if(_effectCoroutine != null) StopCoroutine(_effectCoroutine);
+        if(!gameObject.activeInHierarchy) { 
+            Debug.Log("hiteffect coroutine attempted during death"); 
+            return; 
+        }
 
+        if(_effectCoroutine != null) {
+            StopCoroutine(_effectCoroutine);
+        }
         _effectCoroutine = StartCoroutine(HitEffect());
     }
 
@@ -164,7 +170,8 @@ public abstract class MonsterBase : MonoBehaviour
         _animator.SetBool("Walk", false);
         _effectObject.SetActive(false);
         StopAllCoroutines();
-        StartCoroutine(DropAndRelease(_animator.GetCurrentAnimatorStateInfo(0).length));
+        float animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
+        StartCoroutine(DropAndRelease(animLength));
     }
 
     protected IEnumerator DropAndRelease(float value) {
