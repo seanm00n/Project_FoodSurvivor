@@ -224,10 +224,9 @@ MonoBehaviour:
   _rainFirePref: {fileID: 1308840794168678689, guid: 61dfd4e0d12c42245a57e0967f798792, type: 3}
   _slowCirclePref: {fileID: 2437209667103863883, guid: 2245b28a2ac8d55499943e2a7e78ad22, type: 3}
   _protectShieldPref: {fileID: 3770749953129922182, guid: eb9abcf69696a7a4989981a10f40c18b, type: 3}
-  _switchingPref: {fileID: 8361460493925754942, guid: 97453e30bc9fe394fb877840a5e127d3, type: 3}
+  _thunderBoltPref: {fileID: 8897146554592015834, guid: 398792ece5687274db0d6df4322d9d5b, type: 3}
   _vitalSurgePref: {fileID: 5100453080466153061, guid: 20c7398bee9ec02428261107e56edce3, type: 3}
   _overdrivePref: {fileID: 6430998564156198106, guid: 757fe2c6a32b6ee4fae0ec802a2e2910, type: 3}
-  _switchingSound: {fileID: 8300000, guid: e50d5ea55dcd7e341899d86e4889566f, type: 3}
 --- !u!82 &7168563084767959
 AudioSource:
   m_ObjectHideFlags: 0
