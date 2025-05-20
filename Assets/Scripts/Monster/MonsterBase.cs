@@ -59,6 +59,7 @@ public abstract class MonsterBase : MonoBehaviour
     protected SpriteRenderer _effectSR;
 
     #endregion
+    protected abstract void Repeat();
 
     public virtual void Initialize() { // 한번만 하면 되는 공통적인 것들
         ability = new Ability();
@@ -96,6 +97,7 @@ public abstract class MonsterBase : MonoBehaviour
     private void Update() {
         Movement();
         Rotation();
+        Repeat();
     }
 
     protected void OnTriggerStay2D(Collider2D collision) { // 지속 데미지

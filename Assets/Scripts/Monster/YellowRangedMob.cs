@@ -20,4 +20,8 @@ public class YellowRangedMob : MonsterBase
         GM.I.OnBossSpawn += HandleSelfRelease;
         GM.I.spawnedMobs.Add(gameObject);
     }
+
+    protected override void Repeat() {
+        //
+    }
 }

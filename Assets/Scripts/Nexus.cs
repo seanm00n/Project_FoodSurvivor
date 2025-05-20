@@ -1,6 +1,7 @@
  using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Nexus : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class Nexus : MonoBehaviour
 
     [SerializeField]
     private AudioClip _hitSound;
+
+    [SerializeField]
+    private Slider _healthBar;
 
     #region Member ref
 
@@ -73,7 +77,15 @@ public class Nexus : MonoBehaviour
         if(!_isDeath) { 
             //Movement();
             Rotation();
+            SetSliderUI();
         }
+    }
+
+    private void SetSliderUI() {
+        float curNexusHP = ability.HP;
+        float curNexusMaxHP = ability.MaxHP;
+
+        _healthBar.value = curNexusHP / curNexusMaxHP;
     }
 
     private IEnumerator Anchor(float value) {

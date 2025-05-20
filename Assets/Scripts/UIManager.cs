@@ -50,8 +50,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _playTimeText;
 
-    [SerializeField]
-    private TextMeshProUGUI _switchCoolText;
+    //[SerializeField]
+    //private TextMeshProUGUI _switchCoolText;
 
     [SerializeField]
     private TextMeshProUGUI _killResultText;
@@ -68,8 +68,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _timeScoreText;
 
-    [SerializeField]
-    private GameObject _switchButton;
+    //[SerializeField]
+    //private GameObject _switchButton;
 
     [SerializeField]
     private AudioClip _buttonSound;
@@ -80,8 +80,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private AudioClip _bossWarningSound;
 
-    [SerializeField]
-    private GameObject _bossHPUI;
+    //[SerializeField]
+    //private GameObject _bossHPUI;
 
     [SerializeField]
     private Animator _transAnimator;
@@ -107,7 +107,7 @@ public class UIManager : MonoBehaviour
 
     private int _iconBoxIndex = 0;
 
-    private bool _isBossSpawn = false;
+    //private bool _isBossSpawn = false;
 
     private void Awake() {
         if(I != null && I != this) {
@@ -130,14 +130,14 @@ public class UIManager : MonoBehaviour
         _pausePanel.SetActive(false);
         _gameOverPanel.SetActive(false);
 
-        StartCoroutine(SwitchStart()); // level 1 start
+        //StartCoroutine(SwitchStart()); // level 1 start
         Invoke(nameof(DrawTutorialPanel), 1.0f);
         Invoke(nameof(DrawBossSpawnAlert), 355f);
     }
 
     private void Update() {
         SetPlayTimeText();
-        SetSwitchCoolText();
+        //SetSwitchCoolText();
         SetSlider();
         SetLevelText();
         SetArrowVisible();
@@ -153,34 +153,34 @@ public class UIManager : MonoBehaviour
         _playTimeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    private void SetSwitchCoolText() {
-        int cooltime = Mathf.FloorToInt(_weapon.GetSwitchCool());
+    //private void SetSwitchCoolText() {
+    //    int cooltime = Mathf.FloorToInt(_weapon.GetSwitchCool());
 
-        if(cooltime > 0) {
-            _switchCoolText.text = cooltime.ToString();
-        } else {
-            _switchCoolText.text = "";
-        }
-    }
+    //    if(cooltime > 0) {
+    //        _switchCoolText.text = cooltime.ToString();
+    //    } else {
+    //        _switchCoolText.text = "";
+    //    }
+    //}
 
     private void SetSlider() {
         float curExp = _weapon.ability.Exp;
         float maxExp = GM.I.LevelData[_weapon.ability.Lv].reqEXP;
         sliders[SliderType.WeaponEXP].value = curExp / maxExp;
 
-        if(_isBossSpawn) {
-            Boss boss = GameObject.Find("Boss(Clone)")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
-            if(boss != null) {
-                float curBossHP = boss.ability.HP;
-                float maxBossHP = boss.ability.MaxHP;
-                sliders[SliderType.BossHP].value = curBossHP / maxBossHP;
-            }
-        }
+        //if(_isBossSpawn) {
+        //    Boss boss = GameObject.Find("Boss(Clone)")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
+        //    if(boss != null) {
+        //        float curBossHP = boss.ability.HP;
+        //        float maxBossHP = boss.ability.MaxHP;
+        //        sliders[SliderType.BossHP].value = curBossHP / maxBossHP;
+        //    }
+        //}
 
-        float curNexusHP = _nexus.ability.HP;
-        float curNexusMaxHP = _nexus.ability.MaxHP;
+        //float curNexusHP = _nexus.ability.HP;
+        //float curNexusMaxHP = _nexus.ability.MaxHP;
 
-        sliders[SliderType.NexusHP].value = curNexusHP / curNexusMaxHP;
+        //sliders[SliderType.NexusHP].value = curNexusHP / curNexusMaxHP;
     }
 
     private void SetLevelText() {
@@ -206,10 +206,10 @@ public class UIManager : MonoBehaviour
 
     public void SetKillCountText() => _killCountText.text = GM.I.killCount.ToString();
 
-    public void SetBossHPUI() {
-        _bossHPUI.SetActive(true);
-        _isBossSpawn = true;
-    }
+    //public void SetBossHPUI() {
+    //    _bossHPUI.SetActive(true);
+    //    _isBossSpawn = true;
+    //}
 
     #endregion
 
@@ -250,7 +250,7 @@ public class UIManager : MonoBehaviour
 
     #region Button interaction
 
-    public void OnSwitchButton() => _weapon.HandleSwitching();
+    //public void OnSwitchButton() => _weapon.HandleSwitching();
 
     public void OnPauseButton() {
         _audioSource.PlayOneShot(_buttonSound);
@@ -387,23 +387,23 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator SwitchStart() {
-        yield return null;
-        GameObject imgObject = new GameObject("Icon");
+    //private IEnumerator SwitchStart() {
+    //    yield return null;
+    //    GameObject imgObject = new GameObject("Icon");
 
-        RectTransform rt = imgObject.AddComponent<RectTransform>();
-        rt.sizeDelta = new Vector2(150f, 150f);
+    //    RectTransform rt = imgObject.AddComponent<RectTransform>();
+    //    rt.sizeDelta = new Vector2(150f, 150f);
 
-        Image imgComp = imgObject.AddComponent<Image>();
-        imgComp.sprite = _iconList[Skill.Switching];
+    //    Image imgComp = imgObject.AddComponent<Image>();
+    //    imgComp.sprite = _iconList[Skill.Switching];
 
-        imgObject.transform.SetParent(_skilBoxList[_iconBoxIndex].transform);
-        imgObject.transform.SetAsLastSibling();
-        imgObject.transform.localPosition = Vector3.zero;
-        imgObject.transform.localScale = Vector3.one;
+    //    imgObject.transform.SetParent(_skilBoxList[_iconBoxIndex].transform);
+    //    imgObject.transform.SetAsLastSibling();
+    //    imgObject.transform.localPosition = Vector3.zero;
+    //    imgObject.transform.localScale = Vector3.one;
 
-        _iconBoxIndex++;
-    }
+    //    _iconBoxIndex++;
+    //}
 
     private IEnumerator PlayFadeOut() {
         GM.I.ResumeGame();

@@ -10,6 +10,10 @@ public class Weapon : MonoBehaviour
 
     public event Action<Weapon> OnWeaponLevelUp;
 
+    public event Action OnTouchDown;
+
+    public event Action OnTouchUp;
+
     public Ability ability { get; private set; }
 
     public Dictionary<Skill, WeaponProjBase> instSkills { get; private set; }
@@ -27,8 +31,11 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     private GameObject _protectShieldPref;
 
+    //[SerializeField]
+    //private GameObject _switchingPref;
+
     [SerializeField]
-    private GameObject _switchingPref;
+    private GameObject _thunderBoltPref;
 
     [SerializeField]
     private GameObject _vitalSurgePref;
@@ -36,8 +43,8 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     private GameObject _overdrivePref;
 
-    [SerializeField]
-    private AudioClip _switchingSound;
+    //[SerializeField]
+    //private AudioClip _switchingSound;
 
     #endregion
 
@@ -57,9 +64,9 @@ public class Weapon : MonoBehaviour
 
     private bool _isSelected = false;
 
-    private float _lastSwitchTime = -60f;
+    //private float _lastSwitchTime = -60f;
 
-    private int _weaponMaxLv = 30;
+    private int _weaponMaxLv = 7;
 
     #endregion
 
@@ -75,7 +82,7 @@ public class Weapon : MonoBehaviour
         ability.SetLv(1);
         ability.SetAS(1f);
         ability.SetExp(0f);
-
+        
         instSkills = new Dictionary<Skill, WeaponProjBase>();
     }
 
@@ -98,8 +105,11 @@ public class Weapon : MonoBehaviour
         WeaponProjBase instProtectShield = Instantiate(_protectShieldPref, _nexus.transform).GetComponent<WeaponProjBase>();
         instSkills.Add(Skill.ProtectShield, instProtectShield);
 
-        WeaponProjBase instSwitching = Instantiate(_switchingPref, transform).GetComponent<WeaponProjBase>();
-        instSkills.Add(Skill.Switching, instSwitching);
+        //WeaponProjBase instSwitching = Instantiate(_switchingPref, transform).GetComponent<WeaponProjBase>();
+        //instSkills.Add(Skill.Switching, instSwitching);
+
+        WeaponProjBase instThunderBolt = Instantiate(_thunderBoltPref, transform).GetComponent<WeaponProjBase>();
+        instSkills.Add(Skill.ThunderBolt, instThunderBolt);
 
         WeaponProjBase instVitalSurge = Instantiate(_vitalSurgePref, transform).GetComponent<WeaponProjBase>();
         instSkills.Add(Skill.VitalSurge, instVitalSurge);
@@ -107,7 +117,7 @@ public class Weapon : MonoBehaviour
         WeaponProjBase instOverdrive = Instantiate(_overdrivePref, transform).GetComponent<WeaponProjBase>();
         instSkills.Add(Skill.Overdrive, instOverdrive);
 
-        StartCoroutine(SwitchStart()); // level 1 start
+        //StartCoroutine(SwitchStart()); // level 1 start
     }
 
     private void Update() {
@@ -118,10 +128,10 @@ public class Weapon : MonoBehaviour
     #endif
     }
 
-    private IEnumerator SwitchStart() {
-        yield return null;
-        instSkills[Skill.Switching].OnLevelUp();
-    }
+    //private IEnumerator SwitchStart() {
+    //    yield return null;
+    //    instSkills[Skill.Switching].OnLevelUp();
+    //}
 
     public void HandleExpGet(float value) {
         if(ability.Lv < _weaponMaxLv) {
@@ -145,22 +155,23 @@ public class Weapon : MonoBehaviour
         ability.SetReqEXP(GM.I.LevelData[ability.Lv].reqEXP);
 
         if(ability.Lv >= _weaponMaxLv) {
+            ability.SetLv(_weaponMaxLv);
             ability.SetExp(1f);
             ability.SetReqEXP(1f);
         }
     }
 
-    public void SkillLevelUp(Skill skill) { // LevelUp -> UI select -> SkillLevelUP(select)
+    public void SkillLevelUp(Skill skill) {
         instSkills[skill].OnLevelUp();
     }
 
     public bool IsPointerOverUIObject() {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
-#if UNITY_ANDROID
+        #if UNITY_ANDROID
         eventData.position = Input.mousePosition;
-#else
+        #else
         eventData.position = Input.GetTouch(0).position;
-#endif
+        #endif
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
 
@@ -172,13 +183,16 @@ public class Weapon : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0) && !IsPointerOverUIObject()) {
             _isSelected = true;
+            OnTouchDown?.Invoke();
         }else if(Input.GetMouseButtonUp(0)) {
             _isSelected = false;
+            OnTouchUp?.Invoke();
         }
 
         if(_isSelected) {
             Vector2 newPos = GetMouseWorldPosition();
             transform.position = newPos;
+
         }
     }
 
@@ -193,10 +207,12 @@ public class Weapon : MonoBehaviour
             switch(touch.phase) {
                 case TouchPhase.Began:
                     _isSelected = true;
+                    OnTouchDown?.Invoke();
                     break;
                 case TouchPhase.Ended:
                 case TouchPhase.Canceled:
                     _isSelected = false;
+                    OnTouchUp?.Invoke();
                     break;
             }
 
@@ -216,41 +232,41 @@ public class Weapon : MonoBehaviour
         return _mainCamera.ScreenToWorldPoint(mouseScreenPosition);
     }
 
-    public void HandleSwitching() {
-        if(Time.timeSinceLevelLoad - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
-            _lastSwitchTime = Time.timeSinceLevelLoad;
-            _audioSource.PlayOneShot(_switchingSound);
-            //FStartCoroutine(SwitchingLerp(0.3f));
-        }
-    }
+    //public void HandleSwitching() {
+    //    if(Time.timeSinceLevelLoad - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
+    //        _lastSwitchTime = Time.timeSinceLevelLoad;
+    //        _audioSource.PlayOneShot(_switchingSound);
+    //        //FStartCoroutine(SwitchingLerp(0.3f));
+    //    }
+    //}
 
-    private IEnumerator SwitchingLerp(float duration) {
-        touchEnable = false;
-        Vector3 weaponPos = transform.position;
-        Vector3 nexusPos = _nexus.transform.position;
+    //private IEnumerator SwitchingLerp(float duration) {
+    //    touchEnable = false;
+    //    Vector3 weaponPos = transform.position;
+    //    Vector3 nexusPos = _nexus.transform.position;
 
-        float elapsed = 0f;
+    //    float elapsed = 0f;
 
-        while(elapsed < duration) {
-            float t = elapsed / duration;
+    //    while(elapsed < duration) {
+    //        float t = elapsed / duration;
 
-            transform.position = Vector3.Lerp(weaponPos, nexusPos, t);
-            _nexus.transform.position = Vector3.Lerp(nexusPos, weaponPos, t);
+    //        transform.position = Vector3.Lerp(weaponPos, nexusPos, t);
+    //        _nexus.transform.position = Vector3.Lerp(nexusPos, weaponPos, t);
 
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+    //        elapsed += Time.deltaTime;
+    //        yield return null;
+    //    }
 
-        transform.position = nexusPos;
-        _nexus.transform.position = weaponPos;
-        touchEnable = true;
+    //    transform.position = nexusPos;
+    //    _nexus.transform.position = weaponPos;
+    //    touchEnable = true;
 
-        //StartCoroutine(_cameraComp.SmoothCameraTransition(transform.position, 0.2f));
-    }
+    //    StartCoroutine(_cameraComp.SmoothCameraTransition(transform.position, 0.2f));
+    //}
 
-    public float GetSwitchCool() { // UI 확인용
-        return instSkills[Skill.Switching].GetAP() - (Time.timeSinceLevelLoad - _lastSwitchTime);
-    }
+    //public float GetSwitchCool() { // UI 확인용
+    //    return instSkills[Skill.Switching].GetAP() - (Time.timeSinceLevelLoad - _lastSwitchTime);
+    //}
 
     public void SetTouchEnable(bool value) {
         touchEnable = value;

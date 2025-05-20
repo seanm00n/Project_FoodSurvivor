@@ -35,7 +35,7 @@ public class CameraMovement : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        FixedMovement();
+        //FixedMovement();
     }
 
     private void FixedMovement() {

@@ -20,5 +20,9 @@ public class BlueRangedMob : MonsterBase
         GM.I.OnBossSpawn += HandleSelfRelease;
         GM.I.spawnedMobs.Add(gameObject);
     }
+
+    protected override void Repeat() {
+        //
+    }
 }
 
