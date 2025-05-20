@@ -557,7 +557,7 @@ public class GM : MonoBehaviour
 
     private void BossSpawn() {
         OnBossSpawn.Invoke(); // ÀüºÎ self release
-        _uiManager.SetBossHPUI();
+        //_uiManager.SetBossHPUI();
 
         GameObject spawnedBoss = monPool["Boss"].Get();
         spawnedBoss.transform.position = new Vector3(0, 4, 0);

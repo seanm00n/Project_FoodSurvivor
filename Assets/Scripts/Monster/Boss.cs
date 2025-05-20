@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Boss : MonsterBase {
 
@@ -12,10 +14,14 @@ public class Boss : MonsterBase {
 
     public float skillDuration { get; private set; } = 10f;
 
+    private SpriteRenderer _telegraphSR;
+
     [SerializeField]
     private GameObject _telegraphObject;
 
-    private SpriteRenderer _telegraphSR;
+    [SerializeField]
+    private Slider _healthBar;
+
 
     public override string poolKey { get; protected set; } = "Boss";
 
@@ -42,6 +48,15 @@ public class Boss : MonsterBase {
 
     protected override void OnDisable() {
         StopAllCoroutines();
+    }
+
+    private void HandleHealthBar() {
+        //    Boss boss = GameObject.Find("Boss(Clone)")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
+        //    if(boss != null) {
+        //        float curBossHP = boss.ability.HP;
+        //        float maxBossHP = boss.ability.MaxHP;
+        //        sliders[SliderType.BossHP].value = curBossHP / maxBossHP;
+        //    }
     }
 
     protected override void HandleDeath() { // 수정

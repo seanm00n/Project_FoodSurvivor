@@ -80,8 +80,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private AudioClip _bossWarningSound;
 
-    [SerializeField]
-    private GameObject _bossHPUI;
+    //[SerializeField]
+    //private GameObject _bossHPUI;
 
     [SerializeField]
     private Animator _transAnimator;
@@ -107,7 +107,7 @@ public class UIManager : MonoBehaviour
 
     private int _iconBoxIndex = 0;
 
-    private bool _isBossSpawn = false;
+    //private bool _isBossSpawn = false;
 
     private void Awake() {
         if(I != null && I != this) {
@@ -168,19 +168,19 @@ public class UIManager : MonoBehaviour
         float maxExp = GM.I.LevelData[_weapon.ability.Lv].reqEXP;
         sliders[SliderType.WeaponEXP].value = curExp / maxExp;
 
-        if(_isBossSpawn) {
-            Boss boss = GameObject.Find("Boss(Clone)")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
-            if(boss != null) {
-                float curBossHP = boss.ability.HP;
-                float maxBossHP = boss.ability.MaxHP;
-                sliders[SliderType.BossHP].value = curBossHP / maxBossHP;
-            }
-        }
+        //if(_isBossSpawn) {
+        //    Boss boss = GameObject.Find("Boss(Clone)")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
+        //    if(boss != null) {
+        //        float curBossHP = boss.ability.HP;
+        //        float maxBossHP = boss.ability.MaxHP;
+        //        sliders[SliderType.BossHP].value = curBossHP / maxBossHP;
+        //    }
+        //}
 
-        float curNexusHP = _nexus.ability.HP;
-        float curNexusMaxHP = _nexus.ability.MaxHP;
+        //float curNexusHP = _nexus.ability.HP;
+        //float curNexusMaxHP = _nexus.ability.MaxHP;
 
-        sliders[SliderType.NexusHP].value = curNexusHP / curNexusMaxHP;
+        //sliders[SliderType.NexusHP].value = curNexusHP / curNexusMaxHP;
     }
 
     private void SetLevelText() {
@@ -206,10 +206,10 @@ public class UIManager : MonoBehaviour
 
     public void SetKillCountText() => _killCountText.text = GM.I.killCount.ToString();
 
-    public void SetBossHPUI() {
-        _bossHPUI.SetActive(true);
-        _isBossSpawn = true;
-    }
+    //public void SetBossHPUI() {
+    //    _bossHPUI.SetActive(true);
+    //    _isBossSpawn = true;
+    //}
 
     #endregion
 
