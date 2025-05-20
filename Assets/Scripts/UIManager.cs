@@ -137,7 +137,7 @@ public class UIManager : MonoBehaviour
 
     private void Update() {
         SetPlayTimeText();
-        SetSwitchCoolText();
+        //SetSwitchCoolText();
         SetSlider();
         SetLevelText();
         SetArrowVisible();
@@ -153,15 +153,15 @@ public class UIManager : MonoBehaviour
         _playTimeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    private void SetSwitchCoolText() {
-        int cooltime = Mathf.FloorToInt(_weapon.GetSwitchCool());
+    //private void SetSwitchCoolText() {
+    //    int cooltime = Mathf.FloorToInt(_weapon.GetSwitchCool());
 
-        if(cooltime > 0) {
-            _switchCoolText.text = cooltime.ToString();
-        } else {
-            _switchCoolText.text = "";
-        }
-    }
+    //    if(cooltime > 0) {
+    //        _switchCoolText.text = cooltime.ToString();
+    //    } else {
+    //        _switchCoolText.text = "";
+    //    }
+    //}
 
     private void SetSlider() {
         float curExp = _weapon.ability.Exp;
@@ -250,7 +250,7 @@ public class UIManager : MonoBehaviour
 
     #region Button interaction
 
-    public void OnSwitchButton() => _weapon.HandleSwitching();
+    //public void OnSwitchButton() => _weapon.HandleSwitching();
 
     public void OnPauseButton() {
         _audioSource.PlayOneShot(_buttonSound);
