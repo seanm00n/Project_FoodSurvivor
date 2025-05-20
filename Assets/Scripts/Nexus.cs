@@ -77,7 +77,15 @@ public class Nexus : MonoBehaviour
         if(!_isDeath) { 
             //Movement();
             Rotation();
+            SetSliderUI();
         }
+    }
+
+    private void SetSliderUI() {
+        float curNexusHP = ability.HP;
+        float curNexusMaxHP = ability.MaxHP;
+
+        _healthBar.value = curNexusHP / curNexusMaxHP;
     }
 
     private IEnumerator Anchor(float value) {

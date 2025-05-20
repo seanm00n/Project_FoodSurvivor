@@ -50,13 +50,14 @@ public class Boss : MonsterBase {
         StopAllCoroutines();
     }
 
-    private void HandleHealthBar() {
-        //    Boss boss = GameObject.Find("Boss(Clone)")?.GetComponent<Boss>(); // 오브젝트 참조 방식 변경
-        //    if(boss != null) {
-        //        float curBossHP = boss.ability.HP;
-        //        float maxBossHP = boss.ability.MaxHP;
-        //        sliders[SliderType.BossHP].value = curBossHP / maxBossHP;
-        //    }
+    protected override void Repeat() {
+        SetSliderUI();
+    }
+
+    private void SetSliderUI() {
+        float curBossHP = ability.HP;
+        float maxBossHP = ability.MaxHP;
+        _healthBar.value = curBossHP / maxBossHP;        
     }
 
     protected override void HandleDeath() { // 수정
