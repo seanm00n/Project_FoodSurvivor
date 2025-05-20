@@ -138,6 +138,10 @@ public class GM : MonoBehaviour
 
     private bool _isGamePaused = false;
 
+    private float _bossTimer = 120f;
+
+    private float _interval = 10f;
+
     #endregion
 
     #region CSV Data
@@ -207,7 +211,7 @@ public class GM : MonoBehaviour
 
         _cameraComp = Camera.main.GetComponent<CameraMovement>();
 
-        Invoke(nameof(BossSpawn), 360f); // 수정 - 360f
+        Invoke(nameof(BossSpawn), _bossTimer); 
     }
 
     private void Update() {
@@ -503,15 +507,15 @@ public class GM : MonoBehaviour
     #region Monster Control
 
     private void MonsterSpawn() {
-        if(Time.timeSinceLevelLoad >= 355f) return; // 수정 - 355f
+        if(Time.timeSinceLevelLoad >= _bossTimer - 5f) return;
 
         MonsterSpawner("BlueMelee", "BlueRanged", _blueMaxNum, _blueSpawnPoint, ref _blueLastIndex);
 
-        if(Time.timeSinceLevelLoad / 120 >= 1 || _isBlueZoneOut) {
+        if(Time.timeSinceLevelLoad / (_bossTimer * 0.33) >= 1 || _isBlueZoneOut) {
             MonsterSpawner("GreenMelee", "GreenRanged", _greenMaxNum, _greenSpawnPoint, ref _greenLastIndex);
         }
 
-        if(Time.timeSinceLevelLoad / 240 >= 1 || _isGreenZoneOut) {
+        if(Time.timeSinceLevelLoad / (_bossTimer * 0.66) >= 1 || _isGreenZoneOut) {
             MonsterSpawner("YellowMelee", "YellowRanged", _yellowMaxNum, _yellowSpawnPoint, ref _yellowLastIndex);
         }
     }
@@ -527,11 +531,11 @@ public class GM : MonoBehaviour
     }
 
     private void UpdateMonsterMax() {
-        if(Time.timeSinceLevelLoad >= 355) return;
+        if(Time.timeSinceLevelLoad >= _bossTimer - 5f) return;
 
-        int index = 330;
-        if(!_isYellowZoneOut) { 
-            index = ((int)(Mathf.Min(Time.timeSinceLevelLoad, 330) / 30)) * 30;
+        int index = (int)(_bossTimer - _interval);
+        if(!_isYellowZoneOut) {
+            index = (int)((int)(Mathf.Min(Time.timeSinceLevelLoad, index) / _interval) * _interval);
         }
 
         _blueMaxNum = MobSpawnData[index].blueMax;
