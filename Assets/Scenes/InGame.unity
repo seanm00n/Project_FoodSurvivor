@@ -6337,6 +6337,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 832603226944567986, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
+      propertyPath: _thunderBoltPref
+      value: 
+      objectReference: {fileID: 8897146554592015834, guid: 398792ece5687274db0d6df4322d9d5b, type: 3}
     - target: {fileID: 7761268160000418982, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
       propertyPath: m_Name
       value: Weapon

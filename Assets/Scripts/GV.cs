@@ -8,7 +8,7 @@ public enum Debuff {
 }
 
 public enum Skill {
-    Switching, RainFire, ProtectShield, SlowCircle, Overdrive, VitalSurge
+    ThunderBolt, RainFire, ProtectShield, SlowCircle, Overdrive, VitalSurge
 }
 
 public enum Zone {

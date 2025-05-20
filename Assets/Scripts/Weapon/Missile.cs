@@ -66,7 +66,7 @@ public class Missile : MonoBehaviour, IBattle
         return nearest;
     }
 
-    public void SetAbility(Ability ability) => this.ability = ability;
+    public void SetAbility(Ability value) => ability = value;
 
     public float GetAP() => ability.AP;
 }

@@ -50,8 +50,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _playTimeText;
 
-    [SerializeField]
-    private TextMeshProUGUI _switchCoolText;
+    //[SerializeField]
+    //private TextMeshProUGUI _switchCoolText;
 
     [SerializeField]
     private TextMeshProUGUI _killResultText;
@@ -68,8 +68,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _timeScoreText;
 
-    [SerializeField]
-    private GameObject _switchButton;
+    //[SerializeField]
+    //private GameObject _switchButton;
 
     [SerializeField]
     private AudioClip _buttonSound;
@@ -130,7 +130,7 @@ public class UIManager : MonoBehaviour
         _pausePanel.SetActive(false);
         _gameOverPanel.SetActive(false);
 
-        StartCoroutine(SwitchStart()); // level 1 start
+        //StartCoroutine(SwitchStart()); // level 1 start
         Invoke(nameof(DrawTutorialPanel), 1.0f);
         Invoke(nameof(DrawBossSpawnAlert), 355f);
     }
@@ -387,23 +387,23 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator SwitchStart() {
-        yield return null;
-        GameObject imgObject = new GameObject("Icon");
+    //private IEnumerator SwitchStart() {
+    //    yield return null;
+    //    GameObject imgObject = new GameObject("Icon");
 
-        RectTransform rt = imgObject.AddComponent<RectTransform>();
-        rt.sizeDelta = new Vector2(150f, 150f);
+    //    RectTransform rt = imgObject.AddComponent<RectTransform>();
+    //    rt.sizeDelta = new Vector2(150f, 150f);
 
-        Image imgComp = imgObject.AddComponent<Image>();
-        imgComp.sprite = _iconList[Skill.Switching];
+    //    Image imgComp = imgObject.AddComponent<Image>();
+    //    imgComp.sprite = _iconList[Skill.Switching];
 
-        imgObject.transform.SetParent(_skilBoxList[_iconBoxIndex].transform);
-        imgObject.transform.SetAsLastSibling();
-        imgObject.transform.localPosition = Vector3.zero;
-        imgObject.transform.localScale = Vector3.one;
+    //    imgObject.transform.SetParent(_skilBoxList[_iconBoxIndex].transform);
+    //    imgObject.transform.SetAsLastSibling();
+    //    imgObject.transform.localPosition = Vector3.zero;
+    //    imgObject.transform.localScale = Vector3.one;
 
-        _iconBoxIndex++;
-    }
+    //    _iconBoxIndex++;
+    //}
 
     private IEnumerator PlayFadeOut() {
         GM.I.ResumeGame();
