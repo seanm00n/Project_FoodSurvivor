@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      fatigue_0: 4347074383671278454
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
