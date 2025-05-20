@@ -220,7 +220,7 @@ public class Weapon : MonoBehaviour
         if(Time.timeSinceLevelLoad - _lastSwitchTime >= instSkills[Skill.Switching].GetAP()) {
             _lastSwitchTime = Time.timeSinceLevelLoad;
             _audioSource.PlayOneShot(_switchingSound);
-            //StartCoroutine(SwitchingLerp(0.3f));
+            //FStartCoroutine(SwitchingLerp(0.3f));
         }
     }
 
