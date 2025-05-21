@@ -218,7 +218,6 @@ GameObject:
   - component: {fileID: 5081661515232358033}
   - component: {fileID: 1071175755889643272}
   - component: {fileID: 1071175755889643271}
-  - component: {fileID: 1720999434304096688}
   - component: {fileID: -7712401307886363122}
   m_Layer: 7
   m_Name: Boss
@@ -257,7 +256,7 @@ Animator:
   m_GameObject: {fileID: 5081661515232358038}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 81bf5e16a332adf4299e3715898ba1a5, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -342,24 +341,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1720999434304096688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5081661515232358038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a515061ea4ecfc447b82e19bbb063157, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectObject: {fileID: 4084430502542030731}
-  _zone: 2
-  _hitSound: {fileID: 8300000, guid: af660d5c8a115db45b7e25df6592757a, type: 3}
-  _redLight: {fileID: 8096069840974819902}
-  _blueLight: {fileID: 6722426697305084927}
-  _healthBar: {fileID: 1495244225450243038}
 --- !u!82 &-7712401307886363122
 AudioSource:
   m_ObjectHideFlags: 0

@@ -132,7 +132,7 @@ public class UIManager : MonoBehaviour
 
         //StartCoroutine(SwitchStart()); // level 1 start
         Invoke(nameof(DrawTutorialPanel), 1.0f);
-        Invoke(nameof(DrawBossSpawnAlert), 355f);
+        Invoke(nameof(DrawBossSpawnAlert), GM.I.bossTimer - 3f);
     }
 
     private void Update() {

@@ -20,6 +20,8 @@ public class GM : MonoBehaviour
 
     public int killCount { get; private set; } = 0;
 
+    public float bossTimer { get; private set; } = 120f; //
+
     #region Object Pool
 
     public Dictionary<string, ObjectPool<GameObject>> monPool { get; private set; }
@@ -129,8 +131,6 @@ public class GM : MonoBehaviour
 
     private bool _isGamePaused = false;
 
-    private float _bossTimer = 120f;
-
     private float _interval = 10f;
 
     private List<int> _indexPool = new List<int>(8);
@@ -187,7 +187,7 @@ public class GM : MonoBehaviour
         InitMonProjPool(_greenRangedMobPref, _greenRangedProjPref, 26, "GreenRanged");
         InitMonProjPool(_yellowMeleeMobPref, _yellowMeleeProjPref, 16, "YellowMelee");
         InitMonProjPool(_yellowRangedMobPref, _yellowRangedProjPref, 16, "YellowRanged");
-        InitMonProjPool(_bossPref, _bossMeleeProjPref, 2, "BossMelee");
+        InitMonProjPool(_bossPref, _bossMeleeProjPref, 2, "BossMelee"); // 필요 없는듯 한데...
         InitMonProjPool(_bossPref, _bossRangedProjPref, 16, "BossRanged");
         InitMonProjPool(_bossPref, _bossMeleeProjPref, 2, "BossRush");
 
@@ -212,7 +212,7 @@ public class GM : MonoBehaviour
         _greenSpawnPoints = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).Select(t => t.position).ToArray();
         _yellowSpawnPoints = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).Select(t => t.position).ToArray();
 
-        Invoke(nameof(BossSpawn), _bossTimer); 
+        Invoke(nameof(BossSpawn), bossTimer); 
     }
 
     private void Update() {
@@ -508,15 +508,15 @@ public class GM : MonoBehaviour
     #region Monster Control
 
     private void MonsterSpawn() {
-        if(Time.timeSinceLevelLoad >= _bossTimer - 5f) return;
+        if(Time.timeSinceLevelLoad >= bossTimer - 5f) return;
 
         MonsterSpawner("BlueMelee", "BlueRanged", _blueMaxNum, _blueSpawnPoints);
 
-        if(Time.timeSinceLevelLoad / (_bossTimer * 0.33) >= 1 || _isBlueZoneOut) {
+        if(Time.timeSinceLevelLoad / (bossTimer * 0.33) >= 1 || _isBlueZoneOut) {
             MonsterSpawner("GreenMelee", "GreenRanged", _greenMaxNum, _greenSpawnPoints);
         }
 
-        if(Time.timeSinceLevelLoad / (_bossTimer * 0.66) >= 1 || _isGreenZoneOut) {
+        if(Time.timeSinceLevelLoad / (bossTimer * 0.66) >= 1 || _isGreenZoneOut) {
             MonsterSpawner("YellowMelee", "YellowRanged", _yellowMaxNum, _yellowSpawnPoints);
         }
     }
@@ -552,9 +552,9 @@ public class GM : MonoBehaviour
     private float SnapToGrid(float value, float gridSize) => Mathf.Round(value * (1f / gridSize)) * gridSize;
 
     private void UpdateMonsterMax() {
-        if(Time.timeSinceLevelLoad >= _bossTimer - 5f) return;
+        if(Time.timeSinceLevelLoad >= bossTimer - 5f) return;
 
-        int index = (int)(_bossTimer - _interval);
+        int index = (int)(bossTimer - _interval);
         if(!_isYellowZoneOut) {
             index = (int)((int)(Mathf.Min(Time.timeSinceLevelLoad, index) / _interval) * _interval);
         }
@@ -581,19 +581,19 @@ public class GM : MonoBehaviour
     }
 
     private void BossSpawn() {
-        OnBossSpawn.Invoke(); // 전부 self release
+        OnBossSpawn?.Invoke(); // 전부 self release
         //_uiManager.SetBossHPUI();
 
         GameObject spawnedBoss = monPool["Boss"].Get();
-        spawnedBoss.transform.position = new Vector3(20, 0, 0);
+        spawnedBoss.transform.position = new Vector3(10, 0, 0);
         spawnedBoss.transform.rotation = Quaternion.identity;
         Boss bossComp = spawnedBoss.GetComponent<Boss>();
         bossComp.OnBossDeath += HandleBossDeath; // InitMonPool에서 임시로 생성하므로 여기서 바인딩
         bossComp.OnGameClear += HandleGameClear;
 
-        _weapon.transform.position = new Vector3(0, 0, 0);
-        _nexus.transform.position = new Vector3(0, -4, 0);
-        StartCoroutine(_cameraComp.SmoothCameraTransition(new Vector3(6, 0, 0), 0.6f));
+        //_weapon.transform.position = new Vector3(0, 0, 0);
+        //_nexus.transform.position = new Vector3(0, -4, 0);
+        StartCoroutine(_cameraComp.SmoothCameraTransition(new Vector3(3.25f, 0f, 0f), 0.6f));
     }
 
     #endregion

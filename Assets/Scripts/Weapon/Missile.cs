@@ -12,7 +12,7 @@ public class Missile : MonoBehaviour, IBattle
     private float _angle;
 
     private void Start() {
-        Destroy(gameObject, 1.5f);
+        Destroy(gameObject, 2f);
         SearchTarget();
         InvokeRepeating(nameof(SearchTarget), 0.2f, 0.2f);
     }

@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69760ae1f2a6f943b6760da0ad6f588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectObject: {fileID: 2093403607862202486}
+  _hitEffectObject: {fileID: 2093403607862202486}
   _zone: 1
   _hitSound: {fileID: 8300000, guid: af660d5c8a115db45b7e25df6592757a, type: 3}
 --- !u!95 &3950635015285663795

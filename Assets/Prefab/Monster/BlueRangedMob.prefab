@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CategoryHash: 9.365925e-16
+  m_CategoryHash: 4.7221487e-14
   m_labelHash: 0.00000040954276
   m_SpriteKey: 0
   m_SpriteHash: 567518536
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 310e87f8c48bdc443ac8eaa168fb9399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectObject: {fileID: 2719193669114627214}
+  _hitEffectObject: {fileID: 2719193669114627214}
   _zone: 0
   _hitSound: {fileID: 8300000, guid: af660d5c8a115db45b7e25df6592757a, type: 3}
 --- !u!95 &7086917538549154450

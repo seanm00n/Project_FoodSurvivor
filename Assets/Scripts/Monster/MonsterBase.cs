@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour
@@ -40,9 +41,9 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected bool _initialized = false;
 
-    protected int _currHitFrame = -1;
+    protected bool _counterActive = false;
 
-    protected int _frameCount = 0;
+    protected bool _isHitOnCounter = false;
 
     #endregion
 
@@ -52,7 +53,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected float _lastAttackTime;
 
-    protected float _rangeOffset;
+    protected float _rangeOffset = 0.5f; // 자식에서 설정해야하나?
 
     protected State _state;
 
@@ -69,7 +70,7 @@ public abstract class MonsterBase : MonoBehaviour
         ability = new Ability();
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _spriteRenderer = GetComponentsInChildren<SpriteRenderer>().FirstOrDefault(sr => sr.gameObject.name == "Body");
         _nexus = GameObject.FindGameObjectWithTag("Nexus")?.GetComponent<Nexus>();
         _nexusColl = _nexus?.GetComponent<BoxCollider2D>();
         _boxColl = GetComponent<BoxCollider2D>();
@@ -99,7 +100,6 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void Update() {
-        _frameCount++;
         Movement();
         Rotation();
         Repeat();
@@ -109,8 +109,8 @@ public abstract class MonsterBase : MonoBehaviour
         if(_state == State.Death) return;
 
         if(collision.CompareTag("PlayerProj") && _hitCoroutine == null) {
-            if(collision.gameObject.name == "WeaponBody") {
-                _currHitFrame = _frameCount;
+            if(_counterActive && collision.gameObject.name == "WeaponBody") {
+                _isHitOnCounter = true;
             }
             _hitCoroutine = StartCoroutine(LateHit(collision.gameObject));
         }
@@ -120,8 +120,8 @@ public abstract class MonsterBase : MonoBehaviour
         if(_state == State.Death) return;
 
         if(collision.CompareTag("PlayerProj")) {
-            if(collision.gameObject.name == "WeaponBody") {
-                _currHitFrame = _frameCount;
+            if(_counterActive && collision.gameObject.name == "WeaponBody") {
+                _isHitOnCounter = true;
             }
 
             if(_hitCoroutine != null) {
@@ -129,7 +129,6 @@ public abstract class MonsterBase : MonoBehaviour
                 _hitCoroutine = null;
             }
 
-            
             HandleHit(collision.gameObject);
         }
     }
@@ -206,11 +205,11 @@ public abstract class MonsterBase : MonoBehaviour
             if(_nexus == null) return;
         }
 
-        if(this is Boss boss) {
-            if(Time.timeSinceLevelLoad - boss.lastSkillUse >= boss.skillDuration) {
-                ability.SetAR(3f);
-            }
-        }
+        //if(this is Boss boss) {
+        //    if(Time.timeSinceLevelLoad - boss.lastSkillUse >= boss.skillDuration) {
+        //        ability.SetAR(3f);
+        //    }
+        //}
 
         float distance = Vector3.Distance(_nexus.transform.position, transform.position);
 
@@ -250,7 +249,7 @@ public abstract class MonsterBase : MonoBehaviour
         float angle = Mathf.Atan2(spawnDir.y, spawnDir.x) * Mathf.Rad2Deg;
 
         string poolKeyCopy = poolKey;
-        if(poolKey == "Boss") poolKeyCopy = "BossMelee";
+        if(poolKey == "Boss") poolKeyCopy = "BossRanged";
         GameObject spawnProj = GM.I.monProjPool[poolKeyCopy].Get();
 
         if(spawnProj == null) Debug.Log("monsterbase proj is null");
@@ -274,4 +273,6 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     public Zone GetZone() => _zone; // 필요?
+
+    protected void SetRangeOffset(float value) => _rangeOffset = value;
 }
