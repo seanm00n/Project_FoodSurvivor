@@ -6,9 +6,12 @@ using System.Linq;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.Pool;
+using Unity.VisualScripting;
 
 public class GM : MonoBehaviour
 {
+    #region Field
+
     public static GM I { get; private set; }
 
     public event Action OnBossSpawn;
@@ -106,12 +109,6 @@ public class GM : MonoBehaviour
 
     private Nexus _nexus;
 
-    private Transform[] _blueSpawnPoint;
-
-    private Transform[] _greenSpawnPoint;
-
-    private Transform[] _yellowSpawnPoint;
-
     private CameraMovement _cameraComp;
 
     #endregion
@@ -123,12 +120,6 @@ public class GM : MonoBehaviour
     private int _greenMaxNum = 0;
 
     private int _yellowMaxNum = 0;
-
-    private int _blueLastIndex = 0;
-
-    private int _greenLastIndex = 0;
-
-    private int _yellowLastIndex = 0;
 
     private bool _isBlueZoneOut = false;
 
@@ -142,6 +133,14 @@ public class GM : MonoBehaviour
 
     private float _interval = 10f;
 
+    private List<int> _indexPool = new List<int>(8);
+
+    private Vector3[] _blueSpawnPoints;
+
+    private Vector3[] _greenSpawnPoints;
+
+    private Vector3[] _yellowSpawnPoints;
+
     #endregion
 
     #region CSV Data
@@ -153,6 +152,8 @@ public class GM : MonoBehaviour
     public Dictionary<(string, int), float> SkillData { get; private set; }
 
     public Dictionary<int, MobSpawnCol> MobSpawnData {  get; private set; }
+
+    #endregion
 
     #endregion
 
@@ -194,22 +195,22 @@ public class GM : MonoBehaviour
         InitMobExpPool(_blueMeleeMobPref, _blueExpPref, 56, Zone.Blue);
         InitMobExpPool(_greenMeleeMobPref, _greenExpPref, 52, Zone.Green);
         InitMobExpPool(_yellowMeleeMobPref, _yellowExpPref, 32, Zone.Yellow);
+
+        _cameraComp = Camera.main.GetComponent<CameraMovement>(); // 성능 고려한 위치
     }
 
     private void Start() {
-        _weapon = GameObject.FindGameObjectWithTag("Player").GetComponent<Weapon>();
+        _weapon = GameObject.FindGameObjectWithTag("Player")?.GetComponent<Weapon>();
         _weapon.OnWeaponLevelUp += HandleWeaponLevelUp;
 
-        _nexus = GameObject.FindGameObjectWithTag("Nexus").GetComponent<Nexus>();
+        _nexus = GameObject.FindGameObjectWithTag("Nexus")?.GetComponent<Nexus>();
         _nexus.OnNexusHit += HandleNexusHit;
         _nexus.OnNexusDeath += HandleNexusDeath;
         _nexus.OnGameOver += HandleGameOver;
 
-        _blueSpawnPoint = _blueZone.GetComponentsInChildren<Transform>().Where(t => t != _blueZone.transform).ToArray();
-        _greenSpawnPoint = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).ToArray();
-        _yellowSpawnPoint = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).ToArray();
-
-        _cameraComp = Camera.main.GetComponent<CameraMovement>();
+        _blueSpawnPoints = _blueZone.GetComponentsInChildren<Transform>().Where(t => t != _blueZone.transform).Select(t => t.position).ToArray();
+        _greenSpawnPoints = _greenZone.GetComponentsInChildren<Transform>().Where(t => t != _greenZone.transform).Select(t => t.position).ToArray();
+        _yellowSpawnPoints = _yellowZone.GetComponentsInChildren<Transform>().Where(t => t != _yellowZone.transform).Select(t => t.position).ToArray();
 
         Invoke(nameof(BossSpawn), _bossTimer); 
     }
@@ -509,26 +510,46 @@ public class GM : MonoBehaviour
     private void MonsterSpawn() {
         if(Time.timeSinceLevelLoad >= _bossTimer - 5f) return;
 
-        MonsterSpawner("BlueMelee", "BlueRanged", _blueMaxNum, _blueSpawnPoint, ref _blueLastIndex);
+        MonsterSpawner("BlueMelee", "BlueRanged", _blueMaxNum, _blueSpawnPoints);
 
         if(Time.timeSinceLevelLoad / (_bossTimer * 0.33) >= 1 || _isBlueZoneOut) {
-            MonsterSpawner("GreenMelee", "GreenRanged", _greenMaxNum, _greenSpawnPoint, ref _greenLastIndex);
+            MonsterSpawner("GreenMelee", "GreenRanged", _greenMaxNum, _greenSpawnPoints);
         }
 
         if(Time.timeSinceLevelLoad / (_bossTimer * 0.66) >= 1 || _isGreenZoneOut) {
-            MonsterSpawner("YellowMelee", "YellowRanged", _yellowMaxNum, _yellowSpawnPoint, ref _yellowLastIndex);
+            MonsterSpawner("YellowMelee", "YellowRanged", _yellowMaxNum, _yellowSpawnPoints);
         }
     }
 
-    private void MonsterSpawner(string poolkey1, string poolkey2, int maxnum, Transform[] spawnpoints, ref int lastindex) {
+    private void MonsterSpawner(string poolkey1, string poolkey2, int maxnum, Vector3[] spawnpoints) {
+        int lastIndex = Random.Range(0, 8);
+        float interval = 3f;
+        float gridSize = 0.01f;
         while(monPool[poolkey1].CountActive + monPool[poolkey2].CountActive < maxnum) {
             string mobType = Random.value > 0.5f ? poolkey1 : poolkey2;
             GameObject spawnedMob = monPool[mobType].Get();
-            spawnedMob.transform.SetPositionAndRotation(spawnpoints[lastindex].position, Quaternion.identity);
+            // 여덟개의 스폰 포인트 중 lastindex를 제외한 하나를 랜덤하게 선택
+            int currentIndex = GetNextIndex(lastIndex);
+            // 선택된 스폰 포인트를 피벗으로 하는 원 모양의 범위에서 랜덤한 좌표를 생성후 스폰
+            Vector3 pivot = spawnpoints[currentIndex];
+            float randX = SnapToGrid(Random.Range(pivot.x - interval, pivot.x + interval), gridSize);
+            float randY = SnapToGrid(Random.Range(pivot.y - interval, pivot.y + interval), gridSize);
+            Vector3 spawnPoint = new Vector3(randX, randY, pivot.z);
+            spawnedMob.transform.SetPositionAndRotation(spawnPoint, Quaternion.identity);
             spawnedMob.GetComponent<MonsterBase>().OnMonsterDeath += HandleMonsterDeath;
-            lastindex = (lastindex + 1) % spawnpoints.Length;
+            lastIndex = currentIndex;
         }
     }
+
+    private int GetNextIndex(int lastindex) {
+        _indexPool.Clear();
+        for(int i = 0; i < 8; ++i) {
+            if(i != lastindex) _indexPool.Add(i);
+        }
+        return _indexPool[Random.Range(0, _indexPool.Count)];
+    }
+
+    private float SnapToGrid(float value, float gridSize) => Mathf.Round(value * (1f / gridSize)) * gridSize;
 
     private void UpdateMonsterMax() {
         if(Time.timeSinceLevelLoad >= _bossTimer - 5f) return;

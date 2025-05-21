@@ -153,7 +153,7 @@ public abstract class MonsterBase : MonoBehaviour
         }
 
         if(!gameObject.activeInHierarchy) { 
-            Debug.Log("hiteffect coroutine attempted during death"); 
+            Debug.Log("reached hiteffect coroutine during death"); 
             return; 
         }
 
@@ -171,6 +171,10 @@ public abstract class MonsterBase : MonoBehaviour
         _effectObject.SetActive(false);
         StopAllCoroutines();
         float animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
+        if(!gameObject.activeInHierarchy) {
+            Debug.Log("reached DropAndRelease coroutine during death");
+            return;
+        }
         StartCoroutine(DropAndRelease(animLength));
     }
 
