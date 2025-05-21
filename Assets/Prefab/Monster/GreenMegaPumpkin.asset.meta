@@ -11,5 +11,5 @@ AssetOrigin:
   productId: 269333
   packageName: Pixel Monsters Animated Boss Pack #1
   packageVersion: 2.7
-  assetPath: Assets/PixelFantasy/PixelMonsters/BossPack1/MegaPumpkin/GreenMegaPumpkin.asset
+  assetPath: Assets/Prefab/Monster/GreenMegaPumpkin.asset
   uploadId: 656019
