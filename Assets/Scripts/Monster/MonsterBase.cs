@@ -14,7 +14,7 @@ public abstract class MonsterBase : MonoBehaviour
     #region SerializeField
 
     [SerializeField]
-    protected GameObject _effectObject;
+    protected GameObject _hitEffectObject;
 
     [SerializeField]
     protected Zone _zone;
@@ -39,6 +39,10 @@ public abstract class MonsterBase : MonoBehaviour
     protected AudioSource _audioSource;
 
     protected bool _initialized = false;
+
+    protected int _currHitFrame = -1;
+
+    protected int _frameCount = 0;
 
     #endregion
 
@@ -69,7 +73,7 @@ public abstract class MonsterBase : MonoBehaviour
         _nexus = GameObject.FindGameObjectWithTag("Nexus")?.GetComponent<Nexus>();
         _nexusColl = _nexus?.GetComponent<BoxCollider2D>();
         _boxColl = GetComponent<BoxCollider2D>();
-        _effectSR = _effectObject.GetComponent<SpriteRenderer>();
+        _effectSR = _hitEffectObject.GetComponent<SpriteRenderer>();
         _initialized = true;
     }
 
@@ -77,7 +81,7 @@ public abstract class MonsterBase : MonoBehaviour
         if(!_initialized) Initialize();
         ability.SetHP(ability.MaxHP);
         _debuffList = new HashSet<Debuff>();
-        _effectObject.SetActive(false);
+        _hitEffectObject.SetActive(false);
         _animator.SetBool("Walk", true);
         _state = State.Moving;
         _boxColl.enabled = true;
@@ -95,6 +99,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     private void Update() {
+        _frameCount++;
         Movement();
         Rotation();
         Repeat();
@@ -104,6 +109,9 @@ public abstract class MonsterBase : MonoBehaviour
         if(_state == State.Death) return;
 
         if(collision.CompareTag("PlayerProj") && _hitCoroutine == null) {
+            if(collision.gameObject.name == "WeaponBody") {
+                _currHitFrame = _frameCount;
+            }
             _hitCoroutine = StartCoroutine(LateHit(collision.gameObject));
         }
     }
@@ -112,10 +120,15 @@ public abstract class MonsterBase : MonoBehaviour
         if(_state == State.Death) return;
 
         if(collision.CompareTag("PlayerProj")) {
+            if(collision.gameObject.name == "WeaponBody") {
+                _currHitFrame = _frameCount;
+            }
+
             if(_hitCoroutine != null) {
                 StopCoroutine(_hitCoroutine);
                 _hitCoroutine = null;
             }
+
             
             HandleHit(collision.gameObject);
         }
@@ -140,9 +153,9 @@ public abstract class MonsterBase : MonoBehaviour
     protected IEnumerator HitEffect() {
         _effectSR.sprite = _spriteRenderer.sprite;
         _effectSR.flipX = _spriteRenderer.flipX;
-        _effectObject.SetActive(true);
+        _hitEffectObject.SetActive(true);
         yield return new WaitForSeconds(0.05f);
-        _effectObject.SetActive(false);
+        _hitEffectObject.SetActive(false);
         _effectCoroutine = null;
     }
 
@@ -168,7 +181,7 @@ public abstract class MonsterBase : MonoBehaviour
         _boxColl.enabled = false;
         _animator.SetTrigger("Die");
         _animator.SetBool("Walk", false);
-        _effectObject.SetActive(false);
+        _hitEffectObject.SetActive(false);
         StopAllCoroutines();
         float animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
         if(!gameObject.activeInHierarchy) {

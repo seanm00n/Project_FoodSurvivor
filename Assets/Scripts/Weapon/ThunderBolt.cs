@@ -63,6 +63,7 @@ public class ThunderBolt : WeaponProjBase, IBattle {
 
     public void HandleOnTouchUp() {
         if(!_isMouseDown) return;
+        _elapsed = 0f;
         _isMouseDown = false;
     }
 }

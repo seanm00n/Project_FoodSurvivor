@@ -188,7 +188,7 @@ public class GM : MonoBehaviour
         InitMonProjPool(_yellowMeleeMobPref, _yellowMeleeProjPref, 16, "YellowMelee");
         InitMonProjPool(_yellowRangedMobPref, _yellowRangedProjPref, 16, "YellowRanged");
         InitMonProjPool(_bossPref, _bossMeleeProjPref, 2, "BossMelee");
-        InitMonProjPool(_bossPref, _bossRangedProjPref, 192, "BossRanged");
+        InitMonProjPool(_bossPref, _bossRangedProjPref, 16, "BossRanged");
         InitMonProjPool(_bossPref, _bossMeleeProjPref, 2, "BossRush");
 
         mobExpPool = new Dictionary<Zone, ObjectPool<GameObject>>();
