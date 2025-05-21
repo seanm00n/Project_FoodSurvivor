@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      SwordOverdrive_0: -2999973264016092071
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

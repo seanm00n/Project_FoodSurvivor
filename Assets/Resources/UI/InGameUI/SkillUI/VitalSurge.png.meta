@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      VitalSurge_0: -6260832318561180611
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
