@@ -92,7 +92,7 @@ public class Boss : MonsterBase {
         if(Time.timeSinceLevelLoad - lastSkillUse >= skillDuration) { // 시간제로 변경
             lastSkillUse = Time.timeSinceLevelLoad;
             Func<IEnumerator>[] patterns = new Func<IEnumerator>[] {
-                RushAttack//MultiAttack, RushAttack, GiantAttack
+                MultiAttack, RushAttack, //GiantAttack
             };
             int rand = Random.Range(0, patterns.Length);
             StartCoroutine(patterns[rand]());
@@ -148,25 +148,24 @@ public class Boss : MonsterBase {
     private IEnumerator RushAttack() { 
         _state = State.Attack;
         _animator.SetTrigger("RushWait");
-        yield return new WaitForSeconds(0.5f);
 
         _counterAlert.SetActive(true);
         _counterAlertSR.sprite = _spriteRenderer.sprite;
         _counterAlertSR.flipX = _spriteRenderer.flipX;
-
         _counterAlert.transform.localScale = new Vector3(2, 2, 1);
 
         float elapsed = 0f;
-        float motion = 0.5f;
+        float motion = 1.5f;
+        float delay = 0.5f;
         bool isfail = false;
-        _counterActive = true;
+        
         Vector3 start = Vector3.one * 2;
         Vector3 end = Vector3.one;
         while(elapsed < motion) {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / motion);
             _counterAlert.transform.localScale = Vector3.Lerp(start, end, t);
-            
+            if(elapsed > delay) _counterActive = true;
             if(_isHitOnCounter) {
                 Debug.Log("Early Counter Attack");
                 isfail = true;
@@ -190,10 +189,10 @@ public class Boss : MonsterBase {
             _alertObjectSR.flipX = _spriteRenderer.flipX;
 
             elapsed = 0f;
-            motion = 0.2f;
+            motion = 0.3f;
             while(elapsed < motion) {
                 elapsed += Time.deltaTime;
-                if(_isHitOnCounter) { // 카운터 성공 시 뒤로 잠깐 밀림
+                if(_isHitOnCounter) {
                     Debug.Log("Counter Success");
                     isSuccess = true;
                     _alertObject.SetActive(false);
@@ -219,7 +218,6 @@ public class Boss : MonsterBase {
             end = Vector3.zero;
 
             while(elapsed < motion) {
-                // 뒤로 밀려나는 느낌의 물리 추가
                 elapsed += Time.deltaTime;
                 float t = Mathf.PingPong(elapsed / (motion / 2), 1f);
                 transform.position = Vector3.Lerp(start, end, t);
@@ -227,9 +225,11 @@ public class Boss : MonsterBase {
             }
 
             transform.position = start;
+        } else {
+            yield return new WaitForSeconds(0.3f);
         }
-        
-        lastSkillUse += 2f;
+
+            lastSkillUse += 2f;
         ResetState();
     }
 
