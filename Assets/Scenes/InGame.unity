@@ -4731,7 +4731,7 @@ MonoBehaviour:
   _iconList:
     _serializedList:
     - Key: 0
-      Value: {fileID: 21300000, guid: ef5c4618d49a98a4facfc64da2307467, type: 3}
+      Value: {fileID: 21300000, guid: 9519cb7f7d77b4144af151fcb8733a8d, type: 3}
     - Key: 1
       Value: {fileID: 21300000, guid: 8b190049653a69b469dfa7967740d6e2, type: 3}
     - Key: 2
