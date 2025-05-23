@@ -140,6 +140,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     protected void HandleHit(GameObject target) {
+        if(_state == State.Death) return;
         _audioSource.PlayOneShot(_hitSound);
         IBattle battle = target.GetComponent<IBattle>();
         
@@ -159,6 +160,8 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     protected void CheckDeath() {
+        if(_state == State.Death) return;
+
         if(ability.HP <= 0f) {
             HandleDeath();
             return;
