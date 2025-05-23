@@ -209,12 +209,6 @@ public abstract class MonsterBase : MonoBehaviour
             if(_nexus == null) return;
         }
 
-        //if(this is Boss boss) {
-        //    if(Time.timeSinceLevelLoad - boss.lastSkillUse >= boss.skillDuration) {
-        //        ability.SetAR(3f);
-        //    }
-        //}
-
         float distance = Vector3.Distance(_nexus.transform.position, transform.position);
 
         if(distance > ability.AR + _rangeOffset) {

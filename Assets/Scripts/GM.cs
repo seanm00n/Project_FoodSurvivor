@@ -20,7 +20,7 @@ public class GM : MonoBehaviour
 
     public int killCount { get; private set; } = 0;
 
-    public float bossTimer { get; private set; } = 120f; //
+    public float bossTimer { get; private set; } = 5f; //
 
     #region Object Pool
 

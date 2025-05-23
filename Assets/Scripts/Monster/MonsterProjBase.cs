@@ -39,8 +39,9 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
     }
 
     protected virtual void Movement() {
+        if(ability.AR <= 0) return;
         Vector3 direction = transform.right.normalized;
-        transform.position += direction * (ability.MS * 1.5f) * (ability.AR > 0 ? 1f : 0f) * Time.deltaTime;
+        transform.position += direction * (ability.MS * 1.5f) * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

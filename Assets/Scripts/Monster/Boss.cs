@@ -92,7 +92,7 @@ public class Boss : MonsterBase {
         if(Time.timeSinceLevelLoad - lastSkillUse >= skillDuration) { // 시간제로 변경
             lastSkillUse = Time.timeSinceLevelLoad;
             Func<IEnumerator>[] patterns = new Func<IEnumerator>[] {
-                RushAttack, MultiAttack, GiantAttack
+                RushAttack//MultiAttack, RushAttack, GiantAttack
             };
             int rand = Random.Range(0, patterns.Length);
             StartCoroutine(patterns[rand]());
@@ -109,27 +109,45 @@ public class Boss : MonsterBase {
     private IEnumerator MultiAttack() { // 여러발 공격
         _state = State.Attack;
         _animator.SetTrigger("Multi");
+
+        _alertObject = _redAlert;
+        _alertObject.SetActive(true);
+        _alertObjectSR = _alertObject.GetComponent<SpriteRenderer>();
         _alertObjectSR.sprite = _spriteRenderer.sprite;
         _alertObjectSR.flipX = _spriteRenderer.flipX;
-        _redAlert.SetActive(true);
-        yield return new WaitForSeconds(1f);
 
-        for(int i = 0; i < 8; ++i) {
-            for(int index = 0; index < 24; ++index) {
+        float elapsed = 0f;
+        float duration = 1f;
+        Color c = _alertObjectSR.color;
+        c.a = 0f;
+        _alertObjectSR.color = c;
+
+        while(elapsed < duration) {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            c.a = t;
+            _alertObjectSR.color = c;
+            _alertObjectSR.sprite = _spriteRenderer.sprite;
+            yield return null;
+        }
+        _alertObject.SetActive(false);
+
+        for(int i = 0; i < 4; ++i) {
+            for(int index = 0; index < 4; ++index) {
                 GameObject spawnedProj = GM.I.monProjPool["BossRanged"].Get();
                 spawnedProj.transform.position = transform.position;
-                spawnedProj.transform.rotation = Quaternion.Euler(0f, 0f, (index * 15) + (i * 5));
+                spawnedProj.transform.rotation = Quaternion.Euler(0f, 0f, -135f - (30f * index));
             }
             yield return new WaitForSeconds(0.125f);
         }
-        _redAlert.SetActive(false);
+        _alertObject.SetActive(false);
         lastSkillUse += 1f;
         ResetState();
     }
 
     private IEnumerator RushAttack() { 
         _state = State.Attack;
-        _animator.SetTrigger("RushWait"); // 차징 애니메이션 1.2초
+        _animator.SetTrigger("RushWait");
         yield return new WaitForSeconds(0.5f);
 
         _counterAlert.SetActive(true);
@@ -175,7 +193,7 @@ public class Boss : MonsterBase {
             motion = 0.2f;
             while(elapsed < motion) {
                 elapsed += Time.deltaTime;
-                if(_isHitOnCounter) {
+                if(_isHitOnCounter) { // 카운터 성공 시 뒤로 잠깐 밀림
                     Debug.Log("Counter Success");
                     isSuccess = true;
                     _alertObject.SetActive(false);
