@@ -53,7 +53,7 @@ public abstract class MonsterBase : MonoBehaviour
 
     protected float _lastAttackTime;
 
-    protected float _rangeOffset = 0.5f; // 자식에서 설정해야하나?
+    private float _rangeOffset = 0.5f; // 자식에서 설정해야하나?
 
     protected State _state;
 

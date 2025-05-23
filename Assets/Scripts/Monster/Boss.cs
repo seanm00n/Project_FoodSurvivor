@@ -40,13 +40,11 @@ public class Boss : MonsterBase {
         ability.SetHP(10000f);
         ability.SetMaxHP(10000f);
         ability.SetAS(0.5f); // attack per second
-        ability.SetAR(6.5f); // attack range
+        ability.SetAR(6.25f); // attack range
         ability.SetMS(5f); // move speed
         ability.SetLifeTime(2f); // proj lifetime
         ability.SetExp(0);
-        _rangeOffset = 2f;
         _counterAlertSR = _counterAlert.GetComponent<SpriteRenderer>();
-        //_effectSprite = _redLight.GetComponent<SpriteRenderer>();
     }
 
     protected override void OnEnable() {

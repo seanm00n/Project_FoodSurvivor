@@ -12,7 +12,6 @@ public class GreenRangedMob : MonsterBase
         ability.SetMS(1.25f);
         ability.SetLifeTime(4f);
         ability.SetExp(GM.I.MobData["GreenRanged"].Exp);
-        _rangeOffset = 0.5f;
     }
 
     protected override void OnEnable() {

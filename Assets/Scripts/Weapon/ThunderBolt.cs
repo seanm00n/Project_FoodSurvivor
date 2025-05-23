@@ -13,9 +13,6 @@ public class ThunderBolt : WeaponProjBase, IBattle {
     [SerializeField]
     private GameObject _thunderPref;
 
-    [SerializeField]
-    private Slider _coolBar;
-
     protected override void Initialize() {
         base.Initialize();
         Weapon.I.OnTouchDown += HandleOnTouchDown;
@@ -37,7 +34,6 @@ public class ThunderBolt : WeaponProjBase, IBattle {
                 _elapsed = 0f;
                 StartCoroutine(SpawnThunder(0.2f));
             }
-            _coolBar.value = _elapsed / _attackDuration;
         }
     }
 
