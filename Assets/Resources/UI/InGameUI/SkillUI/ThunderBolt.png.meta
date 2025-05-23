@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6ead4b28cc83f694ab4a1c0e67a94605
+guid: 1ac65e6e83830444bb55d5781c5281f1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -894095381526335850
-    second: Lightning_0
+      213: -7242113624083656407
+    second: ThunderBolt_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Lightning_0
+      name: ThunderBolt_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 69e2ec4dcf88793f0800000000000000
-      internalID: -894095381526335850
+      spriteID: 9211a7d7708de7b90800000000000000
+      internalID: -7242113624083656407
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Lightning_0: -894095381526335850
+      ThunderBolt_0: -7242113624083656407
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
