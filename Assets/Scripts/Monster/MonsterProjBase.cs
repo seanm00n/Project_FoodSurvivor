@@ -32,13 +32,13 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
         Movement();
     }
 
-    protected virtual void Countdown() {
+    private void Countdown() {
         if(Time.timeSinceLevelLoad - _spawnTime >= ability.lifeTime) {
             GM.I.monProjPool[poolKey].Release(gameObject);
         }
     }
 
-    private void Movement() {
+    protected virtual void Movement() {
         Vector3 direction = transform.right.normalized;
         transform.position += direction * (ability.MS * 1.5f) * (ability.AR > 0 ? 1f : 0f) * Time.deltaTime;
     }

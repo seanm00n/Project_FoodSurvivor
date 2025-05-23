@@ -176,6 +176,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     protected virtual void HandleDeath() {
+        if(_state == State.Death) return;
         _state = State.Death;
         _boxColl.enabled = false;
         _animator.SetTrigger("Die");

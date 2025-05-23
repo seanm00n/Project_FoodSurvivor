@@ -70,6 +70,7 @@ public class Boss : MonsterBase {
     }
 
     protected override void HandleDeath() { // ¼öÁ¤
+        if(_state == State.Death) return;
         _state = State.Death;
         _boxColl.enabled = false;
         _animator.SetTrigger("Die");
