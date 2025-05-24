@@ -1,7 +1,7 @@
 <div align="center">
 <h2>🎮Drag&Slash Survivor v1.1.1</h2>
-![gametitlefinal](https://github.com/user-attachments/assets/934c6bb0-c67e-4d7a-8f99-5d95ae78e2e7)
 </div>
+![gametitlefinal](https://github.com/user-attachments/assets/455fa80b-1d42-4b83-b670-1069d9b2b093)
 
 ---
 
@@ -34,15 +34,17 @@
 <a name="게임-소개"></a>
 ## 🕹️ 게임 소개
 
-**Drag & Slash Survivor**는 Unity 6으로 개발된 2D 모바일 하이브리드 캐주얼 뱀서라이크 게임입니다. 플레이어는 다양한 스킬과 무기를 조합하여 손가락으로 끝없이 몰려오는 적을 드래그하여 처치하고 최후의 보스와 전투에서 승리하는 것을 목표로 합니다.
+**Drag & Slash Survivor**는 Unity 6으로 개발된 2D 모바일 하이브리드 캐주얼 뱀서라이크 게임입니다.  
+플레이어는 다양한 스킬과 무기를 조합하여 손가락으로 끝없이 몰려오는 적을 드래그하여 처치하고 최후의 보스와 전투에서 승리하는 것을 목표로 합니다.
 
-**Drag&Slash Survivor**는 현재 어떠한 개인정보도 수집, 저장, 또는 공유하지 않습니다.
+**Drag&Slash Survivor**는 현재 어떠한 개인정보도 수집, 저장, 또는 공유하지 않습니다.  
 이 게임은 광고, 로그인, 서버 통신이 없는 완전한 오프라인 게임입니다.
 
-※ 추후 광고 기능이 추가될 경우, 본 개인정보 처리방침은 변경될 수 있습니다.
+※ 추후 광고 기능이 추가될 경우, 본 개인정보 처리방침은 변경될 수 있습니다.  
 문의: deccj97@gmail.com
 
-**Drag & Slash Survivor** is a 2D mobile hybrid casual Reverse Bullet Hell game created via Unity 6. With different combinations of skills and weapons, the player must touch and drag to eliminate enemies and ultimately, the boss.
+**Drag & Slash Survivor** is a 2D mobile hybrid casual Reverse Bullet Hell game created via Unity 6. 
+With different combinations of skills and weapons, the player must touch and drag to eliminate enemies and ultimately, the boss.
 
 **Drag&Slash Survivor** does not currently collect, store, or share any personal information.  
 This is a fully offline game with no ads, login, or server communication.  
@@ -57,9 +59,9 @@ Contact: deccj97@gmail.com
 
 | 특징 | 설명 |
 |------|------|
-| 🔄 손가락이 곧 공격 | 손가락이 무기가 된다! 플레이어는 직접 무기를 드래그하여 대량의 적들을 공격하며 전장을 쓸어버리는 쾌감 제공. |
-| ⚔️ 다양한 무기와 스킬 시스템 | 플레이어 스타일에 맞는 플레이! 다수의 스킬과 무기의 고유 특성을 활용함으로 공격 혹은 방어 위주로 선택하는 전략 시스템. |
-| 캐주얼한 플레이타임 | 캐주얼이라는 테마에 맞는 2분~3분의 플레이타임. |
+| 👆 손가락이 곧 공격 | 손가락이 무기가 된다! 플레이어는 직접 무기를 드래그하여 대량의 적들을 공격하며 전장을 쓸어버리는 쾌감 제공. |
+| ⚔️ 다양한 스킬 시스템 | 플레이어 스타일에 맞는 플레이! 다수의 스킬과 무기의 고유 특성을 활용함으로 공격 혹은 방어 위주로 선택하는 전략 시스템. |
+| 🕹️ 짧은 플레이타임 | 캐주얼이라는 테마에 맞는 2분~3분의 플레이타임. |
 
 ---
 
@@ -85,9 +87,9 @@ Contact: deccj97@gmail.com
 <a name="사용-기술-스택"></a>
 ## 🛠️ 사용 기술 스택
 
-- **Unity Engine**: Animator, Scene 관리, UI 시스템 등
-- **C#**: SerializedDictionary 구현, Object Pooling, CSV Read/Write, 전투 시스템, UI 로직, 몬스터 AI, 스킬 처리 등
-- **Git**: 협업 버전 관리
+- **Unity Engine**: Animator, Scene 관리, UI 시스템, SerializedDictionary 등
+- **C#**: Object Pooling, CSV Read/Write, 전투 시스템, UI 로직, 몬스터 AI, 스킬 처리 등
+- **Git**: 협업&버전 관리
 - **Figma**: UI 디자인 및 스프라이트 제작
 
 ---
