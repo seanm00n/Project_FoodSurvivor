@@ -1,6 +1,6 @@
 <div align="center">
 <h2>🎮Drag&Slash Survivor v1.1.1</h2>
-![gametitlefinal](https://github.com/user-attachments/assets/5217ac57-badb-4454-ab58-5b33079e0aee)
+![gametitlefinal](https://github.com/user-attachments/assets/934c6bb0-c67e-4d7a-8f99-5d95ae78e2e7)
 </div>
 
 ---
