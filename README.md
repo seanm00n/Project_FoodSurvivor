@@ -34,8 +34,15 @@
 <a name="게임-소개"></a>
 ## 🕹️ 게임 소개
 
-**DragNSlash Survivor**는 Unity 6으로 개발된 2D 모바일 뱀서라이크 게임입니다.  
-플레이어는 다양한 스킬과 무기를 조합하여 끝없이 몰려오는 적을 처치하고, 최후의 보스와 전투에서 승리하는 것을 목표로 합니다.  
+**Drag & Slash Survivor**는 Unity 6으로 개발된 2D 모바일 하이브리드 캐주얼 뱀서라이크 게임입니다. 플레이어는 다양한 스킬과 무기를 조합하여 손가락으로 끝없이 몰려오는 적을 드래그하여 처치하고 최후의 보스와 전투에서 승리하는 것을 목표로 합니다.
+
+**Drag&Slash Survivor**는 현재 어떠한 개인정보도 수집, 저장, 또는 공유하지 않습니다.
+이 게임은 광고, 로그인, 서버 통신이 없는 완전한 오프라인 게임입니다.
+
+※ 추후 광고 기능이 추가될 경우, 본 개인정보 처리방침은 변경될 수 있습니다.
+문의: deccj97@gmail.com
+
+**Drag & Slash Survivor** is a 2D mobile hybrid casual Reverse Bullet Hell game created via Unity 6. With different combinations of skills and weapons, the player must touch and drag to eliminate enemies and ultimately, the boss.
 
 **Drag&Slash Survivor** does not currently collect, store, or share any personal information.  
 This is a fully offline game with no ads, login, or server communication.  
