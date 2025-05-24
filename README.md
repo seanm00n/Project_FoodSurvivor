@@ -1,5 +1,5 @@
 <div align="center">
-  <h2>🎮Drag&Slash Survivor v1.1.1</h2>
+  <h2>🎮Drag&Slash Survivor v1.1.1(수정중)</h2>
   <img src="image/gametitlefinal.png" alt="gametitlefinal" />
 </div>
 
