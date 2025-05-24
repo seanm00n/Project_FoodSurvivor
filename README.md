@@ -1,7 +1,7 @@
 <div align="center">
-<h2>🎮Drag&Slash Survivor v1.1.1</h2>
+  <h2>🎮Drag&Slash Survivor v1.1.1</h2>
+  <img src="image/gametitlefinal.png" alt="gametitlefinal" />
 </div>
-![gametitlefinal](https://github.com/user-attachments/assets/455fa80b-1d42-4b83-b670-1069d9b2b093)
 
 ---
 
