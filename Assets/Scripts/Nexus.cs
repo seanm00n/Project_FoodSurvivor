@@ -86,7 +86,7 @@ public class Nexus : MonoBehaviour
         float curNexusHP = ability.HP;
         float curNexusMaxHP = ability.MaxHP;
 
-        _healthBar.value = curNexusHP / curNexusMaxHP;
+        _healthBar.value = Mathf.Clamp01(curNexusHP / curNexusMaxHP);
     }
 
     private IEnumerator Anchor(float value) {
