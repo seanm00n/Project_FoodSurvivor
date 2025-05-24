@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using AYellowpaper.SerializedCollections;
 using TMPro;
 using System.Collections;
+using static CoroutineUtils;
 
 public class UIManager : MonoBehaviour
 {
@@ -424,7 +425,7 @@ public class UIManager : MonoBehaviour
         float fadeCycleDuration = 1f;
 
         while(elapsed < totalDuration) {
-            yield return CoroutineUtils.WaitWhilePaused();
+            while(GM.isPaused) yield return null;
             float cycleTime = elapsed % fadeCycleDuration;
             float alpha = Mathf.PingPong(cycleTime * 2f, 1f);
 
