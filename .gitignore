@@ -72,3 +72,27 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/* 
 /[Aa]ssets/PixelFantasy/*     
 /[Aa]ssets/IgnoreAssets/*     
+
+# Native build artifacts (Android NDK, IL2CPP, CMake, Ninja builds)
+**/CMakeFiles/
+**/cmake*/        # cmake api temp folders
+**/CMakeOutput.log
+**/configure_fingerprint.bin
+**/FramePacing/
+**/*.cmake
+**/*.ninja*
+**/*.log
+**/*.json
+**/*.txt
+
+# Temporary Unity burst/debug/IL2CPP output
+*.sym.so
+*.map
+*.so.debug
+*.symbols.zip
+*_BackUpThisFolder_ButDontShipItWithYourGame/
+*_BurstDebugInformation_DoNotShip/
+*_mapping.txt
+
+# Unity temp native build folder
+.utmpp*/
