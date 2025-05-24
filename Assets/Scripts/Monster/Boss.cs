@@ -77,6 +77,7 @@ public class Boss : MonsterBase {
         _boxColl.enabled = false;
         _animator.SetTrigger("Die");
         _animator.SetBool("Walk", false);
+        _hitEffectObject.SetActive(false);
         OnBossDeath.Invoke(this);
         StopAllCoroutines();
         StartCoroutine(DestroyBoss());
