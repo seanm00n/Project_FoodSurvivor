@@ -1,5 +1,5 @@
 <div align="center">
-<h2>🎮Drag&Slash Survivor(수정중)</h2>
+<h2>🎮Drag&Slash Survivor v1.1(수정중)</h2>
 <img src="https://github.com/user-attachments/assets/7fbd24c5-ba5a-4aa7-84e6-9f405562dbfd" width="600"/>
 </div>
 
@@ -119,11 +119,9 @@ Contact: deccj97@gmail.com
 ---
 
 <a name="출처"></a>
-## 📚 출처
+## 📚 출처  
 
-- A:
-- B:
-- C:
+전체 에셋 출처는 [ASSETS.md](./ASSETS.md) 파일을 참고하세요.
 
 ---
 
