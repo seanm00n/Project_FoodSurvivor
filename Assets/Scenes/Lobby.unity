@@ -1683,7 +1683,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4ad8ef4266ac8974781516a2c712712d, type: 3}
+  m_Sprite: {fileID: 222744264183196833, guid: 4ad8ef4266ac8974781516a2c712712d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1714,8 +1714,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 2038128179}
-  newSprite: {fileID: 21300000, guid: f8bc84734bf2d0543aed661ddb03503e, type: 3}
-  oldSprite: {fileID: 21300000, guid: 4ad8ef4266ac8974781516a2c712712d, type: 3}
+  newSprite: {fileID: -7003145361451237511, guid: f8bc84734bf2d0543aed661ddb03503e, type: 3}
+  oldSprite: {fileID: 222744264183196833, guid: 4ad8ef4266ac8974781516a2c712712d, type: 3}
   clickAudio: {fileID: 2038128183}
 --- !u!82 &2038128183
 AudioSource:
