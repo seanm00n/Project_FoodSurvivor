@@ -1,6 +1,6 @@
 <div align="center">
-<h2>🎮Drag&Slash Survivor v1.1(수정중)</h2>
-<img src="https://github.com/user-attachments/assets/7fbd24c5-ba5a-4aa7-84e6-9f405562dbfd" width="600"/>
+<h2>🎮Drag&Slash Survivor v1.1.1</h2>
+![gametitlefinal](https://github.com/user-attachments/assets/5217ac57-badb-4454-ab58-5b33079e0aee)
 </div>
 
 ---
@@ -57,8 +57,9 @@ Contact: deccj97@gmail.com
 
 | 특징 | 설명 |
 |------|------|
-| 🔄 터치&드래그 조작 | x |
-| ⚔️ 다양한 스킬 시스템 | x |
+| 🔄 손가락이 곧 공격 | 손가락이 무기가 된다! 플레이어는 직접 무기를 드래그하여 대량의 적들을 공격하며 전장을 쓸어버리는 쾌감 제공. |
+| ⚔️ 다양한 무기와 스킬 시스템 | 플레이어 스타일에 맞는 플레이! 다수의 스킬과 무기의 고유 특성을 활용함으로 공격 혹은 방어 위주로 선택하는 전략 시스템. |
+| 캐주얼한 플레이타임 | 캐주얼이라는 테마에 맞는 2분~3분의 플레이타임. |
 
 ---
 
@@ -67,11 +68,8 @@ Contact: deccj97@gmail.com
 
 | 동작 | 키 |
 |------|----|
-| 이동 | x |
-| 공격 | x |
-| 회피 | x |
-| 스킬 사용 | x |
-| 인터랙션 | x |
+| 이동 | 터치 & 드래그 |
+| 공격 | 터치 & 드래그 |
 
 ---
 
@@ -90,7 +88,7 @@ Contact: deccj97@gmail.com
 - **Unity Engine**: Animator, Scene 관리, UI 시스템 등
 - **C#**: SerializedDictionary 구현, Object Pooling, CSV Read/Write, 전투 시스템, UI 로직, 몬스터 AI, 스킬 처리 등
 - **Git**: 협업 버전 관리
-- **Photoshop**: UI 디자인
+- **Figma**: UI 디자인 및 스프라이트 제작
 
 ---
 
@@ -110,9 +108,11 @@ Contact: deccj97@gmail.com
 <a name="업데이트"></a>
 ## 🔄 업데이트
 
-- A:
-- B:
-- C:
+- 게임 화면 세로에서 가로로 변경
+- 6분에서 2분으로 플레이타임 변경 및 스킬 성장, 몬스터 밸런싱
+- 넥서스(여신) 움직임 고정 및 카메라 고정
+- UI 개선
+- 보스 패턴 변경
 
 ---
 
