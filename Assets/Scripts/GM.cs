@@ -681,9 +681,9 @@ public class GM : MonoBehaviour
     public void HandleBossDeath(Boss boss) {
         _weapon.SetTouchEnable(false);
 
-        Vector3 bossPos = boss.transform.position;
-        bossPos.z = _cameraComp.transform.position.z;
-        _cameraComp.gameObject.transform.position = bossPos;
+        //Vector3 bossPos = boss.transform.position;
+        //bossPos.z = _cameraComp.transform.position.z;
+        //_cameraComp.gameObject.transform.position = bossPos;
 
         Time.timeScale = 0.25f;
     }

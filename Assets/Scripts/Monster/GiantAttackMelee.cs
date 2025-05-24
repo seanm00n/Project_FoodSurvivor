@@ -15,7 +15,7 @@ public class GiantAttackMelee : MonsterBase
         ability.SetMaxHP(2500f);
         ability.SetAS(0.3f);
         ability.SetAR(0f);
-        ability.SetMS(3f);
+        ability.SetMS(2f);
         ability.SetLifeTime(100f);
         ability.SetExp(0);
     }
