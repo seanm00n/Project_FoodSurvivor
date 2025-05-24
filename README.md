@@ -99,7 +99,7 @@ Contact: deccj97@gmail.com
 
 ### A. 구글 플레이스토어 (출시 예정)
 
-> ✨ 출시 이후 여기에 링크가 추가될 예정입니다.
+> ✨ https://play.google.com/store/apps/details?id=com.teamfunity.dragnslashsurvivor
 
 ### B. 플레이 (Web)
 
