@@ -14,13 +14,15 @@ public class GM : MonoBehaviour
 
     public static GM I { get; private set; }
 
+    public static bool isPaused { get; private set; }
+
     public event Action OnBossSpawn;
 
     public HashSet<GameObject> spawnedMobs { get; private set; }
 
     public int killCount { get; private set; } = 0;
 
-    public float bossTimer { get; private set; } = 120f; //
+    public float bossTimer { get; private set; } = 5f; //
 
     #region Object Pool
 
@@ -132,7 +134,7 @@ public class GM : MonoBehaviour
 
     private bool _isYellowZoneOut = false;
 
-    private bool _isGamePaused = false;
+    //private bool _isGamePaused = false;
 
     private float _interval = 10f;
 
@@ -604,8 +606,13 @@ public class GM : MonoBehaviour
 
     #region Game Control
 
-    public void PauseGame() { // 문제시 interface 패턴 사용
-        if(_isGamePaused) return; //
+    public static void PauseGame() {
+        isPaused = true;
+        Time.timeScale = 0f;
+    }
+
+    public void PauseGameOld() { // 
+        //if(_isGamePaused) return; //
 
         MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
 
@@ -623,11 +630,16 @@ public class GM : MonoBehaviour
         }
 
         Time.timeScale = 0f;
-        _isGamePaused = true;
+        //_isGamePaused = true;
     }
 
-    public void ResumeGame() {
-        if(!_isGamePaused) return;
+    public static void ResumeGame() {
+        isPaused = false;
+        Time.timeScale = 1f;
+    }
+
+    public void ResumeGameOld() {
+        //if(!_isGamePaused) return;
 
         MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None); // FindObjectsOfType<MonoBehaviour>(true);
 
@@ -637,7 +649,7 @@ public class GM : MonoBehaviour
         }
 
         Time.timeScale = 1f;
-        _isGamePaused = false;
+        //_isGamePaused = false;
     }
 
     public void LoadLobby() {

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static CoroutineUtils;
 
 public class Thunder : MonoBehaviour, IBattle
 {
@@ -18,9 +19,9 @@ public class Thunder : MonoBehaviour, IBattle
 
     private IEnumerator BeforeDestroy(float value) {
         _audioSource.PlayOneShot(_thunderSound);
-        yield return new WaitForSeconds(value);
+        yield return WaitForSecondsPaused(value);
         transform.position = new Vector3(0, 20, 0); // 멀리 이동시켜버리기
-        yield return new WaitForSeconds(0.02f);
+        yield return WaitForSecondsPaused(0.02f);
         Destroy(gameObject);
     }
     public void SetAbility(Ability value) => ability = value;

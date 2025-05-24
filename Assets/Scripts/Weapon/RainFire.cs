@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static CoroutineUtils;
 
 public class RainFire : WeaponProjBase {
 
@@ -42,7 +43,7 @@ public class RainFire : WeaponProjBase {
             _audioSource.PlayOneShot(_launchSound);
             GameObject instMissie = Instantiate(_missilePref, transform.position, Quaternion.identity);
             instMissie.GetComponent<Missile>().SetAbility(ability);
-            yield return new WaitForSeconds(_missileDelay);
+            yield return WaitForSecondsPaused(_missileDelay);
         }
     }
 }

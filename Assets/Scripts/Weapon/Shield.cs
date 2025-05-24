@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static CoroutineUtils;
 
 public class Shield : MonoBehaviour, IBattle {
     public Ability ability { get; private set; }
@@ -28,7 +29,7 @@ public class Shield : MonoBehaviour, IBattle {
 
         Vector2 pushDir = (collision.transform.position - transform.parent.position).normalized;
         collision.GetComponent<Rigidbody2D>().AddForce(pushDir * pushPower, ForceMode2D.Impulse);
-        yield return new WaitForSeconds(0.2f);
+        yield return WaitForSecondsPaused(0.2f);
         if(collision != null) collision.attachedRigidbody.linearVelocity = Vector2.zero;
     }
 

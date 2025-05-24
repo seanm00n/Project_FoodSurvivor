@@ -2,6 +2,7 @@ using System.Collections;
 using System.Net.Security;
 using UnityEngine;
 using UnityEngine.UI;
+using static CoroutineUtils;
 
 public class ThunderBolt : WeaponProjBase, IBattle {
 
@@ -46,7 +47,7 @@ public class ThunderBolt : WeaponProjBase, IBattle {
             Vector3 instPos = new Vector3(randX, randY, transform.position.z);
             GameObject instThunder = Instantiate(_thunderPref, instPos, Quaternion.identity);
             instThunder.GetComponent<Thunder>().SetAbility(ability);
-            yield return new WaitForSeconds(value);
+            yield return WaitForSecondsPaused(value);
         }
 
     }

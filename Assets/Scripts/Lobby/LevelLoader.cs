@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static CoroutineUtils;
 
 public class LevelLoader : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class LevelLoader : MonoBehaviour
     IEnumerator LoadLevel(string sceneName)
     {
         //wait
-        yield return new WaitForSeconds(transitionTime);
+        yield return WaitForSecondsPaused(transitionTime);
 
         //load scene
         SceneManager.LoadScene(sceneName);

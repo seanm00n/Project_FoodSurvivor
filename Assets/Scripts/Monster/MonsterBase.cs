@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static CoroutineUtils;
 
 public abstract class MonsterBase : MonoBehaviour
 {
@@ -133,7 +134,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
 
     protected IEnumerator LateHit(GameObject target) {
-        yield return new WaitForSeconds(1f);
+        yield return WaitForSecondsPaused(1f);
         HandleHit(target);
         _hitCoroutine = null;
     }
@@ -153,7 +154,7 @@ public abstract class MonsterBase : MonoBehaviour
         _effectSR.sprite = _spriteRenderer.sprite;
         _effectSR.flipX = _spriteRenderer.flipX;
         _hitEffectObject.SetActive(true);
-        yield return new WaitForSeconds(0.05f);
+        yield return WaitForSecondsPaused(0.05f);
         _hitEffectObject.SetActive(false);
         _effectCoroutine = null;
     }
@@ -196,7 +197,7 @@ public abstract class MonsterBase : MonoBehaviour
     protected IEnumerator DropAndRelease() {
         yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsName("Dead"));
         float animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animLength);
+        yield return WaitForSecondsPaused(animLength);
         GameObject spawnedExp = GM.I.mobExpPool[_zone].Get();
         spawnedExp.transform.position = transform.position;
         OnMonsterDeath.Invoke(poolKey, gameObject);
@@ -205,7 +206,7 @@ public abstract class MonsterBase : MonoBehaviour
     protected IEnumerator JustRelease() {
         yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsName("Dead"));
         float animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animLength);
+        yield return WaitForSecondsPaused(animLength);
         OnMonsterDeath.Invoke(poolKey, gameObject);
     }
 

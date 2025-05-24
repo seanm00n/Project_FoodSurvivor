@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using static CoroutineUtils;
 
 public class Nexus : MonoBehaviour
 {
@@ -91,7 +92,7 @@ public class Nexus : MonoBehaviour
     private IEnumerator Anchor(float value) {
         while(!_isDeath) {
             transform.position = new Vector2(0, 0);
-            yield return new WaitForSeconds(value);
+            yield return WaitForSecondsPaused(value);
         }
     }
 
@@ -154,11 +155,13 @@ public class Nexus : MonoBehaviour
         _animator.SetBool("Walk", false);
         OnNexusDeath?.Invoke(this);
         StopAllCoroutines();
-        StartCoroutine(DestroyNexus(_animator.GetCurrentAnimatorStateInfo(0).length));
+        StartCoroutine(DestroyNexus());
     }
 
-    private IEnumerator DestroyNexus(float value) {
-        yield return new WaitForSeconds(value);
+    private IEnumerator DestroyNexus() {
+        yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsName("Death"));
+        float animLength = _animator.GetCurrentAnimatorStateInfo(0).length / Time.timeScale;
+        yield return WaitForSecondsPaused(animLength);
         OnGameOver.Invoke();
         Destroy(gameObject);
     }

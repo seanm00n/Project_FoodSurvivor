@@ -59,7 +59,8 @@ public class CameraMovement : MonoBehaviour
         float elapsedTime = 0f;
 
         while(elapsedTime < duration) {
-            elapsedTime += Time.deltaTime;
+            while(GM.isPaused) yield return null;
+            elapsedTime += Time.unscaledDeltaTime;
             float t = elapsedTime / duration;
 
             transform.position = new Vector3(

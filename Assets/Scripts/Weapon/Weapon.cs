@@ -183,7 +183,7 @@ public class Weapon : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0) && !IsPointerOverUIObject()) {
             _isSelected = true;
-            OnTouchDown?.Invoke();
+            OnTouchDown?.Invoke(); // thunder control
         }else if(Input.GetMouseButtonUp(0)) {
             _isSelected = false;
             OnTouchUp?.Invoke();
@@ -253,7 +253,7 @@ public class Weapon : MonoBehaviour
     //        transform.position = Vector3.Lerp(weaponPos, nexusPos, t);
     //        _nexus.transform.position = Vector3.Lerp(nexusPos, weaponPos, t);
 
-    //        elapsed += Time.deltaTime;
+    //        elapsed += Time.unscaledDeltaTime;
     //        yield return null;
     //    }
 

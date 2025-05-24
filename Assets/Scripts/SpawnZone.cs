@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static CoroutineUtils;
 
 public class SpawnZone : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class SpawnZone : MonoBehaviour
     }
 
     private IEnumerator InitDelay() {
-        yield return new WaitForSeconds(0.1f);
+        yield return WaitForSecondsPaused(0.1f);
         _initialized = true;
     }
 

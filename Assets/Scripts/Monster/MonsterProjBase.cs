@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static CoroutineUtils;
 
 public abstract class MonsterProjBase : MonoBehaviour, IBattle
 {
@@ -55,7 +56,7 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
     }
 
     protected IEnumerator ColliderDelay(float value) {
-        yield return new WaitForSeconds(value);
+        yield return WaitForSecondsPaused(value);
         if(_coll != null) _coll.enabled = true;
     }
 

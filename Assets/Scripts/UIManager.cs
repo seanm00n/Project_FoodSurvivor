@@ -231,7 +231,7 @@ public class UIManager : MonoBehaviour
 
     public void DrawTutorialPanel() { 
         _tutorialPanel.SetActive(true);
-        GM.I.PauseGame();
+        GM.PauseGame();
     } 
 
     public void DrawNexusHitUI() {}
@@ -255,7 +255,7 @@ public class UIManager : MonoBehaviour
     public void OnPauseButton() {
         _audioSource.PlayOneShot(_buttonSound);
         DrawPausePanel(); 
-        GM.I.PauseGame();
+        GM.PauseGame();
     }
 
     public void OnCardButton(Skill skill) { // skill list box
@@ -268,14 +268,14 @@ public class UIManager : MonoBehaviour
         _instCards.Clear();
 
         _skillSelectPanel.SetActive(false);
-        GM.I.ResumeGame();
+        GM.ResumeGame();
     }
 
     public void OnResumeButton() {
         _audioSource.PlayOneShot(_buttonSound);
         _pausePanel.SetActive(false);
         _weapon.SetTouchEnable(true);
-        GM.I.ResumeGame();
+        GM.ResumeGame();
     }
 
     public void OnQuitButton() {
@@ -295,7 +295,7 @@ public class UIManager : MonoBehaviour
     public void OnPlayButton() {
         _audioSource.PlayOneShot(_buttonSound);
         _tutorialPanel.SetActive(false);
-        GM.I.ResumeGame();
+        GM.ResumeGame();
     }
 
     public void OnMainButton() {
@@ -406,9 +406,9 @@ public class UIManager : MonoBehaviour
     //}
 
     private IEnumerator PlayFadeOut() {
-        GM.I.ResumeGame();
+        GM.ResumeGame();
         _transAnimator.SetTrigger("FadeOut");
-        yield return new WaitForSeconds(1f);
+        yield return CoroutineUtils.WaitForSecondsPaused(1f);
         GM.I.LoadLobby();
     }
 
@@ -424,13 +424,14 @@ public class UIManager : MonoBehaviour
         float fadeCycleDuration = 1f;
 
         while(elapsed < totalDuration) {
+            yield return CoroutineUtils.WaitWhilePaused();
             float cycleTime = elapsed % fadeCycleDuration;
             float alpha = Mathf.PingPong(cycleTime * 2f, 1f);
 
             color.a = alpha;
             img.color = color;
 
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
 

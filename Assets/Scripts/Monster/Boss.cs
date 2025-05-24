@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using Random = UnityEngine.Random;
+using static CoroutineUtils;
 using Unity.VisualScripting;
 
 public class Boss : MonsterBase {
@@ -78,11 +79,13 @@ public class Boss : MonsterBase {
         _animator.SetBool("Walk", false);
         OnBossDeath.Invoke(this);
         StopAllCoroutines();
-        StartCoroutine(DestroyBoss(_animator.GetCurrentAnimatorStateInfo(0).length));
+        StartCoroutine(DestroyBoss());
     }
 
-    private IEnumerator DestroyBoss(float value) {
-        yield return new WaitForSeconds(value);
+    private IEnumerator DestroyBoss() {
+        yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsName("Die"));
+        float animLength = _animator.GetCurrentAnimatorStateInfo(0).length / Time.timeScale;
+        yield return WaitForSecondsPaused(animLength);
         OnGameClear.Invoke();
         Destroy(gameObject);
     }
@@ -124,7 +127,8 @@ public class Boss : MonsterBase {
         _alertObjectSR.color = c;
 
         while(elapsed < duration) {
-            elapsed += Time.deltaTime;
+            while(GM.isPaused) yield return null;
+            elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
             c.a = t;
             _alertObjectSR.color = c;
@@ -139,7 +143,7 @@ public class Boss : MonsterBase {
                 spawnedProj.transform.position = transform.position;
                 spawnedProj.transform.rotation = Quaternion.Euler(0f, 0f, -135f - (30f * index));
             }
-            yield return new WaitForSeconds(0.125f);
+            yield return WaitForSecondsPaused(0.125f);
         }
         _alertObject.SetActive(false);
         lastSkillUse += 1f;
@@ -163,7 +167,8 @@ public class Boss : MonsterBase {
         Vector3 start = Vector3.one * 2;
         Vector3 end = Vector3.one;
         while(elapsed < motion) {
-            elapsed += Time.deltaTime;
+            while(GM.isPaused) yield return null;
+            elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / motion);
             _counterAlert.transform.localScale = Vector3.Lerp(start, end, t);
             if(elapsed > delay) _counterActive = true;
@@ -192,7 +197,8 @@ public class Boss : MonsterBase {
             elapsed = 0f;
             motion = 0.3f;
             while(elapsed < motion) {
-                elapsed += Time.deltaTime;
+                while(GM.isPaused) yield return null;
+                elapsed += Time.unscaledDeltaTime;
                 if(_isHitOnCounter) {
                     Debug.Log("Counter Success");
                     isSuccess = true;
@@ -219,7 +225,8 @@ public class Boss : MonsterBase {
             end = Vector3.zero;
 
             while(elapsed < motion) {
-                elapsed += Time.deltaTime;
+                while(GM.isPaused) yield return null;
+                elapsed += Time.unscaledDeltaTime;
                 float t = Mathf.PingPong(elapsed / (motion / 2), 1f);
                 transform.position = Vector3.Lerp(start, end, t);
                 yield return null;
@@ -227,7 +234,7 @@ public class Boss : MonsterBase {
 
             transform.position = start;
         } else {
-            yield return new WaitForSeconds(0.3f);
+            yield return WaitForSecondsPaused(0.3f);
         }
 
             lastSkillUse += 2f;
@@ -235,6 +242,7 @@ public class Boss : MonsterBase {
     }
 
     private IEnumerator GiantAttack() {
+        yield return WaitWhilePaused();
         _animator.SetTrigger("Attack");
 
         GameObject giant = GM.I.monPool["GiantAttackMelee"].Get();
