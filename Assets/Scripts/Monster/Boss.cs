@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using Random = UnityEngine.Random;
+using Unity.VisualScripting;
 
 public class Boss : MonsterBase {
 
@@ -37,8 +38,8 @@ public class Boss : MonsterBase {
     public override void Initialize() {
         base.Initialize();
         ability.SetAP(50f);
-        ability.SetHP(10000f);
-        ability.SetMaxHP(10000f);
+        ability.SetHP(15000f);
+        ability.SetMaxHP(15000f);
         ability.SetAS(0.5f); // attack per second
         ability.SetAR(6.25f); // attack range
         ability.SetMS(5f); // move speed
@@ -92,7 +93,7 @@ public class Boss : MonsterBase {
         if(Time.timeSinceLevelLoad - lastSkillUse >= skillDuration) { // 시간제로 변경
             lastSkillUse = Time.timeSinceLevelLoad;
             Func<IEnumerator>[] patterns = new Func<IEnumerator>[] {
-                MultiAttack, RushAttack, //GiantAttack
+                MultiAttack, RushAttack, GiantAttack
             };
             int rand = Random.Range(0, patterns.Length);
             StartCoroutine(patterns[rand]());
@@ -235,6 +236,16 @@ public class Boss : MonsterBase {
 
     private IEnumerator GiantAttack() {
         _animator.SetTrigger("Attack");
+
+        GameObject giant = GM.I.monPool["GiantAttackMelee"].Get();
+        giant.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+
+        MonsterBase giantBase = giant.GetComponent<MonsterBase>();
+        giantBase.OnMonsterDeath += GM.I.HandleMonsterDeath;
+
+        MonsterProjBase giantProjBase = giant.GetComponent<MonsterProjBase>();
+        giantProjBase.SetPoolKey("GiantAttackMelee");
+        giantProjBase.SetAbility(giantBase.ability);
         yield return null;
     }
 }

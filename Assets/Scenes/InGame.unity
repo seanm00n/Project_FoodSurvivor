@@ -3530,6 +3530,7 @@ MonoBehaviour:
   _yellowRangedProjPref: {fileID: 4554319367707034832, guid: ec99ad01af1448143b3d28b6e0e3ba35, type: 3}
   _bossMeleeProjPref: {fileID: 4554319367707034832, guid: e2955d86d6357ee47ade268d9953772f, type: 3}
   _bossRangedProjPref: {fileID: 4554319367707034832, guid: 2126dcc8f67814143b52a7f460e1f95b, type: 3}
+  _giantAttackMeleePref: {fileID: 7614071129163002635, guid: 0ac029dbb33a3e34595f8e20cb35a860, type: 3}
   _blueExpPref: {fileID: 2485280721376784820, guid: 6d864ffa63671594896754eeff5aea80, type: 3}
   _greenExpPref: {fileID: 3883606933231349002, guid: 2553adc898ac128469ade6b5c43372fe, type: 3}
   _yellowExpPref: {fileID: 1000780801139214134, guid: 43a8dadc2a9894e4b820a2c7a037cee2, type: 3}
@@ -3775,6 +3776,10 @@ PrefabInstance:
     - target: {fileID: 1555446884715239407, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
       propertyPath: m_Name
       value: Nexus
+      objectReference: {fileID: 0}
+    - target: {fileID: 2547211452104097783, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2547211452104097783, guid: 6b4eae20a98fea34780b2ead958255d6, type: 3}
       propertyPath: m_AnchorMax.y

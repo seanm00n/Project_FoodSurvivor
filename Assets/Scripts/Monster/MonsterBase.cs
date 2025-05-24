@@ -128,7 +128,6 @@ public abstract class MonsterBase : MonoBehaviour
                 StopCoroutine(_hitCoroutine);
                 _hitCoroutine = null;
             }
-
             HandleHit(collision.gameObject);
         }
     }
@@ -182,22 +181,31 @@ public abstract class MonsterBase : MonoBehaviour
         if(_state == State.Death) return;
         _state = State.Death;
         _boxColl.enabled = false;
-        _animator.SetTrigger("Die");
         _animator.SetBool("Walk", false);
+        _animator.SetTrigger("Die");
         _hitEffectObject.SetActive(false);
         StopAllCoroutines();
-        float animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
+        
         if(!gameObject.activeInHierarchy) {
             Debug.Log("reached DropAndRelease coroutine during death");
             return;
         }
-        StartCoroutine(DropAndRelease(animLength));
+        StartCoroutine(DropAndRelease());
     }
 
-    protected IEnumerator DropAndRelease(float value) {
-        yield return new WaitForSeconds(value);
+    protected IEnumerator DropAndRelease() {
+        yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsName("Dead"));
+        float animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(animLength);
         GameObject spawnedExp = GM.I.mobExpPool[_zone].Get();
         spawnedExp.transform.position = transform.position;
+        OnMonsterDeath.Invoke(poolKey, gameObject);
+    }
+
+    protected IEnumerator JustRelease() {
+        yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsName("Dead"));
+        float animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(animLength);
         OnMonsterDeath.Invoke(poolKey, gameObject);
     }
 

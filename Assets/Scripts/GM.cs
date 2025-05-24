@@ -92,6 +92,9 @@ public class GM : MonoBehaviour
     private GameObject _bossRangedProjPref;
 
     [SerializeField]
+    private GameObject _giantAttackMeleePref;
+
+    [SerializeField]
     private GameObject _blueExpPref;
 
     [SerializeField]
@@ -179,6 +182,7 @@ public class GM : MonoBehaviour
         InitMonPool(_yellowMeleeMobPref, 16, "YellowMelee");
         InitMonPool(_yellowRangedMobPref, 16, "YellowRanged");
         InitMonPool(_bossPref, 1, "Boss");
+        InitMonPool(_giantAttackMeleePref, 1, "GiantAttackMelee");
 
         monProjPool = new Dictionary<string, ObjectPool<GameObject>>();
         InitMonProjPool(_blueMeleeMobPref, _blueMeleeProjPref, 28, "BlueMelee");

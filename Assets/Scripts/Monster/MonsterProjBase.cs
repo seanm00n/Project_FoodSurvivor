@@ -11,7 +11,7 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
 
     protected CircleCollider2D _coll;
 
-    private Coroutine _collCoroutine;
+    protected Coroutine _collCoroutine;
 
     private void OnEnable() {
         if(_coll == null) _coll = GetComponent<CircleCollider2D>();
@@ -46,11 +46,15 @@ public abstract class MonsterProjBase : MonoBehaviour, IBattle
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("Nexus")) {
-            GM.I.monProjPool[poolKey].Release(gameObject);
+            HitAndRelease();
         }
     }
 
-    private IEnumerator ColliderDelay(float value) {
+    protected virtual void HitAndRelease() {
+        GM.I.monProjPool[poolKey].Release(gameObject);
+    }
+
+    protected IEnumerator ColliderDelay(float value) {
         yield return new WaitForSeconds(value);
         if(_coll != null) _coll.enabled = true;
     }
