@@ -78,7 +78,7 @@ Contact: deccj97@gmail.com
 <a name="스크린샷"></a>
 ## 🖼️ 스크린샷
 
-| ![KakaoTalk_20250427_173213635 - frame at 1m35s](https://github.com/user-attachments/assets/cc902c88-caa0-40ba-83a7-fe42c255275a) | ![KakaoTalk_20250427_173213635 - frame at 0m58s](https://github.com/user-attachments/assets/48837496-8453-4703-86a9-b0dd5c34dba7) | ![KakaoTalk_20250427_173213635 - frame at 2m26s](https://github.com/user-attachments/assets/c4a8fde2-e69f-4058-9999-10c1382ab1fe) |
+| ![img3](https://github.com/user-attachments/assets/9d0752c9-853a-4a82-b853-c068e97b683f) | ![img2](https://github.com/user-attachments/assets/f28f25ca-93d2-4454-b78a-f50067b54172) | ![img4](https://github.com/user-attachments/assets/2bb3f18c-0fe3-4546-8040-6d210536b543) |
 |:--:|:--:|:--:|
 | 인게임 전투 | 스킬 선택 | 보스 전투 |
 
