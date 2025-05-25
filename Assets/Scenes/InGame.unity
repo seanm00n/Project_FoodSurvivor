@@ -6415,6 +6415,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1178952150220415533, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 516520566a704004ea2a6d61aaf3ab87, type: 3}
+    - target: {fileID: 1178952150220415533, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7761268160000418982, guid: 534f13618089a0d4496cdeafd3ba4928, type: 3}
       propertyPath: m_Name
       value: Weapon

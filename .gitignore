@@ -96,3 +96,7 @@ crashlytics-build.properties
 
 # Unity temp native build folder
 .utmpp*/
+
+# Unity build test json file
+Assets/Resources/PerformanceTestRun*.json
+Assets/Resources/PerformanceTestRun*.json.meta

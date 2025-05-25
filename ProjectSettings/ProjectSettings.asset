@@ -64,7 +64,7 @@ PlayerSettings:
   allowedAutorotateToLandscapeRight: 1
   allowedAutorotateToLandscapeLeft: 1
   useOSAutorotation: 1
-  use32BitDisplayBuffer: 1
+  use32BitDisplayBuffer: 0
   preserveFramebufferAlpha: 0
   disableDepthAndStencilBuffers: 0
   androidStartInFullscreen: 1
@@ -140,8 +140,11 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 1.1.1
-  preloadedAssets: []
+  bundleVersion: 1.1.2
+  preloadedAssets:
+  - {fileID: 11400000, guid: af0984502d50f4f4e8b515b2ce4fc109, type: 2}
+  - {fileID: 11400000, guid: f8bb07a764c26544dae1f5d3bd7fee73, type: 2}
+  - {fileID: -4082423364725185901, guid: 33020a83d52c7cd40bbdd49c8315e8de, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -151,7 +154,7 @@ PlayerSettings:
     enable360StereoCapture: 0
   isWsaHolographicRemotingEnabled: 0
   enableFrameTimingStats: 1
-  enableOpenGLProfilerGPURecorders: 1
+  enableOpenGLProfilerGPURecorders: 0
   allowHDRDisplaySupport: 0
   useHDRDisplay: 0
   hdrBitDepth: 0
@@ -174,8 +177,8 @@ PlayerSettings:
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 5
-  AndroidMinSdkVersion: 24
+  AndroidBundleVersionCode: 6
+  AndroidMinSdkVersion: 26
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -294,7 +297,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 86936f77663dae44d9708894e0b5338c, type: 3}
+      m_Icon: {fileID: 2800000, guid: b88593f2612a54e4f9ec3bd58bf18732, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -543,7 +546,7 @@ PlayerSettings:
   m_BuildTargetDefaultTextureCompressionFormat:
   - serializedVersion: 3
     m_BuildTarget: Android
-    m_Formats: 03000000
+    m_Formats: 030000000200000007000000
   - serializedVersion: 3
     m_BuildTarget: WebGL
     m_Formats: 03000000
