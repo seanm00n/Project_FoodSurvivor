@@ -1,5 +1,5 @@
 <div align="center">
-  <h2>🎮Drag&Slash Survivor v1.1.1(수정중)</h2>
+  <h2>🎮Drag&Slash Survivor v1.1.2</h2>
   <img src="image/gametitlefinal.png" alt="gametitlefinal" />
 </div>
 
@@ -75,12 +75,18 @@ Contact: deccj97@gmail.com
 
 ---
 
-<a name="스크린샷"></a>
-## 🖼️ 스크린샷
+<a name="스크린샷-및-플레이-영상"></a>
+## 🖼️ 스크린샷 및 ▶️ 플레이 영상
+
+### 스크린샷
 
 | ![img3](https://github.com/user-attachments/assets/9d0752c9-853a-4a82-b853-c068e97b683f) | ![img2](https://github.com/user-attachments/assets/f28f25ca-93d2-4454-b78a-f50067b54172) | ![img4](https://github.com/user-attachments/assets/2bb3f18c-0fe3-4546-8040-6d210536b543) |
 |:--:|:--:|:--:|
 | 인게임 전투 | 스킬 선택 | 보스 전투 |
+
+### 플레이 영상
+
+> ✨ https://www.youtube.com/watch?v=77Aoty-M29Y
 
 ---
 
@@ -97,31 +103,30 @@ Contact: deccj97@gmail.com
 <a name="다운로드-및-플레이"></a>
 ## 🚀 다운로드 및 플레이
 
-### A. 구글 플레이스토어 (출시 예정)
+### A. 구글 플레이스토어
 
-> ✨ https://play.google.com/store/apps/details?id=com.teamfunity.dragnslashsurvivor
+> ✨ [https://play.google.com/store/apps/details?id=com.teamfunity.dragnslashsurvivor](https://play.google.com/store/apps/details?id=com.teamfunity.dragnslashsurvivor)
 
-### B. 플레이 (Web)
+### B. 웹에서 플레이
 
-- https://incandescent-platypus-0b6498.netlify.app/
+> 🌐 https://taupe-rolypoly-666d14.netlify.app/
 
 ---
 
 <a name="업데이트"></a>
 ## 🔄 업데이트
 
-- 게임 화면 세로에서 가로로 변경
-- 6분에서 2분으로 플레이타임 변경 및 스킬 성장, 몬스터 밸런싱
-- 넥서스(여신) 움직임 고정 및 카메라 고정
-- UI 개선
-- 보스 패턴 변경
+- 모바일 기기의 성능 최적화
+- Android 15 및 Vulkan 지원 시스템과의 향상된 호환성
+- 메모리 효율 향상
+- 로드 시간 단축
 
 ---
 
 <a name="제작자"></a>
 ## 🙌 제작자
 
-- 기획: **Manjun Han**, **Minseok Seo**
+- 기획: **Man Jun Han**, **Minseok Seo**
 - 개발: **CheonHyeok Moon**
 - 팀명: **Team Funity**
 
