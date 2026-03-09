@@ -2,7 +2,7 @@
 
 <div align="center">
   <h2>🎮Drag&Slash Survivor v1.1.2</h2>
-  <img src="image/gametitlefinal.png" alt="gametitlefinal" />
+  <img src="image/gametitlefinal.png" alt="gametitlefinal" width="900"/>
 </div>
 
 ---
