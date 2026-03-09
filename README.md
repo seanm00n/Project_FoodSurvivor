@@ -1,3 +1,5 @@
+🇰🇷 한국어 | 🇺🇸 [English](README.md)
+
 <div align="center">
   <h2>🎮Drag&Slash Survivor v1.1.2</h2>
   <img src="image/gametitlefinal.png" alt="gametitlefinal" />
@@ -42,15 +44,6 @@
 
 ※ 추후 광고 기능이 추가될 경우, 본 개인정보 처리방침은 변경될 수 있습니다.  
 문의: deccj97@gmail.com
-
-**Drag & Slash Survivor** is a 2D mobile hybrid casual Reverse Bullet Hell game created via Unity 6. 
-With different combinations of skills and weapons, the player must touch and drag to eliminate enemies and ultimately, the boss.
-
-**Drag&Slash Survivor** does not currently collect, store, or share any personal information.  
-This is a fully offline game with no ads, login, or server communication.  
-
-Please note: This policy may be updated if advertising features are added in the future.  
-Contact: deccj97@gmail.com  
 
 ---
 
